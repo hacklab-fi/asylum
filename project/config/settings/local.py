@@ -13,8 +13,7 @@ from .common import *  # noqa
 # DEBUG
 # ------------------------------------------------------------------------------
 DEBUG = env.bool('DJANGO_DEBUG', default=True)
-for n in range(len(TEMPLATES)):
-    TEMPLATES[n]['OPTIONS']['debug'] = DEBUG
+TEMPLATES[1]['OPTIONS']['debug'] = DEBUG
 
 # SECRET CONFIGURATION
 # ------------------------------------------------------------------------------
