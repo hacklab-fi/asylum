@@ -42,12 +42,13 @@ DJANGO_APPS = (
 THIRD_PARTY_APPS = (
     'crispy_forms',  # Form layouts
     'bootstrap3',
+    'reversion',
 )
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
-
     # Your stuff: custom apps go here
+    'members',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
