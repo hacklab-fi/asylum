@@ -41,7 +41,7 @@ DJANGO_APPS = (
 )
 THIRD_PARTY_APPS = (
     'crispy_forms',  # Form layouts
-
+    'bootstrap3',
 )
 
 # Apps specific for this project go here.
