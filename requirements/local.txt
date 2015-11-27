@@ -1,0 +1,20 @@
+# Local development dependencies go here
+-r base.txt
+
+# django-debug-toolbar that works with Django 1.5+
+django-debug-toolbar==1.4
+
+# improved REPL
+ipdb==0.8.1
+
+# the "python3 compatible" package is broken ATM
+# Required by maildump. Need to pin dependency to gevent beta to be Python 3-compatible.
+#gevent==1.0.2
+# Enables better email testing
+#maildump==0.5.1
+
+# Code quality
+flake8==2.4.1
+pep8==1.5.7
+pep8-naming==0.3.3
+
