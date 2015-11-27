@@ -1,0 +1,33 @@
+# Bleeding edge Django
+django==1.8.5
+Jinja2==2.8
+django-jinja==1.4.1
+markupsafe==0.23
+
+# Configuration
+django-environ==0.4.0
+django-secure==1.0.1
+whitenoise==2.0.4
+
+# Forms
+django-braces==1.8.1
+django-crispy-forms==1.5.2
+django-floppyforms==1.5.2
+
+# Models
+django-model-utils==2.3.1
+
+# Images
+Pillow==3.0.0
+
+# Python-PostgreSQL Database Adapter
+psycopg2==2.6.1
+
+# Unicode slugification
+unicode-slugify==0.1.3
+django-autoslug==1.9.3
+
+# Time zones support
+pytz==2015.6
+
+# Your custom requirements go here
