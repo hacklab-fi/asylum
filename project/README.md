@@ -8,6 +8,12 @@ Uses django-environ for configurations, create `.env`-file in your project dir t
 
 For Ubuntu 14.04 LTS
 
+  - Install nodejs v4 first (needs PPA and key and stuff, nodesource has a handy script for this)
+
+    sudo apt-get install curl
+    curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+    sudo apt-get install -y nodejs
+
   - `xargs -a <(awk '/^\s*[^#]/' "requirements.apt") -r -- sudo apt-get install` Installs all packages listed in requirements.apt
   - `sudo pip install maildump` currently not python3 compatible due to broken package
   - `` virtualenv -p `which python3.4` venv && source venv/bin/activate ``
@@ -18,6 +24,7 @@ For Ubuntu 14.04 LTS
   - `pip install -r requirements/local.txt` (or `pip install -r requirements/production.txt` if installing on production)
   - `./manage.py migrate`
   - `./manage.py createsuperuser`
+  - `npm run build`
 
 ### uWSGI & Nginx setup
 
