@@ -20,11 +20,12 @@ RUN awk '/^\s*[^#]/' requirements.apt | xargs -r -- sudo apt-get install --no-in
 RUN virtualenv -p `which python3.4` venv
 
 # Install python requirements
-COPY project /opt/asylum/
+COPY project/requirements /opt/asylum/requirements/
 WORKDIR /opt/asylum
 RUN . venv/bin/activate && pip install -r requirements/local.txt
 
 # Configure application
+COPY project /opt/asylum/
 RUN echo "DATABASE_URL=postgres://asylum:asylum@localhost/asylum" > .env
 
 # Create
