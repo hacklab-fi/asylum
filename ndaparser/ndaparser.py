@@ -1,7 +1,7 @@
 from datetime import date
 from decimal import Decimal
 
-class ndaTransaction:
+class NdaTransaction(object):
     "Contains data of single NDA transaction. Additional information is discarded."
     referenceNumber  = None #reference of transaction
     amount = None #amount of money in transaction
@@ -31,9 +31,9 @@ def parseLine(line):
 
     #amount
     amount = int(line[87:106])
-    amount = Decimal(amount/100)
+    amount = Decimal(amount)/100
 
-    transaction = ndaTransaction(amount, timestamp)
+    transaction = NdaTransaction(amount, timestamp)
 
     #Event type
     eventType = line[52:86]
@@ -45,6 +45,7 @@ def parseLine(line):
 
     #reference
     reference = line[159:178]
+    reference = reference.strip()
     transaction.referenceNumber = reference.lstrip("0")
 
     return transaction
