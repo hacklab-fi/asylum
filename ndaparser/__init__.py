@@ -1,5 +1,11 @@
 import ndaparser
 
 if __name__ == "__main__" : 
-    trns = ndaparser.parseLine("T10188000060SCTSZFW3GT3WU1B   1501131501131501121710Viitemaksu                         +000000000000002800  HAKKERI HEIKKI HOKSAAVA            A               00000000000000111012         ")
-    print(trns)
+    transactions = [];
+    with open("./testdata.nda") as f:
+        for line in f:
+            transaction = ndaparser.parseLine(line)
+            if transaction is not None:
+                transactions.append(transaction)
+    for transaction in transactions:
+        print(transaction)
