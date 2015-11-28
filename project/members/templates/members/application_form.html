@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load bootstrap3 staticfiles i18n %}
+
+{% block page_title %}{% trans "Apply for membership" %}{% endblock page_title %}
+{% block main_title %}{% trans "Apply for membership" %}{% endblock main_title %}
+
+{% block content %}
+<div class="container-fluid">
+    <form role="form" method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons submit='OK' reset="Cancel" %}{% endbuttons %}
+    </form>
+</div>
+{% endblock %}

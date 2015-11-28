@@ -1,0 +1,60 @@
+@bower-path: "./bower_components";
+@bs-path: "@{bower-path}/bootstrap";
+@fa-path: "@{bower-path}/font-awesome/less";
+
+// Import custom variables first
+@import "asylum/variables.less";
+
+// Core variables and mixins
+//@import "@{bs-path}/less/variables.less";
+@import "@{bs-path}/less/mixins.less";
+
+// Reset and dependencies
+@import "@{bs-path}/less/normalize.less";
+@import "@{bs-path}/less/print.less";
+@import "@{bs-path}/less/glyphicons.less";
+
+// Core CSS
+@import "@{bs-path}/less/scaffolding.less";
+@import "@{bs-path}/less/type.less";
+@import "@{bs-path}/less/code.less";
+@import "@{bs-path}/less/grid.less";
+@import "@{bs-path}/less/tables.less";
+@import "@{bs-path}/less/forms.less";
+@import "@{bs-path}/less/buttons.less";
+
+// Components
+@import "@{bs-path}/less/component-animations.less";
+@import "@{bs-path}/less/dropdowns.less";
+@import "@{bs-path}/less/button-groups.less";
+@import "@{bs-path}/less/input-groups.less";
+@import "@{bs-path}/less/navs.less";
+@import "@{bs-path}/less/navbar.less";
+@import "@{bs-path}/less/breadcrumbs.less";
+@import "@{bs-path}/less/pagination.less";
+@import "@{bs-path}/less/pager.less";
+@import "@{bs-path}/less/labels.less";
+@import "@{bs-path}/less/badges.less";
+@import "@{bs-path}/less/jumbotron.less";
+@import "@{bs-path}/less/thumbnails.less";
+@import "@{bs-path}/less/alerts.less";
+@import "@{bs-path}/less/progress-bars.less";
+@import "@{bs-path}/less/media.less";
+@import "@{bs-path}/less/list-group.less";
+@import "@{bs-path}/less/panels.less";
+@import "@{bs-path}/less/responsive-embed.less";
+@import "@{bs-path}/less/wells.less";
+@import "@{bs-path}/less/close.less";
+
+// Components w/ JavaScript
+@import "@{bs-path}/less/modals.less";
+@import "@{bs-path}/less/tooltip.less";
+@import "@{bs-path}/less/popovers.less";
+@import "@{bs-path}/less/carousel.less";
+
+// Utility classes
+@import "@{bs-path}/less/utilities.less";
+@import "@{bs-path}/less/responsive-utilities.less";
+
+// Vendor styles
+@import "@{fa-path}/font-awesome.less";

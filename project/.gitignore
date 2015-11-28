@@ -1,5 +1,7 @@
 bower_components/
-asylum/static/
+asylum/static/css/
+asylum/static/js/
+asylum/static/fonts/
 
 ## Local virtualenv ##
 venv/

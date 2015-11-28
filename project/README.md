@@ -46,6 +46,7 @@ Until we maybe decide on Celery for running various (timed or otherwise) tasks a
   - `maildump --http-ip 0.0.0.0 -p ~/maildump.pid` (maybe needs sudo)
     - Web interface at <http://localhost:1080/> (replace localhost with your vagrant ip)
   - `source venv/bin/activate`
+  - `npm run watch &` If you want to develop the JS/LESS stuff this will autocompile them on change
   - `./manage.py runserver 0.0.0.0:8000`
   - `maildump -p ~/maildump.pid --stop`
 

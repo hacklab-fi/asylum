@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load bootstrap3 staticfiles i18n %}
+
+{% block page_title %}{% trans "Received. Thank you" %}{% endblock page_title %}
+{% block main_title %}{% trans "Application received. Thank you" %}{% endblock main_title %}
+
+{% block content %}
+<div class="container-fluid">
+    <p>{% blocktrans %}We'll get back to you{% endblocktrans %}</p>
+</div>
+{% endblock content %}
