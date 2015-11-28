@@ -20,6 +20,8 @@ class ApplicationReceivedView(generic.TemplateView):
 
 
 class HomeView(generic.base.RedirectView):
+    permanent = True
+
     def get_redirect_url(self, *args, **kwargs):
         return reverse('members-apply')
 
