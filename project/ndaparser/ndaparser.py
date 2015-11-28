@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 from datetime import date
 from decimal import Decimal
 
@@ -60,3 +63,13 @@ def ascii2scandic(string):
     string = string.replace('}', 'å')
     string = string.replace('|', 'ö')
     return string
+
+if __name__ == "__main__" : 
+    transactions = [];
+    with open("./testdata.nda") as f:
+        for line in f:
+            transaction = parseLine(line)
+            if transaction is not None:
+                transactions.append(transaction)
+    for transaction in transactions:
+        print(transaction)
