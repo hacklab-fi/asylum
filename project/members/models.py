@@ -2,7 +2,10 @@ import random
 from decimal import Decimal
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from asylum.mixins import AtomicVersionMixin
+# importing after asylum.mixins to get the monkeypatching done there
 from reversion import revisions
+from django.db import transaction
 
 def generate_unique_randomid():
     """Generate pseudorandom ids until a free one is found"""
@@ -22,9 +25,9 @@ def generate_unique_memberid():
     while Member.objects.filter(member_id=candidate).count():
         candidate += 1
     return candidate
-    
 
-class MemberCommon(models.Model):
+
+class MemberCommon(AtomicVersionMixin, models.Model):
     fname = models.CharField(_("First name"), max_length=200, blank=False)
     lname = models.CharField(_("Last name"), max_length=200, blank=False)
     city = models.CharField(_("City of residence"), max_length=200, blank=False)
@@ -39,7 +42,7 @@ class MemberCommon(models.Model):
         abstract = True
 
 
-class MemberType(models.Model):
+class MemberType(AtomicVersionMixin, models.Model):
     label = models.CharField(_("Label"), max_length=200, blank=False)
 
     def __str__(self):
@@ -68,17 +71,18 @@ class MembershipApplication(MemberCommon):
     received = models.DateField(auto_now_add=True)
 
     def approve(self, set_mtypes):
-        m = Member()
-        m.fname = self.fname
-        m.lname = self.lname
-        m.city = self.city
-        m.email = self.email
-        m.phone = self.phone
-        m.nick = self.nick
-        m.save()
-        if set_mtypes:
-            m.mtypes = set_mtypes
+        with transaction.atomic(), revisions.create_revision():
+            m = Member()
+            m.fname = self.fname
+            m.lname = self.lname
+            m.city = self.city
+            m.email = self.email
+            m.phone = self.phone
+            m.nick = self.nick
             m.save()
-        self.delete()
+            if set_mtypes:
+                m.mtypes = set_mtypes
+                m.save()
+            self.delete()
 
 revisions.default_revision_manager.register(MembershipApplication)

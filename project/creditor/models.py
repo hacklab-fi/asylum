@@ -3,9 +3,12 @@ import uuid, hashlib
 from django.db import models, transaction
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
+from asylum.mixins import AtomicVersionMixin
+# importing after asylum.mixins to get the monkeypatching done there
 from reversion import revisions
+from django.db import transaction
 
-class TransactionTag(models.Model):
+class TransactionTag(AtomicVersionMixin, models.Model):
     label = models.CharField(_("Label"), max_length=200, blank=False)
 
     def __str__(self):
@@ -14,7 +17,7 @@ class TransactionTag(models.Model):
 revisions.default_revision_manager.register(TransactionTag)
 
 
-@transaction.atomic
+@transaction.atomic()
 def generate_transaction_id():
     candidate = uuid.uuid4().hex
     while Transaction.objects.filter(unique_id=candidate).count():
@@ -22,7 +25,7 @@ def generate_transaction_id():
     return candidate
 
 
-class Transaction(models.Model):
+class Transaction(AtomicVersionMixin, models.Model):
     stamp = models.DateTimeField(_("Datetime"), auto_now_add=True, db_index=True)
     tag = models.ForeignKey(TransactionTag, blank=True, null=True, verbose_name=_("Tag"), related_name='+')
     reference = models.CharField(_("Reference"), max_length=200, blank=False, db_index=True)
@@ -35,14 +38,10 @@ class Transaction(models.Model):
             return _("%+.2f for %s (%s)") % (self.amount, self.owner, self.tag)
         return _("%+.2f for %s") % (self.amount, self.owner)
 
-    @transaction.atomic
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
 revisions.default_revision_manager.register(Transaction)
 
 
-class RecurringTransaction(models.Model):
+class RecurringTransaction(AtomicVersionMixin, models.Model):
     MONTHLY = 1
     YEARLY = 2
     RTYPE_READABLE = {
@@ -84,6 +83,7 @@ class RecurringTransaction(models.Model):
         # NOTE: Do not localize anything in this string
         return "RecurringTransaction #%d/#%d for %s" % (self.pk, self.rtype, start.date().isoformat())
 
+    @transaction.atomic()
     def transaction_exists(self, timescope=None):
         start, end = self.resolve_timescope(timescope)
         ref = self.make_reference(timescope)
@@ -96,7 +96,8 @@ class RecurringTransaction(models.Model):
             return True
         return False
 
-    @transaction.atomic
+    @transaction.atomic()
+    @revisions.create_revision()
     def conditional_add_transaction(self, timescope=None):
         if self.transaction_exists(timescope):
             return False
