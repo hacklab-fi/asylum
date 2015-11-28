@@ -41,7 +41,7 @@ def parseLine(line):
 
     #name
     name = line[108:142]
-    transaction.name = name
+    transaction.name = name.rstrip();
 
     #reference
     reference = line[159:178]
