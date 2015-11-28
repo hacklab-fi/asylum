@@ -10,9 +10,9 @@ For Ubuntu 14.04 LTS
 
   - Install nodejs v4 first (needs PPA and key and stuff, nodesource has a handy script for this)
 
-    sudo apt-get install curl
-    curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
-    sudo apt-get install -y nodejs
+    - `sudo apt-get install curl`
+    - `curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash `
+    - `sudo apt-get install -y nodejs`
 
   - `xargs -a <(awk '/^\s*[^#]/' "requirements.apt") -r -- sudo apt-get install` Installs all packages listed in requirements.apt
   - `sudo pip install maildump` currently not python3 compatible due to broken package
