@@ -1,4 +1,5 @@
 import random
+from decimal import Decimal
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from reversion import revisions
@@ -52,6 +53,13 @@ class Member(MemberCommon):
     mtypes = models.ManyToManyField(MemberType, related_name='+', verbose_name=_("Membership types"), blank=True)
     anonymized_id = models.CharField(_("Anonymized id (for use in external databases)"), max_length=24, unique=True, blank=True, null=True, default=generate_unique_randomid)
     member_id = models.PositiveIntegerField(_("Member id no"), blank=True, null=True, unique=True, default=generate_unique_memberid)
+
+    @property
+    def credit(self):
+        ret = self.creditor_transactions.all().aggregate(models.Sum('amount'))['amount__sum']
+        if ret == None:
+            return Decimal(0.0)
+        return ret
 
 revisions.default_revision_manager.register(Member)
 

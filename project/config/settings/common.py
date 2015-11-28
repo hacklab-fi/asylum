@@ -50,6 +50,7 @@ LOCAL_APPS = (
     # Your stuff: custom apps go here
     'members',
     'access',
+    'creditor',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
