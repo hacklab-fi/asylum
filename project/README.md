@@ -35,6 +35,12 @@ NOTE: the "sane defaults" are for local development, for production create a `.e
   - DJANGO_SENTRY_DSN
   - DATABASE_URL
 
+## Cron jobs
+
+Until we maybe decide on Celery for running various (timed or otherwise) tasks add the following to your crontab:
+
+    @daily      cd /path/to/project ; source venv/bin/activate ; ./manage.py addrecurring
+
 ## Running in development mode
 
   - `maildump --http-ip 0.0.0.0 -p ~/maildump.pid` (maybe needs sudo)
@@ -44,4 +50,3 @@ NOTE: the "sane defaults" are for local development, for production create a `.e
   - `maildump -p ~/maildump.pid --stop`
 
 If you need the special environment variables in scripts not run via manage.py, use `source .env` to load them.
-
