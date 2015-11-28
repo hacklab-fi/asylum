@@ -23,6 +23,7 @@ For Ubuntu 14.04 LTS
       Good luck.
   - `pip install -r requirements/local.txt` (or `pip install -r requirements/production.txt` if installing on production)
   - `./manage.py migrate`
+  - `./manage.py createinitialrevisions`
   - `./manage.py createsuperuser`
   - `npm run build`
 
