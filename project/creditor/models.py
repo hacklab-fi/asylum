@@ -1,4 +1,5 @@
 import datetime, calendar
+import uuid, hashlib
 from django.db import models, transaction
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
@@ -13,17 +14,30 @@ class TransactionTag(models.Model):
 revisions.default_revision_manager.register(TransactionTag)
 
 
+@transaction.atomic
+def generate_transaction_id():
+    candidate = uuid.uuid4().hex
+    while Transaction.objects.filter(unique_id=candidate).count():
+        candidate = uuid.uuid4().hex
+    return candidate
+
+
 class Transaction(models.Model):
-    stamp = models.DateTimeField(_("Datetime"), auto_now_add=True)
+    stamp = models.DateTimeField(_("Datetime"), auto_now_add=True, db_index=True)
     tag = models.ForeignKey(TransactionTag, blank=True, null=True, verbose_name=_("Tag"), related_name='+')
-    reference = models.CharField(_("Reference"), max_length=200, blank=False)
+    reference = models.CharField(_("Reference"), max_length=200, blank=False, db_index=True)
     owner = models.ForeignKey('members.Member', blank=False, verbose_name=_("Member"), related_name='creditor_transactions')
     amount = models.DecimalField(verbose_name=_("Amount"), max_digits=6, decimal_places=2, blank=False, null=False)
+    unique_id = models.CharField(_("Unique transaction id"), max_length=64, blank=False, default=generate_transaction_id, unique=True)
 
     def __str__(self):
         if self.tag:
             return _("%+.2f for %s (%s)") % (self.amount, self.owner, self.tag)
         return _("%+.2f for %s") % (self.amount, self.owner)
+
+    @transaction.atomic
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
 
 revisions.default_revision_manager.register(Transaction)
 
@@ -72,8 +86,10 @@ class RecurringTransaction(models.Model):
 
     def transaction_exists(self, timescope=None):
         start, end = self.resolve_timescope(timescope)
+        ref = self.make_reference(timescope)
+        uid = hashlib.sha1(ref.encode('UTF-8')).hexdigest()
         qs = Transaction.objects.filter(
-            owner=self.owner, tag=self.tag, reference=self.make_reference(timescope),
+            owner=self.owner, tag=self.tag, reference=ref, unique_id=uid,
             stamp__gte=start, stamp__lte=end
         )
         if qs.count():
@@ -90,6 +106,7 @@ class RecurringTransaction(models.Model):
         t.tag = self.tag
         t.owner = self.owner
         t.reference = self.make_reference(timescope)
+        t.unique_id = hashlib.sha1(t.reference.encode('UTF-8')).hexdigest()
         t.amount = self.amount
         t.save()
         return True
