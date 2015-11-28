@@ -41,7 +41,8 @@ def parseLine(line):
 
     #name
     name = line[108:142]
-    transaction.name = name.rstrip();
+    name = name.rstrip()
+    transaction.name = ascii2scandic(name)
 
     #reference
     reference = line[159:178]
@@ -50,4 +51,12 @@ def parseLine(line):
 
     return transaction
 
-
+def ascii2scandic(string):
+    "Replaces []\\{}| with ÄÅÖäåö, respectively"
+    string = string.replace('[', 'Ä')
+    string = string.replace(']', 'Å')
+    string = string.replace('\\', 'Ö')
+    string = string.replace('{', 'ä')
+    string = string.replace('}', 'å')
+    string = string.replace('|', 'ö')
+    return string
