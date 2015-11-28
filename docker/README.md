@@ -13,11 +13,16 @@ The general idea is that a web server is going to appear at 8000 when you do doc
 - On Linux: http://127.0.0.1:8000
 - On other systems: http://192.168.100:8000 (maybe, check your docker-machine ip default)
 
+## Maildump
+
+- On Linux: http://127.0.0.1:1080
+- On other systems: http://192.168.100:1080 (maybe, check your docker-machine ip default)
+
 ## Spawn a test server
 
 Webserver exposed at port 8000.
 
-    docker run --rm -it -p 8000:8000 hacklabfi/asylum
+    docker run --rm -it -p 8000:8000 -p 1080:1080 hacklabfi/asylum
 
 This also **removes the container** afterwards.
 
@@ -30,12 +35,12 @@ This also **removes the container** afterwards.
     git checkout upstream/master
     git pull user pull_request
     docker build -t asylum_test .
-    docker run --rm --name asylum_test -it -p 8000:8000 asylum_test
+    docker run --rm --name asylum_test -it -p 8000:8000 -p 1080:1080 asylum_test
     docker exec -it asylum_test bash
 
 ## Development environment (with project-folder mounted)
 
-    docker run -it -p 8000:8000 -v `pwd -P`/project:/opt/asylum hacklabfi/asylum
+    docker run -it -p 8000:8000 -p 1080:1080 -v `pwd -P`/project:/opt/asylum hacklabfi/asylum
     docker exec -it container_name bash # Run in another terminal window
 
 If you change anything that affects the build (requirements) you'll have to rebuild (see building locally).
@@ -47,4 +52,4 @@ This doesn't remove the container after ctrl-c and it can be started again if ne
 
 ## Run in background
 
-    docker run -d -p 8000:8000 hacklabfi/asylum
+    docker run -d -p 8000:8000 -p 1080:1080 hacklabfi/asylum

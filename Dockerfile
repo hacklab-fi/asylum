@@ -4,8 +4,12 @@ EXPOSE 8000
 
 # Install basics
 RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y build-essential postgresql
-RUN apt-get install -y python-virtualenv python3-pip git # to make builds faster (maybe required)
+RUN apt-get install -y build-essential postgresql git python-dev
+RUN apt-get install -y python-virtualenv python3-pip graphviz-dev libpq-dev # faster builds
+
+# Install maildump
+EXPOSE 1080
+RUN pip install maildump
 
 # Install nodejs
 RUN apt-get install -y curl
