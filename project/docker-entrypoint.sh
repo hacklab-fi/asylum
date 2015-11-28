@@ -16,6 +16,10 @@ sudo -u postgres service postgresql start
 
 # Start forego or execute a command in the virtualenv
 if [ "$#" -eq 0 ]; then
+#  npm run build
+  npm run build
+  npm run watch &
+  NPM=$!
   ./manage.py runserver 0.0.0.0:8000
 else
   "$@"
