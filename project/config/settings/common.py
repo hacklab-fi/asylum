@@ -49,6 +49,7 @@ THIRD_PARTY_APPS = (
 LOCAL_APPS = (
     # Your stuff: custom apps go here
     'members',
+    'access',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
