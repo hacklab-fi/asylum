@@ -1,6 +1,6 @@
 # Building hacklabfi/asylum locally
 
-docker build -t hacklabfi/asylum -f docker/Dockerfile .
+docker build -t hacklabfi/asylum .
 
 # Running asylum
 
