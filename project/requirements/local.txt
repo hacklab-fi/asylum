@@ -18,4 +18,5 @@ ipdb==0.8.1
 flake8==2.4.1
 pep8==1.5.7
 pep8-naming==0.3.3
+pytest==2.8.2
 
