@@ -238,3 +238,4 @@ AUTOSLUG_SLUGIFY_FUNCTION = 'slugify.slugify'
 ADMIN_URL = r'^admin/'
 
 # Your common stuff: Below this line define 3rd party library settings
+APPLICATION_RULES_URL = env('APPLICATION_RULES_URL', default='http://hacklab.fi/')
