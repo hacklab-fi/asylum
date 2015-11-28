@@ -7,6 +7,11 @@ RUN apt-get update && apt-get upgrade -y
 RUN apt-get install -y build-essential postgresql
 RUN apt-get install -y python-virtualenv python3-pip # to make builds faster
 
+# Install nodejs
+RUN apt-get install -y curl
+RUN curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash
+RUN apt-get install -y nodejs
+
 # Create database
 USER postgres
 RUN service postgresql start && \
@@ -43,6 +48,7 @@ RUN echo "DATABASE_URL=postgres://asylum:asylum@localhost/asylum" > .env
 # Run migrate and create admin user
 USER asylum
 RUN sudo -u postgres service postgresql start; \
+    npm run build && \
     . ../asylum-venv/bin/activate && \
     ./manage.py migrate && \
     echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'nospamplz@hacklab.fi', 'admin')" | ./manage.py shell
