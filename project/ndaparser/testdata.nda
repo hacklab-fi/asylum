@@ -29,4 +29,14 @@ T1132311                                   FI1234123412341234                 DA
 T101880000111501032588WWMK01351501051501031501032720Itsepalvelu                        -000000000000001041 AOsku O{res{                        A80002106981466                              
 T1104300Kulukorvaus remonttitarvikkeista   
 T1132311                                   FI1234123412341234                 DABAFIHHXXX                                                                                                                                                                                                                                          
-
+T10188000026150107258883E903911501071501071501072730Palvelumaksu                       -000000000000004435EJASYLUM PANKKI SUOMI OYJ            J                                            
+T110780601.12.-31.12.2014                                                     
+T10188000026150107258883E903911501070000001501072730Palvelumaksu                       -000000000000000075 JASULYM PANKKI SUOMI OYJ            J                                           1
+T1118300Konekielinen tiliote               174530-109605                      Tiliote, TITO                    *)      1 kpl a    0,750 e       0,75*) alv rek. 0%                     
+T10188000026150107258883E903911501070000001501072730Palvelumaksu                       -000000000000000448 JASULUM PANKKI SUOMI OYJ            J                                           1
+T1125300Konttoripalvelut                   174530-109605                      Viitteett|m{t panot              *)      2 kpl a    0,550 e       1,10Viitemaksut                      *)     26 kpl a    0,130 e       3,38*) alv rek. 0%                     
+T10188000026150107258883E903911501070000001501072730Palvelumaksu                       -000000000000000040 JASULUM PANKKI SUOMI OYJ            J                                           1
+T1118300Yrityksen verkkopankki, maksut     123412-344321                      Verkkomaksut muihin pankkeihin   *)      2 kpl a    0,200 e       0,40*) alv rek. 0%                     
+T10188000026150107258883E903911501070000001501072730Palvelumaksu                       -000000000000003872 JASYLUM PANKKI SUOMI OYJ            J                                           1
+T1142800Verkkopankkisopimus/yritys         Liittym{maksu                    *)      1 kpl a    6,000 e       6,00Tapahtumakysely                  *)      4 kpl a    0,110 e       0,44E-laskun l{hetys/k{ytt||notto            1 kpl a   16,140 e      16,14Veron peruste e         13,02      alv rek. 24% vero e      3,12      E-laskun vast.otto/k{ytt||notto          1 kpl a   16,140 e      16,14Veron peruste e         13,02      
+T1107800alv rek. 24% vero e      3,12      *) alv rek. 0%                     
