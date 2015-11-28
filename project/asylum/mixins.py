@@ -13,3 +13,6 @@ class AtomicVersionMixin(object):
         with transaction.atomic(), revisions.create_revision():
             return super().save(*args, **kwargs)
 
+    def delete(self, *args, **kwargs):
+        with transaction.atomic(), revisions.create_revision():
+            return super().delete(*args, **kwargs)
