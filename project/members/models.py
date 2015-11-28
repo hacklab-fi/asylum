@@ -66,9 +66,16 @@ class Member(MemberCommon):
 
 revisions.default_revision_manager.register(Member)
 
+class MembershipApplicationTag(AtomicVersionMixin, models.Model):
+    label = models.CharField(_("Label"), max_length=200, blank=False)
+
+    def __str__(self):
+        return self.label
+
 
 class MembershipApplication(MemberCommon):
     received = models.DateField(auto_now_add=True)
+    tags = models.ManyToManyField(MembershipApplicationTag, related_name='+', verbose_name=_("Application tags"), blank=True)
 
     def approve(self, set_mtypes):
         with transaction.atomic(), revisions.create_revision():
