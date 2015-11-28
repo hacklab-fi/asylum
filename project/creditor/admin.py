@@ -1,3 +1,15 @@
 from django.contrib import admin
+from reversion.admin import VersionAdmin
+from .models import TransactionTag, Transaction
 
-# Register your models here.
+
+class TransactionTagAdmin(VersionAdmin):
+    pass
+
+
+class TransactionAdmin(VersionAdmin):
+    pass
+
+
+admin.site.register(TransactionTag, TransactionTagAdmin)
+admin.site.register(Transaction, TransactionAdmin)
