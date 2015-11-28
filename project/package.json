@@ -4,7 +4,8 @@
     "private": true,
     "scripts": {
         "watch": "npm i && bower install && gulp watch",
-        "build": "npm i && bower install && gulp"
+        "build": "npm i && bower install && gulp",
+        "build_noninteractive": "npm i && bower --config.interactive=false install && gulp"
     },
     "repository": {
         "type": "git",
