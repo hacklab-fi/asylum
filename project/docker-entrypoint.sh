@@ -12,7 +12,7 @@ VENV_DIR_PATH=/opt/asylum-venv/
 . $VENV_DIR_PATH/bin/activate
 
 # make sure postgresql is running
-service postgresql start
+sudo -u postgres service postgresql start
 
 # Start forego or execute a command in the virtualenv
 if [ "$#" -eq 0 ]; then
