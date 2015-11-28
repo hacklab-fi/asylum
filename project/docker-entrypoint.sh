@@ -2,7 +2,11 @@
 
 set -e
 
-VENV_DIR_PATH=/opt/asylum/venv/
+if [ ! -f .env ]; then
+  echo "DATABASE_URL=postgres://asylum:asylum@localhost/asylum" > .env
+fi
+
+VENV_DIR_PATH=/opt/asylum-venv/
 
 # activate virtualenv
 . $VENV_DIR_PATH/bin/activate

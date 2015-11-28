@@ -17,12 +17,12 @@ RUN service postgresql start && \
 COPY project/requirements.apt /opt/asylum/
 WORKDIR /opt/asylum
 RUN awk '/^\s*[^#]/' requirements.apt | xargs -r -- sudo apt-get install --no-install-recommends -y
-RUN virtualenv -p `which python3.4` venv
+RUN virtualenv -p `which python3.4` ../asylum-venv
 
 # Install python requirements
 COPY project/requirements /opt/asylum/requirements/
 WORKDIR /opt/asylum
-RUN . venv/bin/activate && pip install -r requirements/local.txt
+RUN . ../asylum-venv/bin/activate && pip install -r requirements/local.txt
 
 # Configure application
 COPY project /opt/asylum/
@@ -30,7 +30,7 @@ RUN echo "DATABASE_URL=postgres://asylum:asylum@localhost/asylum" > .env
 
 # Create
 RUN service postgresql start; \
-    . venv/bin/activate && \
+    . ../asylum-venv/bin/activate && \
     ./manage.py migrate && \
     echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'nospamplz@hacklab.fi', 'admin')" | ./manage.py shell
 
