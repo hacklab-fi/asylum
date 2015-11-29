@@ -24,6 +24,19 @@ class RTInline(admin.TabularInline):
     extra = 0
 
 
+class MemberTypeListFilter(admin.SimpleListFilter):
+    title = _("Membership types")
+    parameter_name = 'mtype'
+
+    def lookups(self, request, model_admin):
+        return ( (x.pk, x.label) for x in MemberType.objects.all() )
+
+    def queryset(self, request, queryset):
+        v = self.value()
+        if not v:
+            return queryset
+        return queryset.filter(mtypes=v)
+
 class MemberAdmin(VersionAdmin):
     list_display = (
         'rname',
@@ -32,6 +45,7 @@ class MemberAdmin(VersionAdmin):
         'credit_formatted',
         'mtypes_formatted',
     )
+    list_filter = (MemberTypeListFilter,)
     inlines = [ GrantInline, TokenInline, RTInline ]
 
     def credit_formatted(self, obj):
