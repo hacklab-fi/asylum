@@ -25,6 +25,7 @@ class MemberAdmin(VersionAdmin):
         'email',
         'nick',
         'credit_formatted',
+        'mtypes_formatted',
     )
     inlines = [ GrantInline, TokenInline ]
 
@@ -34,6 +35,10 @@ class MemberAdmin(VersionAdmin):
             color = "red"
         return format_html("<span style='color: {};'>{}</span>",color, "%+.02f" % obj.credit)
     credit_formatted.short_description = _("Credit")
+
+    def mtypes_formatted(self, obj):
+        return ', '.join(( x.label for x in obj.mtypes.all() ))
+    mtypes_formatted.short_description = _("Membership types")
 
 
 class MembershipApplicationAdmin(VersionAdmin):
