@@ -1,5 +1,6 @@
 import random
 from decimal import Decimal
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from asylum.mixins import AtomicVersionMixin, CleanSaveMixin
@@ -85,6 +86,14 @@ class MembershipApplication(MemberCommon):
     @call_saves('MEMBERAPPLICATION_CALLBACKS_HANDLER')
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)
+
+    def validate_unique(self, exclude=None):
+        if exclude and 'email' in exclude:
+            return super().validate_unique(exclude)
+        if Member.objects.filter(email=self.email).count():
+            # TODO: Figure out the exact format the default form validators use and use that ?
+            raise ValidationError({'email': ValidationError(_('Member with this email already exists'), code='unique')})
+        return super().validate_unique(exclude)
 
     def approve(self, set_mtypes):
         h = get_handler_instance('MEMBERAPPLICATION_CALLBACKS_HANDLER')
