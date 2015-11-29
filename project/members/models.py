@@ -63,6 +63,15 @@ class Member(MemberCommon):
     anonymized_id = models.CharField(_("Anonymized id (for use in external databases)"), max_length=24, unique=True, blank=True, null=True, default=generate_unique_randomid)
     member_id = models.PositiveIntegerField(_("Member id no"), blank=True, null=True, unique=True, default=generate_unique_memberid)
 
+
+    @property
+    def name(self):
+        return "%s %s" % (self.fname, self.lname)
+
+    @property
+    def rname(self):
+        return "%s, %s" % (self.lname, self.fname)
+
     @property
     def credit(self):
         ret = self.creditor_transactions.all().aggregate(models.Sum('amount'))['amount__sum']
