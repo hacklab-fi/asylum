@@ -239,3 +239,7 @@ ADMIN_URL = r'^admin/'
 
 # Your common stuff: Below this line define 3rd party library settings
 APPLICATION_RULES_URL = env('APPLICATION_RULES_URL', default='http://hacklab.fi/')
+
+# Give path to a class implementing the api outlined in member.handers baseclasses
+MEMBERAPPLICATION_CALLBACKS_HANDLER=env('MEMBERAPPLICATION_CALLBACKS_HANDLER', default=None)
+MEMBER_CALLBACKS_HANDLER=env('MEMBER_CALLBACKS_HANDLER', default=None)
