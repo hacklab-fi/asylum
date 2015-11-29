@@ -1,3 +1,4 @@
+import itertools
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
@@ -79,7 +80,7 @@ class TagListFilter(admin.SimpleListFilter):
 class MembershipApplicationsForm(admin.helpers.ActionForm):
     mtypes = forms.MultipleChoiceField(
         label=_("Membership types"), # TODO: Read from the member model meta ?
-        choices=( (x.pk, x.label) for x in MemberType.objects.all() )
+        choices=itertools.chain( ( ('', '----' ), ) ,( (x.pk, x.label) for x in MemberType.objects.all() ))
     )
 
 
@@ -101,7 +102,8 @@ class MembershipApplicationAdmin(VersionAdmin):
     def approve_selected(modeladmin, request, queryset):
         add_types = []
         for x in request.POST.getlist('mtypes'):
-            add_types.append(int(x))
+            if x:
+                add_types.append(int(x))
         for a in queryset.all():
             a.approve(add_types)
     approve_selected.short_description = _("Approve selected applications")
