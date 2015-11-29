@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
+from django import forms
 from reversion.admin import VersionAdmin
 from .models import MemberType, Member, MembershipApplication, MembershipApplicationTag
 from access.models import Token, Grant
@@ -60,6 +61,7 @@ class MemberAdmin(VersionAdmin):
         return ', '.join(( x.label for x in obj.mtypes.all() ))
     mtypes_formatted.short_description = _("Membership types")
 
+
 class TagListFilter(admin.SimpleListFilter):
     title = _("Tags")
     parameter_name = 'tag'
@@ -74,6 +76,13 @@ class TagListFilter(admin.SimpleListFilter):
         return queryset.filter(tags=v)
 
 
+class MembershipApplicationsForm(admin.helpers.ActionForm):
+    mtypes = forms.MultipleChoiceField(
+        label=_("Membership types"), # TODO: Read from the member model meta ?
+        choices=( (x.pk, x.label) for x in MemberType.objects.all() )
+    )
+
+
 class MembershipApplicationAdmin(VersionAdmin):
     list_display = (
         'rname',
@@ -83,14 +92,18 @@ class MembershipApplicationAdmin(VersionAdmin):
     )
     list_filter = (TagListFilter,)
     actions = ['approve_selected']
+    action_form = MembershipApplicationsForm
 
     def tags_formatted(self, obj):
         return ', '.join(( x.label for x in obj.tags.all() ))
     tags_formatted.short_description = _("Tags")
 
     def approve_selected(modeladmin, request, queryset):
+        add_types = []
+        for x in request.POST.getlist('mtypes'):
+            add_types.append(int(x))
         for a in queryset.all():
-            a.approve([])
+            a.approve(add_types)
     approve_selected.short_description = _("Approve selected applications")
 
 
