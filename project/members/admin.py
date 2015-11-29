@@ -60,7 +60,6 @@ class MemberAdmin(VersionAdmin):
         return ', '.join(( x.label for x in obj.mtypes.all() ))
     mtypes_formatted.short_description = _("Membership types")
 
-
 class TagListFilter(admin.SimpleListFilter):
     title = _("Tags")
     parameter_name = 'tag'
@@ -83,9 +82,16 @@ class MembershipApplicationAdmin(VersionAdmin):
         'tags_formatted',
     )
     list_filter = (TagListFilter,)
+    actions = ['approve_selected']
+
     def tags_formatted(self, obj):
         return ', '.join(( x.label for x in obj.tags.all() ))
     tags_formatted.short_description = _("Tags")
+
+    def approve_selected(modeladmin, request, queryset):
+        for a in queryset.all():
+            a.approve([])
+    approve_selected.short_description = _("Approve selected applications")
 
 
 class MembershipApplicationTagAdmin(VersionAdmin):
