@@ -1,5 +1,5 @@
 from django.db import models
-from asylum.mixins import AtomicVersionMixin, CleanSaveMixin
+from asylum.models import AsylumModel
 # importing after asylum.mixins to get the monkeypatching done there
 from reversion import revisions
 from django.db import transaction
