@@ -1,3 +1,39 @@
+# Helper scripts
+
+## Dev server
+
+Quickly start up a dev server, wait for input and destroy it. Fresh db every time! =)
+
+    docker/dev.sh
+
+### What the script does
+
+- Build
+- Start the container and run development server
+    - project-directory is mapped inside the container so changes are applied immediately and this script can be run multiple times without damaging the code
+    - Regular ports are exposed see (Web server)
+- Wait for enter
+- Stop the container
+- Destroy the container (Effectively destroying database)
+
+## Test pull request
+
+Quickly test a pull request
+
+    docker/test_pull_request.sh remote branch
+
+### What the script does
+
+- Clean up work directory (assume it might destroy your uncommited things)
+- Checkout a branch from a remote
+    - add remotes with: git add remote **remote** git@github.com:**remote**/asylum.git
+- Build
+- Start the container and run development server
+    - project-directory is **not** mapped
+- Wait for ctrl-c
+    - To login, in another terminal: docker exec -it asylum_test bash
+- Destroy the server and everything with it
+
 # Building locally
 
     docker build -t hacklabfi/asylum .
