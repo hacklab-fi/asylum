@@ -94,7 +94,7 @@ EMAIL_BACKEND = env('DJANGO_EMAIL_BACKEND', default='django.core.mail.backends.s
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = (
-    ("""Anders Innovations""", 'support@anders.fi'),
+    ("""Hacklab.fi""", 'info@hacklab.fi'),
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
@@ -239,3 +239,7 @@ ADMIN_URL = r'^admin/'
 
 # Your common stuff: Below this line define 3rd party library settings
 APPLICATION_RULES_URL = env('APPLICATION_RULES_URL', default='http://hacklab.fi/')
+
+# Give path to a class implementing the api outlined in member.handers baseclasses
+MEMBERAPPLICATION_CALLBACKS_HANDLER=env('MEMBERAPPLICATION_CALLBACKS_HANDLER', default=None)
+MEMBER_CALLBACKS_HANDLER=env('MEMBER_CALLBACKS_HANDLER', default=None)

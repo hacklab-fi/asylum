@@ -6,6 +6,7 @@ from asylum.mixins import AtomicVersionMixin
 # importing after asylum.mixins to get the monkeypatching done there
 from reversion import revisions
 from django.db import transaction
+from .handlers import call_saves, get_handler_instance
 
 def generate_unique_randomid():
     """Generate pseudorandom ids until a free one is found"""
@@ -64,6 +65,10 @@ class Member(MemberCommon):
             return Decimal(0.0)
         return ret
 
+    @call_saves('MEMBER_CALLBACKS_HANDLER')
+    def save(self, *args, **kwargs):
+        return super().save(*args, **kwargs)
+
 revisions.default_revision_manager.register(Member)
 
 class MembershipApplicationTag(AtomicVersionMixin, models.Model):
@@ -77,7 +82,12 @@ class MembershipApplication(MemberCommon):
     received = models.DateField(auto_now_add=True)
     tags = models.ManyToManyField(MembershipApplicationTag, related_name='+', verbose_name=_("Application tags"), blank=True)
 
+    @call_saves('MEMBERAPPLICATION_CALLBACKS_HANDLER')
+    def save(self, *args, **kwargs):
+        return super().save(*args, **kwargs)
+
     def approve(self, set_mtypes):
+        h = get_handler_instance('MEMBERAPPLICATION_CALLBACKS_HANDLER')
         with transaction.atomic(), revisions.create_revision():
             m = Member()
             m.fname = self.fname
@@ -86,10 +96,14 @@ class MembershipApplication(MemberCommon):
             m.email = self.email
             m.phone = self.phone
             m.nick = self.nick
+            if h:
+                h.on_approving(self, m)
             m.save()
             if set_mtypes:
                 m.mtypes = set_mtypes
                 m.save()
+            if h:
+                h.on_approved(self, m)
             self.delete()
 
 revisions.default_revision_manager.register(MembershipApplication)
