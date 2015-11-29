@@ -48,6 +48,10 @@ class MemberType(AtomicVersionMixin, models.Model):
     def __str__(self):
         return self.label
 
+    class Meta:
+        verbose_name = _('Member Type')
+        verbose_name_plural = _('Member Types')
+
 revisions.default_revision_manager.register(MemberType)
 
 
@@ -64,6 +68,10 @@ class Member(MemberCommon):
             return Decimal(0.0)
         return ret
 
+    class Meta:
+        verbose_name = _('Member')
+        verbose_name_plural = _('Members')
+
 revisions.default_revision_manager.register(Member)
 
 class MembershipApplicationTag(AtomicVersionMixin, models.Model):
@@ -71,6 +79,10 @@ class MembershipApplicationTag(AtomicVersionMixin, models.Model):
 
     def __str__(self):
         return self.label
+
+    class Meta:
+        verbose_name = _('Membership Application Tag')
+        verbose_name_plural = _('Membership Application Tags')
 
 
 class MembershipApplication(MemberCommon):
@@ -91,5 +103,9 @@ class MembershipApplication(MemberCommon):
                 m.mtypes = set_mtypes
                 m.save()
             self.delete()
+
+    class Meta:
+        verbose_name = _('Membership Application')
+        verbose_name_plural = _('Membership Applications')
 
 revisions.default_revision_manager.register(MembershipApplication)
