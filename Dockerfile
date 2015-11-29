@@ -45,8 +45,8 @@ RUN . ../asylum-venv/bin/activate && pip install -r requirements/local.txt
 
 # Configure application
 USER root
-COPY project /opt/asylum/
 RUN echo "DATABASE_URL=postgres://asylum:asylum@localhost/asylum" > .env
+COPY project /opt/asylum/
 RUN chown -R asylum:asylum /opt/asylum/
 
 # Test npm (this will happen again at entrypoint)
