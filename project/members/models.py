@@ -2,7 +2,7 @@ import random
 from decimal import Decimal
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from asylum.mixins import AtomicVersionMixin
+from asylum.mixins import AtomicVersionMixin, CleanSaveMixin
 # importing after asylum.mixins to get the monkeypatching done there
 from reversion import revisions
 from django.db import transaction
@@ -28,7 +28,7 @@ def generate_unique_memberid():
     return candidate
 
 
-class MemberCommon(AtomicVersionMixin, models.Model):
+class MemberCommon(AtomicVersionMixin, CleanSaveMixin, models.Model):
     fname = models.CharField(_("First name"), max_length=200, blank=False)
     lname = models.CharField(_("Last name"), max_length=200, blank=False)
     city = models.CharField(_("City of residence"), max_length=200, blank=False)
@@ -43,7 +43,7 @@ class MemberCommon(AtomicVersionMixin, models.Model):
         abstract = True
 
 
-class MemberType(AtomicVersionMixin, models.Model):
+class MemberType(AtomicVersionMixin, CleanSaveMixin, models.Model):
     label = models.CharField(_("Label"), max_length=200, blank=False)
 
     def __str__(self):
@@ -71,7 +71,7 @@ class Member(MemberCommon):
 
 revisions.default_revision_manager.register(Member)
 
-class MembershipApplicationTag(AtomicVersionMixin, models.Model):
+class MembershipApplicationTag(AtomicVersionMixin, CleanSaveMixin, models.Model):
     label = models.CharField(_("Label"), max_length=200, blank=False)
 
     def __str__(self):
