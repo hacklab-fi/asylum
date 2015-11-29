@@ -61,7 +61,15 @@ class MemberAdmin(VersionAdmin):
 
 
 class MembershipApplicationAdmin(VersionAdmin):
-    pass
+    list_display = (
+        'rname',
+        'email',
+        'nick',
+        'tags_formatted',
+    )
+    def tags_formatted(self, obj):
+        return ', '.join(( x.label for x in obj.tags.all() ))
+    tags_formatted.short_description = _("Tags")
 
 
 class MembershipApplicationTagAdmin(VersionAdmin):
