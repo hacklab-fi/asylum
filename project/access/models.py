@@ -1,11 +1,11 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from asylum.mixins import AtomicVersionMixin
+from asylum.mixins import AtomicVersionMixin, CleanSaveMixin
 # importing after asylum.mixins to get the monkeypatching done there
 from reversion import revisions
 from django.db import transaction
 
-class TokenType(AtomicVersionMixin, models.Model):
+class TokenType(AtomicVersionMixin, CleanSaveMixin, models.Model):
     label = models.CharField(_("Label"), max_length=200, blank=False)
 
     def __str__(self):
@@ -14,7 +14,7 @@ class TokenType(AtomicVersionMixin, models.Model):
 revisions.default_revision_manager.register(TokenType)
 
 
-class Token(AtomicVersionMixin, models.Model):
+class Token(AtomicVersionMixin, CleanSaveMixin, models.Model):
     label = models.CharField(_("Label"), max_length=200, blank=True)
     owner = models.ForeignKey('members.Member', blank=False, verbose_name=_("Member"), related_name='access_tokens')
     ttype = models.ForeignKey(TokenType, blank=False, verbose_name=_("Token type"), related_name='+')
@@ -29,7 +29,7 @@ class Token(AtomicVersionMixin, models.Model):
 revisions.default_revision_manager.register(Token)
 
 
-class AccessType(AtomicVersionMixin, models.Model):
+class AccessType(AtomicVersionMixin, CleanSaveMixin, models.Model):
     label = models.CharField(_("Label"), max_length=200, blank=False)
     bit = models.PositiveSmallIntegerField(_("Bit number"), blank=True, null=True, unique=True) # For systems that utilize bitwise checks
     external_id = models.CharField(_("External identifier"), max_length=200, blank=True, null=True, unique=True) # For other systems
@@ -40,7 +40,7 @@ class AccessType(AtomicVersionMixin, models.Model):
 revisions.default_revision_manager.register(AccessType)
 
 
-class Grant(AtomicVersionMixin, models.Model):
+class Grant(AtomicVersionMixin, CleanSaveMixin, models.Model):
     owner = models.ForeignKey('members.Member', blank=False, verbose_name=_("Member"), related_name='access_granted')
     atype = models.ForeignKey(AccessType, related_name='+', verbose_name=_("Access"))
 
