@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from reversion.admin import VersionAdmin
 from .models import MemberType, Member, MembershipApplication, MembershipApplicationTag
 from access.models import Token, Grant
+from creditor.models import RecurringTransaction
 
 class MemberTypeAdmin(VersionAdmin):
     pass
@@ -18,6 +19,10 @@ class TokenInline(admin.TabularInline):
     model = Token
     extra = 0
 
+class RTInline(admin.TabularInline):
+    model = RecurringTransaction
+    extra = 0
+
 
 class MemberAdmin(VersionAdmin):
     list_display = (
@@ -27,7 +32,7 @@ class MemberAdmin(VersionAdmin):
         'credit_formatted',
         'mtypes_formatted',
     )
-    inlines = [ GrantInline, TokenInline ]
+    inlines = [ GrantInline, TokenInline, RTInline ]
 
     def credit_formatted(self, obj):
         color = "green"
