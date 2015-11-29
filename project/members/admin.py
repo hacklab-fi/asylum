@@ -37,6 +37,7 @@ class MemberTypeListFilter(admin.SimpleListFilter):
             return queryset
         return queryset.filter(mtypes=v)
 
+
 class MemberAdmin(VersionAdmin):
     list_display = (
         'rname',
@@ -60,6 +61,20 @@ class MemberAdmin(VersionAdmin):
     mtypes_formatted.short_description = _("Membership types")
 
 
+class TagListFilter(admin.SimpleListFilter):
+    title = _("Tags")
+    parameter_name = 'tag'
+
+    def lookups(self, request, model_admin):
+        return ( (x.pk, x.label) for x in MembershipApplicationTag.objects.all() )
+
+    def queryset(self, request, queryset):
+        v = self.value()
+        if not v:
+            return queryset
+        return queryset.filter(tags=v)
+
+
 class MembershipApplicationAdmin(VersionAdmin):
     list_display = (
         'rname',
@@ -67,6 +82,7 @@ class MembershipApplicationAdmin(VersionAdmin):
         'nick',
         'tags_formatted',
     )
+    list_filter = (TagListFilter,)
     def tags_formatted(self, obj):
         return ', '.join(( x.label for x in obj.tags.all() ))
     tags_formatted.short_description = _("Tags")
