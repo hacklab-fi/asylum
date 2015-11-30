@@ -51,4 +51,4 @@ Until we maybe decide on Celery for running various (timed or otherwise) tasks a
   - `./manage.py runserver 0.0.0.0:8000`
   - `maildump -p ~/maildump.pid --stop`
 
-If you need the special environment variables in scripts not run via manage.py, use `source .env` to load them.
+If you need the special environment variables in scripts not run via manage.py, use `set -o allexport ; source .env; set +o allexport` to load them.
