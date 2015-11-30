@@ -1,0 +1,90 @@
+# This file is distributed under the same license as the PACKAGE package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-11-29 03:10+0200\n"
+"PO-Revision-Date: 2015-11-29 03:10+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.6\n"
+
+#: access/models.py:9 access/models.py:22 access/models.py:41
+msgid "Label"
+msgstr "Nimiö"
+
+#: access/models.py:15
+msgid "Token Type"
+msgstr "Poletin tyyppi"
+
+#: access/models.py:16
+msgid "Token Types"
+msgstr "Poletin tyypit"
+
+#: access/models.py:23 access/models.py:56
+msgid "Member"
+msgstr "Jäsen"
+
+#: access/models.py:24
+msgid "Token type"
+msgstr "Tunnisteen tyyppi"
+
+#: access/models.py:25
+msgid "Token value"
+msgstr "Tunnisteen arvo"
+
+#: access/models.py:26
+msgid "Revoked"
+msgstr "Peruutettu"
+
+#: access/models.py:31
+#, python-format
+msgid "%s '%s' for %s"
+msgstr ""
+
+#: access/models.py:34
+msgid "Token"
+msgstr "Poletti"
+
+#: access/models.py:35
+msgid "Tokens"
+msgstr "Poletit"
+
+#: access/models.py:42
+msgid "Bit number"
+msgstr "Bittinumero"
+
+#: access/models.py:43
+msgid "External identifier"
+msgstr "Ulkoinen tunnus"
+
+#: access/models.py:49
+msgid "Access Type"
+msgstr "Pääsyoikeuden tyyppi"
+
+#: access/models.py:50
+msgid "Access Types"
+msgstr "Pääsyoikeuden tyypit"
+
+#: access/models.py:57
+msgid "Access"
+msgstr "Pääsyoikeus"
+
+#: access/models.py:60
+#, python-format
+msgid "%s for %s"
+msgstr ""
+
+#: access/models.py:63
+msgid "Grant"
+msgstr "Pääsyoikeus"
+
+#: access/models.py:64
+msgid "Grants"
+msgstr "Pääsyoikeudet"

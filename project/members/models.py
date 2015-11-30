@@ -50,6 +50,10 @@ class MemberType(AtomicVersionMixin, CleanSaveMixin, models.Model):
     def __str__(self):
         return self.label
 
+    class Meta:
+        verbose_name = _('Member Type')
+        verbose_name_plural = _('Member Types')
+
 revisions.default_revision_manager.register(MemberType)
 
 
@@ -70,6 +74,9 @@ class Member(MemberCommon):
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)
 
+class Meta:
+        verbose_name = _('Member')
+        verbose_name_plural = _('Members')
 revisions.default_revision_manager.register(Member)
 
 class MembershipApplicationTag(AtomicVersionMixin, CleanSaveMixin, models.Model):
@@ -77,6 +84,10 @@ class MembershipApplicationTag(AtomicVersionMixin, CleanSaveMixin, models.Model)
 
     def __str__(self):
         return self.label
+
+    class Meta:
+        verbose_name = _('Membership Application Tag')
+        verbose_name_plural = _('Membership Application Tags')
 
 
 class MembershipApplication(MemberCommon):
@@ -114,5 +125,9 @@ class MembershipApplication(MemberCommon):
             if h:
                 h.on_approved(self, m)
             self.delete()
+
+    class Meta:
+        verbose_name = _('Membership Application')
+        verbose_name_plural = _('Membership Applications')
 
 revisions.default_revision_manager.register(MembershipApplication)

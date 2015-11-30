@@ -11,6 +11,10 @@ class TokenType(AtomicVersionMixin, CleanSaveMixin, models.Model):
     def __str__(self):
         return self.label
 
+    class Meta:
+        verbose_name = _('Token Type')
+        verbose_name_plural = _('Token Types')
+
 revisions.default_revision_manager.register(TokenType)
 
 
@@ -26,6 +30,10 @@ class Token(AtomicVersionMixin, CleanSaveMixin, models.Model):
             return self.label
         return _("%s '%s' for %s") % (self.ttype, self.value, self.owner)
 
+    class Meta:
+        verbose_name = _('Token')
+        verbose_name_plural = _('Tokens')
+
 revisions.default_revision_manager.register(Token)
 
 
@@ -37,6 +45,10 @@ class AccessType(AtomicVersionMixin, CleanSaveMixin, models.Model):
     def __str__(self):
         return self.label
 
+    class Meta:
+        verbose_name = _('Access Type')
+        verbose_name_plural = _('Access Types')
+
 revisions.default_revision_manager.register(AccessType)
 
 
@@ -46,5 +58,9 @@ class Grant(AtomicVersionMixin, CleanSaveMixin, models.Model):
 
     def __str__(self):
         return _("%s for %s") % (self.atype, self.owner)
+
+    class Meta:
+        verbose_name = _('Grant')
+        verbose_name_plural = _('Grants')
 
 revisions.default_revision_manager.register(Grant)
