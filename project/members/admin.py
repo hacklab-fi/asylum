@@ -7,6 +7,7 @@ from reversion.admin import VersionAdmin
 from .models import MemberType, Member, MembershipApplication, MembershipApplicationTag
 from access.models import Token, Grant, AccessType
 from creditor.models import RecurringTransaction
+from django.utils.functional import lazy, allow_lazy
 
 class MemberTypeAdmin(VersionAdmin):
     pass
@@ -95,10 +96,13 @@ class TagListFilter(admin.SimpleListFilter):
         return queryset.filter(tags=v)
 
 
+def mtypes_choices():
+    return itertools.chain( ( ('', '----' ), ) ,( (x.pk, x.label) for x in MemberType.objects.all() ) )
+
 class MembershipApplicationsForm(admin.helpers.ActionForm):
     mtypes = forms.MultipleChoiceField(
         label=_("Membership types"), # TODO: Read from the member model meta ?
-        choices=itertools.chain( ( ('', '----' ), ) ,( (x.pk, x.label) for x in MemberType.objects.all() ))
+        choices=lazy(mtypes_choices, tuple)
     )
 
 
