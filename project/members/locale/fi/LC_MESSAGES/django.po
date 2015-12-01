@@ -17,8 +17,8 @@ msgstr ""
 
 #: members/forms.py:7
 #, python-format
-msgid "I have read and accept <a href='%s' target='_blank'>the rules</a>"
-msgstr "Olen lukenut ja hyväksyn <a href=‘%s’ target=‘_blank’>säännöt</a>"
+msgid "I have read and accept <a href=\"%s\" target=\"_blank\">the rules</a>"
+msgstr "Olen lukenut ja hyväksyn <a href=\"%s\" target=\"_blank\">säännöt</a>"
 
 #: members/models.py:31
 msgid "First name"
