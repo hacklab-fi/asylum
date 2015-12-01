@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from django import forms
 from reversion.admin import VersionAdmin
 from .models import MemberType, Member, MembershipApplication, MembershipApplicationTag
-from access.models import Token, Grant
+from access.models import Token, Grant, AccessType
 from creditor.models import RecurringTransaction
 
 class MemberTypeAdmin(VersionAdmin):
@@ -40,6 +40,20 @@ class MemberTypeListFilter(admin.SimpleListFilter):
         return queryset.filter(mtypes=v)
 
 
+class GrantListFilter(admin.SimpleListFilter):
+    title = _("Grants")
+    parameter_name = 'atype'
+
+    def lookups(self, request, model_admin):
+        return ( (x.pk, x.label) for x in AccessType.objects.all() )
+
+    def queryset(self, request, queryset):
+        v = self.value()
+        if not v:
+            return queryset
+        return queryset.filter(access_granted__atype=v)
+
+
 class MemberAdmin(VersionAdmin):
     list_display = (
         'rname',
@@ -49,7 +63,7 @@ class MemberAdmin(VersionAdmin):
         'mtypes_formatted',
         'grants_formatted',
     )
-    list_filter = (MemberTypeListFilter,)
+    list_filter = (MemberTypeListFilter, GrantListFilter)
     inlines = [ GrantInline, TokenInline, RTInline ]
 
     def credit_formatted(self, obj):
