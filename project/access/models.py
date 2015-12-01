@@ -1,11 +1,11 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from asylum.mixins import AtomicVersionMixin, CleanSaveMixin
+from asylum.models import AsylumModel
 # importing after asylum.mixins to get the monkeypatching done there
 from reversion import revisions
 from django.db import transaction
 
-class TokenType(AtomicVersionMixin, CleanSaveMixin, models.Model):
+class TokenType(AsylumModel):
     label = models.CharField(_("Label"), max_length=200, blank=False)
 
     def __str__(self):
@@ -18,7 +18,7 @@ class TokenType(AtomicVersionMixin, CleanSaveMixin, models.Model):
 revisions.default_revision_manager.register(TokenType)
 
 
-class Token(AtomicVersionMixin, CleanSaveMixin, models.Model):
+class Token(AsylumModel):
     label = models.CharField(_("Label"), max_length=200, blank=True)
     owner = models.ForeignKey('members.Member', blank=False, verbose_name=_("Member"), related_name='access_tokens')
     ttype = models.ForeignKey(TokenType, blank=False, verbose_name=_("Token type"), related_name='+')
@@ -37,7 +37,7 @@ class Token(AtomicVersionMixin, CleanSaveMixin, models.Model):
 revisions.default_revision_manager.register(Token)
 
 
-class AccessType(AtomicVersionMixin, CleanSaveMixin, models.Model):
+class AccessType(AsylumModel):
     label = models.CharField(_("Label"), max_length=200, blank=False)
     bit = models.PositiveSmallIntegerField(_("Bit number"), blank=True, null=True, unique=True) # For systems that utilize bitwise checks
     external_id = models.CharField(_("External identifier"), max_length=200, blank=True, null=True, unique=True) # For other systems
@@ -52,7 +52,7 @@ class AccessType(AtomicVersionMixin, CleanSaveMixin, models.Model):
 revisions.default_revision_manager.register(AccessType)
 
 
-class Grant(AtomicVersionMixin, CleanSaveMixin, models.Model):
+class Grant(AsylumModel):
     owner = models.ForeignKey('members.Member', blank=False, verbose_name=_("Member"), related_name='access_granted')
     atype = models.ForeignKey(AccessType, related_name='+', verbose_name=_("Access"))
 

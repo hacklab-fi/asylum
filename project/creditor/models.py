@@ -3,12 +3,12 @@ import uuid, hashlib
 from django.db import models, transaction
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
-from asylum.mixins import AtomicVersionMixin, CleanSaveMixin
+from asylum.models import AsylumModel
 # importing after asylum.mixins to get the monkeypatching done there
 from reversion import revisions
 from django.db import transaction
 
-class TransactionTag(AtomicVersionMixin, CleanSaveMixin, models.Model):
+class TransactionTag(AsylumModel):
     label = models.CharField(_("Label"), max_length=200, blank=False)
 
     def __str__(self):
@@ -29,7 +29,7 @@ def generate_transaction_id():
     return candidate
 
 
-class Transaction(AtomicVersionMixin, CleanSaveMixin, models.Model):
+class Transaction(AsylumModel):
     stamp = models.DateTimeField(_("Datetime"), auto_now_add=True, db_index=True)
     tag = models.ForeignKey(TransactionTag, blank=True, null=True, verbose_name=_("Tag"), related_name='+')
     reference = models.CharField(_("Reference"), max_length=200, blank=False, db_index=True)
@@ -49,7 +49,7 @@ class Transaction(AtomicVersionMixin, CleanSaveMixin, models.Model):
 revisions.default_revision_manager.register(Transaction)
 
 
-class RecurringTransaction(AtomicVersionMixin, CleanSaveMixin, models.Model):
+class RecurringTransaction(AsylumModel):
     MONTHLY = 1
     YEARLY = 2
     RTYPE_READABLE = {
