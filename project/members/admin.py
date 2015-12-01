@@ -47,6 +47,7 @@ class MemberAdmin(VersionAdmin):
         'nick',
         'credit_formatted',
         'mtypes_formatted',
+        'grants_formatted',
     )
     list_filter = (MemberTypeListFilter,)
     inlines = [ GrantInline, TokenInline, RTInline ]
@@ -61,6 +62,9 @@ class MemberAdmin(VersionAdmin):
     def mtypes_formatted(self, obj):
         return ', '.join(( x.label for x in obj.mtypes.all() ))
     mtypes_formatted.short_description = _("Membership types")
+    def grants_formatted(self, obj):
+        return ', '.join(( x.atype.label for x in Grant.objects.filter(owner=obj) ))
+    grants_formatted.short_description = _("Grants")
 
 
 class TagListFilter(admin.SimpleListFilter):
