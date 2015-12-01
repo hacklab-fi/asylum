@@ -14,6 +14,10 @@ class TransactionTag(AtomicVersionMixin, CleanSaveMixin, models.Model):
     def __str__(self):
         return self.label
 
+    class Meta:
+        verbose_name = _('Transaction Tag')
+        verbose_name_plural = _('Transaction Tags')
+
 revisions.default_revision_manager.register(TransactionTag)
 
 
@@ -37,6 +41,10 @@ class Transaction(AtomicVersionMixin, CleanSaveMixin, models.Model):
         if self.tag:
             return _("%+.2f for %s (%s)") % (self.amount, self.owner, self.tag)
         return _("%+.2f for %s") % (self.amount, self.owner)
+
+    class Meta:
+        verbose_name = _('Transaction')
+        verbose_name_plural = _('Transactions')
 
 revisions.default_revision_manager.register(Transaction)
 
@@ -111,5 +119,9 @@ class RecurringTransaction(AtomicVersionMixin, CleanSaveMixin, models.Model):
         t.amount = self.amount
         t.save()
         return True
+
+    class Meta:
+        verbose_name = _('Recurring Transaction')
+        verbose_name_plural = _('Recurring Transactions')
 
 revisions.default_revision_manager.register(RecurringTransaction)

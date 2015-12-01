@@ -49,6 +49,11 @@ COPY project /opt/asylum/
 RUN echo "DATABASE_URL=postgres://asylum:asylum@localhost/asylum" > .env
 RUN chown -R asylum:asylum /opt/asylum/
 
+# Build localisations
+USER asylum
+RUN . ../asylum-venv/bin/activate && \
+    for app in locale */locale; do (cd $(dirname $app) && ../manage.py compilemessages ); done
+
 # Test npm (this will happen again at entrypoint)
 USER asylum
 RUN npm run build
