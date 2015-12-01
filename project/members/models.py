@@ -40,6 +40,14 @@ class MemberCommon(AtomicVersionMixin, CleanSaveMixin, models.Model):
     def __str__(self):
         return '"%s, %s" <%s>' % (self.lname, self.fname, self.email)
 
+    @property
+    def name(self):
+        return "%s %s" % (self.fname, self.lname)
+
+    @property
+    def rname(self):
+        return "%s, %s" % (self.lname, self.fname)
+
     class Meta:
         abstract = True
 

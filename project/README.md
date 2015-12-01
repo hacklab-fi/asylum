@@ -23,6 +23,7 @@ For Ubuntu 14.04 LTS
       Good luck.
   - `pip install -r requirements/local.txt` (or `pip install -r requirements/production.txt` if installing on production)
   - `./manage.py migrate`
+  - `find . -name '._*' | xargs rm ; for app in locale */locale; do (cd $(dirname $app) && ../manage.py compilemessages ); done`
   - `./manage.py createinitialrevisions`
   - `./manage.py createsuperuser`
   - `npm run build`
