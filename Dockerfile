@@ -19,6 +19,7 @@ RUN apt-get install -y nodejs
 # Create database
 USER postgres
 RUN service postgresql start && \
+    sleep 5 && \
     createuser asylum && \
     createdb -E utf-8 -T template0 -O asylum asylum && \
     psql -U postgres -d postgres -c "alter user asylum with password 'asylum';"
@@ -61,6 +62,7 @@ RUN npm run build
 # Run migrate and create admin user
 USER asylum
 RUN sudo -u postgres service postgresql start; \
+    sleep 5 && \
     . ../asylum-venv/bin/activate && \
     ./manage.py migrate && \
     echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'nospamplz@hacklab.fi', 'admin')" | ./manage.py shell
