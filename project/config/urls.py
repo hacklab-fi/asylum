@@ -7,6 +7,15 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
+from rest_framework import routers
+import members.rest
+
+router = routers.DefaultRouter()
+router.register(r'members/types', members.rest.MemberTypeViewSet)
+router.register(r'members/members', members.rest.MemberViewSet)
+router.register(r'members/tags', members.rest.MembershipApplicationTagViewSet)
+router.register(r'members/applications', members.rest.MembershipApplicationSerializerViewSet)
+
 
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='pages/home.html'), name="home"),
@@ -18,6 +27,8 @@ urlpatterns = [
     # Your stuff: custom urls includes go here
     url(r'^members/', include('members.urls')),
 
+    url(r'^api/', include(router.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
