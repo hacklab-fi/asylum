@@ -89,6 +89,10 @@ class MemberAdmin(VersionAdmin):
     list_filter = (MemberTypeListFilter, GrantListFilter, CreditListFilter)
     inlines = [ GrantInline, TokenInline, RTInline ]
 
+    def rname(self, object):
+        return object.rname
+    rname.short_description = _("Name")
+
     def credit_formatted(self, obj):
         color = "green"
         if obj.credit < 0:
@@ -99,6 +103,7 @@ class MemberAdmin(VersionAdmin):
     def mtypes_formatted(self, obj):
         return ', '.join(( x.label for x in obj.mtypes.all() ))
     mtypes_formatted.short_description = _("Membership types")
+
     def grants_formatted(self, obj):
         return ', '.join(( x.atype.label for x in Grant.objects.filter(owner=obj) ))
     grants_formatted.short_description = _("Grants")
