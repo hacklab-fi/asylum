@@ -2,6 +2,7 @@ import itertools
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
+from django.db import models
 from django import forms
 from reversion.admin import VersionAdmin
 from .models import MemberType, Member, MembershipApplication, MembershipApplicationTag
@@ -55,6 +56,27 @@ class GrantListFilter(admin.SimpleListFilter):
         return queryset.filter(access_granted__atype=v)
 
 
+class CreditListFilter(admin.SimpleListFilter):
+    title = _("Credit")
+    parameter_name = 'credit'
+
+    def lookups(self, request, model_admin):
+        return (
+            ( -1, _("Negative credit" )),
+            ( 1, _("Positive credit") ),
+        )
+
+    def queryset(self, request, queryset):
+        v = self.value()
+        if not v:
+            return queryset
+        # self.creditor_transactions.all().aggregate(models.Sum('amount'))['amount__sum']
+        queryset = queryset.annotate(credit_annotated=models.Sum('creditor_transactions__amount'))
+        if int(v) < 0:
+            return queryset.filter(credit_annotated__lt=0)
+        return queryset.filter(credit_annotated__gt=0)
+
+
 class MemberAdmin(VersionAdmin):
     list_display = (
         'rname',
@@ -64,7 +86,7 @@ class MemberAdmin(VersionAdmin):
         'mtypes_formatted',
         'grants_formatted',
     )
-    list_filter = (MemberTypeListFilter, GrantListFilter)
+    list_filter = (MemberTypeListFilter, GrantListFilter, CreditListFilter)
     inlines = [ GrantInline, TokenInline, RTInline ]
 
     def credit_formatted(self, obj):
