@@ -94,6 +94,15 @@ class RecurringTransaction(AsylumModel):
         # NOTE: Do not localize anything in this string
         return "RecurringTransaction #%d/#%d for %s" % (self.pk, self.rtype, start.date().isoformat())
 
+    def in_timescope(self, timescope=None):
+        # Check that we should actually add the transaction
+        start, end = self.resolve_timescope(timescope)
+        if (    self.start <= start.date()
+            and (   not self.end
+                 or self.end >= end.date())):
+            return True
+        return False
+
     @transaction.atomic()
     def transaction_exists(self, timescope=None):
         start, end = self.resolve_timescope(timescope)
@@ -110,6 +119,8 @@ class RecurringTransaction(AsylumModel):
     @transaction.atomic()
     @revisions.create_revision()
     def conditional_add_transaction(self, timescope=None):
+        if not self.in_timescope(timescope):
+            return False
         if self.transaction_exists(timescope):
             return False
         t = Transaction()
