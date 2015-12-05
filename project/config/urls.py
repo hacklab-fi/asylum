@@ -14,15 +14,15 @@ import access.rest
 
 router = routers.DefaultRouter()
 router.register(r'members/types',        members.rest.MemberTypeViewSet)
-router.register(r'members/members',      members.rest.MemberViewSet)
 router.register(r'members/tags',         members.rest.MembershipApplicationTagViewSet)
 router.register(r'members/applications', members.rest.MembershipApplicationSerializerViewSet)
-router.register(r'creditor/transactions', creditor.rest.TransactionViewSet)
-router.register(r'creditor/recurring',    creditor.rest.RecurringTransactionViewSet)
-router.register(r'creditor/tags',         creditor.rest.TransactionTagViewSet)
+router.register(r'members',              members.rest.MemberViewSet)
+router.register(r'creditor/transactions/recurring', creditor.rest.RecurringTransactionViewSet)
+router.register(r'creditor/transactions',           creditor.rest.TransactionViewSet)
+router.register(r'creditor/tags',                   creditor.rest.TransactionTagViewSet)
 router.register(r'access/tokens/types', access.rest.TokenTypeViewSet)
-router.register(r'access/tokens',    access.rest.TokenViewSet)
-router.register(r'access/types',         access.rest.AccessTypeViewSet)
+router.register(r'access/tokens',       access.rest.TokenViewSet)
+router.register(r'access/types',        access.rest.AccessTypeViewSet)
 router.register(r'access/grants',       access.rest.GrantViewSet)
 
 
