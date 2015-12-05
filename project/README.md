@@ -27,6 +27,7 @@ For Ubuntu 14.04 LTS
   - `./manage.py createinitialrevisions`
   - `./manage.py createsuperuser`
   - `npm run build`
+  - `./manage.py collectstatic --noinput`
 
 ### uWSGI & Nginx setup
 
