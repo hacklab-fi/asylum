@@ -62,6 +62,9 @@ class RecurringTransaction(AsylumModel):
         (YEARLY, _("Yearly")),
     )
 
+    start = models.DateField(_("Since"), db_index=True,  null=False, blank=False, default=timezone.now)
+    end = models.DateField(_("Until"), db_index=True, null=True, blank=True)
+
     label = models.CharField(_("Label"), max_length=200, blank=True)
     rtype = models.PositiveSmallIntegerField(verbose_name=_("Recurrence type"), choices=RTYPE_CHOICES)
     tag = models.ForeignKey(TransactionTag, blank=False, verbose_name=_("Tag"), related_name='+')
