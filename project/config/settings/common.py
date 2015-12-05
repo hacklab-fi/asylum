@@ -253,4 +253,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissions'
     ],
     'PAGE_SIZE': 50,
+    'DEFAULT_FILTER_BACKENDS': [
+        'rest_framework.filters.DjangoFilterBackend',
+    ],
 }

@@ -8,6 +8,7 @@ class TokenTypeSerializer(serializers.HyperlinkedModelSerializer):
 class TokenTypeViewSet(viewsets.ModelViewSet):
     serializer_class = TokenTypeSerializer
     queryset = TokenType.objects.all()
+    filter_fields = ('label',)
 
 class TokenSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -16,6 +17,7 @@ class TokenSerializer(serializers.HyperlinkedModelSerializer):
 class TokenViewSet(viewsets.ModelViewSet):
     serializer_class = TokenSerializer
     queryset = Token.objects.all()
+    filter_fields = ('label','owner', 'ttype', 'value','revoked')
 
 class AccessTypeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -24,6 +26,7 @@ class AccessTypeSerializer(serializers.HyperlinkedModelSerializer):
 class AccessTypeViewSet(viewsets.ModelViewSet):
     serializer_class = AccessTypeSerializer
     queryset = AccessType.objects.all()
+    filter_fields = ('label','bit','external_id')
 
 class GrantSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -32,3 +35,4 @@ class GrantSerializer(serializers.HyperlinkedModelSerializer):
 class GrantViewSet(viewsets.ModelViewSet):
     serializer_class = GrantSerializer
     queryset = Grant.objects.all()
+    filter_fields = ('owner','atype')
