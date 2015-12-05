@@ -46,6 +46,7 @@ class MemberSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 class MemberFilter(filters.FilterSet):
+    # TODO: figure out how to implement the credit < 0 filter here
     class Meta:
         model = Member
         fields = {
@@ -53,6 +54,10 @@ class MemberFilter(filters.FilterSet):
             'email': filters.ALL_LOOKUPS,
             'lname': filters.ALL_LOOKUPS,
             'fname': filters.ALL_LOOKUPS,
+            'accepted': filters.ALL_LOOKUPS,
+            'mtypes': filters.ALL_LOOKUPS,
+            'anonymized_id': filters.ALL_LOOKUPS,
+            'member_id': filters.ALL_LOOKUPS,
         }
 
 class MemberViewSet(viewsets.ModelViewSet):
@@ -74,6 +79,8 @@ class MembershipApplicationFilter(filters.FilterSet):
             'email': filters.ALL_LOOKUPS,
             'lname': filters.ALL_LOOKUPS,
             'fname': filters.ALL_LOOKUPS,
+            'received': filters.ALL_LOOKUPS,
+            'tags': filters.ALL_LOOKUPS,
         }
 
 class MembershipApplicationSerializerViewSet(viewsets.ModelViewSet):
