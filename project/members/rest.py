@@ -18,8 +18,10 @@ class MembershipApplicationTagViewSet(viewsets.ModelViewSet):
     queryset = MembershipApplicationTag.objects.all()
 
 class MemberSerializer(serializers.HyperlinkedModelSerializer):
+    credit = serializers.CharField(read_only=True)
     class Meta:
         model = Member
+        fields = '__all__'
 
 class MemberViewSet(viewsets.ModelViewSet):
     serializer_class = MemberSerializer
