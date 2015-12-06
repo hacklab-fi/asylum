@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django import forms
 from reversion.admin import VersionAdmin
-from .models import MemberType, Member, MembershipApplication, MembershipApplicationTag
+from .models import MemberType, Member, MembershipApplication, MembershipApplicationTag, MemberNote
 from access.models import Token, Grant, AccessType
 from creditor.models import RecurringTransaction
 from django.utils.functional import lazy, allow_lazy
@@ -26,6 +26,11 @@ class TokenInline(admin.TabularInline):
 class RTInline(admin.TabularInline):
     model = RecurringTransaction
     extra = 0
+
+class MemberNoteInline(admin.TabularInline):
+    model = MemberNote
+    extra = 0
+
 
 
 class MemberTypeListFilter(admin.SimpleListFilter):
@@ -87,7 +92,7 @@ class MemberAdmin(VersionAdmin):
         'grants_formatted',
     )
     list_filter = (MemberTypeListFilter, GrantListFilter, CreditListFilter)
-    inlines = [ GrantInline, TokenInline, RTInline ]
+    inlines = [ MemberNoteInline, GrantInline, TokenInline, RTInline ]
 
     def rname(self, object):
         return object.rname
@@ -161,8 +166,12 @@ class MembershipApplicationAdmin(VersionAdmin):
 class MembershipApplicationTagAdmin(VersionAdmin):
     pass
 
+class MemberNoteAdmin(VersionAdmin):
+    pass
+
 
 admin.site.register(MemberType, MemberTypeAdmin)
 admin.site.register(Member, MemberAdmin)
 admin.site.register(MembershipApplication, MembershipApplicationAdmin)
 admin.site.register(MembershipApplicationTag, MembershipApplicationTagAdmin)
+admin.site.register(MemberNote, MemberNoteAdmin)
