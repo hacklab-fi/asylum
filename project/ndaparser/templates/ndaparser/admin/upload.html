@@ -13,9 +13,22 @@
 
 {% block content %}
     <div id="content-main">
-        <p>Helklo wolrd!</p>
+        <p>{% blocktrans %}Upload Nordea formatted transactions file in the form below{% endblocktrans %}</p>
         <div class="module">
-        <p>Another world!</p>
+        {% if transactions %}
+            <p>TODO: List transactions</p>
+        {% else %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <table>
+            {{ form.as_table }}
+            </table>
+            <div class="actions_row">
+                <input type="submit" class="btn btn-primary" value="{% trans "Upload" %}" />
+                <a  class="btn btn-default" href="{% url opts|admin_urlname:'changelist' %}">{% trans "Cancel" %}</a>
+            </div>
+        </form>
+        {% endif %}
         </div>
     </div>
 {% endblock %}

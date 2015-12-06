@@ -2,12 +2,14 @@ from django.contrib import admin
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
 from django.conf.urls import url
 from django.core.urlresolvers import reverse
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import get_object_or_404, render
 from django.utils.text import capfirst
+from .views import NordeaUploadView
 
 class NordeaUploadMixin(object):
     nda_change_list_template = "ndaparser/admin/change_list.html"
+    view_class = NordeaUploadView
 
     def get_urls(self):
         """Returns the additional urls used by the uploader."""
@@ -41,8 +43,9 @@ class NordeaUploadMixin(object):
             title = _("Upload Nordea transactions"),
         )
         context.update(extra_context or {})
+        view = self.view_class.as_view()
 
-        return render(request, "ndaparser/admin/upload.html", context)
+        return view(request, context=context)
 
     def changelist_view(self, request, extra_context=None):
         context = dict(
