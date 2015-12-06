@@ -7,6 +7,8 @@ from django.shortcuts import get_object_or_404, render
 from django.utils.text import capfirst
 
 class NordeaUploadMixin(object):
+    nda_change_list_template = "ndaparser/admin/change_list.html"
+
     def get_urls(self):
         """Returns the additional urls used by the uploader."""
         urls = super().get_urls()
@@ -41,3 +43,11 @@ class NordeaUploadMixin(object):
         context.update(extra_context or {})
 
         return render(request, "ndaparser/admin/upload.html", context)
+
+    def changelist_view(self, request, extra_context=None):
+        context = dict(
+            orig_template = str(getattr(super(), 'change_list_template')),
+        )
+        context.update(extra_context or {})
+        self.change_list_template = self.nda_change_list_template
+        return super().changelist_view(request, context)

@@ -1,0 +1,10 @@
+{% extends orig_template %}
+{% load i18n admin_urls %}
+
+
+{% block object-tools-items %}
+    {% if not is_popup and has_add_permission and has_change_permission %}
+        <li><a href="{% url opts|admin_urlname:'ndaupload' %}">{% trans "Upload Nordea transactions" %}</a></li>
+    {% endif %}
+    {{block.super}}
+{% endblock %}
