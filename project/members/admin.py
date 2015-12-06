@@ -93,6 +93,7 @@ class MemberAdmin(VersionAdmin):
     )
     list_filter = (MemberTypeListFilter, GrantListFilter, CreditListFilter)
     inlines = [ MemberNoteInline, GrantInline, TokenInline, RTInline ]
+    search_fields = ['lname', 'fname', 'email', 'nick']
 
     def rname(self, object):
         return object.rname
@@ -148,6 +149,7 @@ class MembershipApplicationAdmin(VersionAdmin):
     list_filter = (TagListFilter,)
     actions = ['approve_selected']
     action_form = MembershipApplicationsForm
+    search_fields = ['lname', 'fname', 'email', 'nick']
 
     def tags_formatted(self, obj):
         return ', '.join(( x.label for x in obj.tags.all() ))
