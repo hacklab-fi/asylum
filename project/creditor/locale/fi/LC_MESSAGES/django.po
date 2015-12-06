@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-05 19:37+0200\n"
+"POT-Creation-Date: 2015-12-06 22:35+0200\n"
 "PO-Revision-Date: 2015-11-29 03:01+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -94,10 +94,10 @@ msgstr "Toistuvuuden tyyppi"
 msgid "%+.2f %s for %s (%s)"
 msgstr ""
 
-#: models.py:127
+#: models.py:138
 msgid "Recurring Transaction"
 msgstr "Toistuva tapahtuma"
 
-#: models.py:128
+#: models.py:139
 msgid "Recurring Transactions"
 msgstr "Toistuvat tapahtumat"
