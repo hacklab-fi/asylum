@@ -53,6 +53,7 @@ LOCAL_APPS = (
     'members',
     'access',
     'creditor',
+    'ndaparser',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
