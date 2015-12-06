@@ -13,21 +13,25 @@
 
 {% block content %}
     <div id="content-main">
-        <p>{% blocktrans %}Upload Nordea formatted transactions file in the form below{% endblocktrans %}</p>
         <div class="module">
         {% if transactions %}
             <p>TODO: List transactions</p>
         {% else %}
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <table>
-            {{ form.as_table }}
-            </table>
-            <div class="actions_row">
-                <input type="submit" class="btn btn-primary" value="{% trans "Upload" %}" />
-                <a  class="btn btn-default" href="{% url opts|admin_urlname:'changelist' %}">{% trans "Cancel" %}</a>
-            </div>
-        </form>
+            {% if not form %}
+                <p>No form and no transactions, something is fucky</p>
+            {% else %}
+            <p>{% blocktrans %}Upload Nordea formatted transactions file in the form below{% endblocktrans %}</p>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <table>
+                {{ form.as_table }}
+                </table>
+                <div class="actions_row">
+                    <input type="submit" class="btn btn-primary" value="{% trans "Upload" %}" />
+                    <a  class="btn btn-default" href="{% url opts|admin_urlname:'changelist' %}">{% trans "Cancel" %}</a>
+                </div>
+            </form>
+            {% endif %}
         {% endif %}
         </div>
     </div>
