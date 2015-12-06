@@ -44,6 +44,7 @@ THIRD_PARTY_APPS = (
     'bootstrap3',
     'reversion',
     'rest_framework',
+    'django_markdown',
 )
 
 # Apps specific for this project go here.
@@ -257,3 +258,5 @@ REST_FRAMEWORK = {
         'rest_framework_filters.backends.DjangoFilterBackend',
     ],
 }
+
+MARKDOWN_EXTENSIONS = ['extra', 'CodeHilite']
