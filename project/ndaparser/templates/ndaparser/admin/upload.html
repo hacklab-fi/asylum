@@ -24,17 +24,25 @@
             {% if not form %}
                 <p>No form and no transactions, something is fucky</p>
             {% else %}
-            <p>{% blocktrans %}Upload Nordea formatted transactions file in the form below{% endblocktrans %}</p>
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <table>
-                {{ form.as_table }}
-                </table>
-                <div class="actions_row">
-                    <input type="submit" class="btn btn-primary" value="{% trans "Upload" %}" />
-                    <a  class="btn btn-default" href="{% url opts|admin_urlname:'changelist' %}">{% trans "Cancel" %}</a>
-                </div>
-            </form>
+                <p>
+                    {% blocktrans %}Upload Nordea formatted transactions file in the form below{% endblocktrans %}.
+                    {% if not transactions_handler %}
+                    {% blocktrans %}You have not defined TRANSACTION_CALLBACKS_HANDLER so nothing will actually be imported on upload{% endblocktrans %}.
+                    {% else %}
+                    <!-- TODO: make this info more sensible -->
+                    <em>{{ transactions_handler }}</em>
+                    {% endif %}
+                </p>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <table>
+                    {{ form.as_table }}
+                    </table>
+                    <div class="actions_row">
+                        <input type="submit" class="btn btn-primary" value="{% trans "Upload" %}" />
+                        <a  class="btn btn-default" href="{% url opts|admin_urlname:'changelist' %}">{% trans "Cancel" %}</a>
+                    </div>
+                </form>
             {% endif %}
         {% endif %}
         </div>

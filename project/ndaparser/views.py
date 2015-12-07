@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView
 from .forms import UploadForm
 from .ndaparser import parseLine
+from creditor.handlers import AbstractTransaction
 
 
 class NordeaUploadView(FormView):
@@ -23,13 +24,21 @@ class NordeaUploadView(FormView):
             for chunk in self.request.FILES['ndafile'].chunks():
                 dest.write(chunk)
 
+        transactions_handler = context['transactions_handler']
         transactions = []
         with open(tmp.name) as f:
             for line in f:
-                transaction = parseLine(line)
-                if transaction is not None:
-                    # TODO: Check if there is transaction mapper defined, if so call it
-                    transactions.append(transaction)
+                nt = parseLine(line)
+                if nt is not None:
+                    if transactions_handler:
+                        #at = AbstractTransaction()
+                        # TODO map the fields
+                        at = nt
+                        ret = transactions_handler.import_transaction(at)
+                        if ret is not None:
+                            transactions.append(ret)
+                    else:
+                        transactions.append(nt)
                 else:
                     # Raise error ? AFAIK there should be no unparseable lines
                     pass

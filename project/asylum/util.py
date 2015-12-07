@@ -1,14 +1,12 @@
 import importlib
-import functools
 from django.conf import settings
 
 
 def get_handler_instance(setting):
+    """Gets instance of class defined in the given setting"""
     try:
         setting_value = getattr(settings, setting)
-        #print("Got value %s for %s" % (setting_value, setting))
     except AttributeError:
-        #print("Got AttributeError for %s" % (setting))
         return None
     if not setting_value:
         return None
