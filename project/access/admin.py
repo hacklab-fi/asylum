@@ -1,6 +1,6 @@
 from django.contrib import admin
 from reversion.admin import VersionAdmin
-from .models import TokenType, Token, AccessType, Grant
+from .models import TokenType, Token, AccessType, Grant, NonMemberToken
 
 
 class TokenTypeAdmin(VersionAdmin):
@@ -19,7 +19,12 @@ class GrantAdmin(VersionAdmin):
     pass
 
 
+class NonMemberTokenAdmin(VersionAdmin):
+    pass
+
+
 admin.site.register(TokenType, TokenTypeAdmin)
 admin.site.register(Token, TokenAdmin)
 admin.site.register(AccessType, AccessTypeAdmin)
 admin.site.register(Grant, GrantAdmin)
+admin.site.register(NonMemberToken, NonMemberTokenAdmin)
