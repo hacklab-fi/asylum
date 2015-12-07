@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import get_object_or_404, render
 from django.utils.text import capfirst
 from .views import NordeaUploadView
+from creditor.admin import TransactionAdmin
 
 class NordeaUploadMixin(object):
     nda_change_list_template = "ndaparser/admin/change_list.html"
@@ -54,3 +55,6 @@ class NordeaUploadMixin(object):
         context.update(extra_context or {})
         self.change_list_template = self.nda_change_list_template
         return super().changelist_view(request, context)
+
+# Dynamically inject the mixin to transactions admin
+TransactionAdmin.__bases__ = (NordeaUploadMixin, ) + TransactionAdmin.__bases__
