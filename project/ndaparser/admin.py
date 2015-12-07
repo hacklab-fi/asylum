@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import get_object_or_404, render
 from django.utils.text import capfirst
+from django.conf import settings
 from .views import NordeaUploadView
 from creditor.admin import TransactionAdmin
 
@@ -56,5 +57,7 @@ class NordeaUploadMixin(object):
         self.change_list_template = self.nda_change_list_template
         return super().changelist_view(request, context)
 
-# Dynamically inject the mixin to transactions admin
-TransactionAdmin.__bases__ = (NordeaUploadMixin, ) + TransactionAdmin.__bases__
+
+if settings.NORDEA_UPLOAD_ENABLED:
+    # Dynamically inject the mixin to transactions admin
+    TransactionAdmin.__bases__ = (NordeaUploadMixin, ) + TransactionAdmin.__bases__
