@@ -53,6 +53,9 @@ class TransactionHandler(BaseTransactionHandler):
         print(msg)
         # We only care about transactions with reference numbers
         if not at.reference:
+            msg = "No reference number for %s, skip" % at
+            logger.info(msg)
+            print(msg)
             return None
 
         lt = at.get_local()
