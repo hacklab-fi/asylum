@@ -3,6 +3,7 @@ from decimal import Decimal
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django_markdown.models import MarkdownField
 from asylum.models import AsylumModel
 # importing after asylum.mixins to get the monkeypatching done there
 from reversion import revisions
@@ -83,10 +84,12 @@ class Member(MemberCommon):
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)
 
-class Meta:
+    class Meta:
         verbose_name = _('Member')
         verbose_name_plural = _('Members')
+
 revisions.default_revision_manager.register(Member)
+
 
 class MembershipApplicationTag(AsylumModel):
     label = models.CharField(_("Label"), max_length=200, blank=False)
@@ -98,10 +101,13 @@ class MembershipApplicationTag(AsylumModel):
         verbose_name = _('Membership Application Tag')
         verbose_name_plural = _('Membership Application Tags')
 
+revisions.default_revision_manager.register(MembershipApplicationTag)
+
 
 class MembershipApplication(MemberCommon):
     received = models.DateField(auto_now_add=True)
     tags = models.ManyToManyField(MembershipApplicationTag, related_name='+', verbose_name=_("Application tags"), blank=True)
+    notes = MarkdownField(verbose_name=_("Notes"), blank=True)
 
     @call_saves('MEMBERAPPLICATION_CALLBACKS_HANDLER')
     def save(self, *args, **kwargs):
@@ -131,6 +137,11 @@ class MembershipApplication(MemberCommon):
             if set_mtypes:
                 m.mtypes = set_mtypes
                 m.save()
+                if self.notes:
+                    n = MemberNote()
+                    n.notes = self.notes
+                    n.member = m
+                    n.save()
             if h:
                 h.on_approved(self, m)
             self.delete()
@@ -140,3 +151,19 @@ class MembershipApplication(MemberCommon):
         verbose_name_plural = _('Membership Applications')
 
 revisions.default_revision_manager.register(MembershipApplication)
+
+
+class MemberNote(AsylumModel):
+    stamp = models.DateTimeField(_("Datetime"), auto_now_add=True, db_index=True)
+    notes = MarkdownField(verbose_name=_("Notes"), blank=False)
+    member = models.ForeignKey(Member, verbose_name=_("Member"), blank=True, null=True, on_delete=models.CASCADE, related_name='notes')
+
+    class Meta:
+        verbose_name = _('Note')
+        verbose_name_plural = _('Notes')
+        ordering = ['member__lname', 'member__fname', '-stamp']
+
+    def __str__(self):
+        return _("Notes about %s on %s") % (self.member, self.stamp)
+
+revisions.default_revision_manager.register(MemberNote)
