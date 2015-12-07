@@ -62,6 +62,7 @@ RUN npm run build
 USER asylum
 RUN sudo -u postgres service postgresql start; \
     . ../asylum-venv/bin/activate && \
+    export PGPASSWORD=asylum; while true; do psql -q asylum -c 'SELECT 1;' 1>/dev/null 2>&1 ; if [ "$?" -ne "0" ]; then echo "Waiting for psql"; sleep 1; else break; fi; done && \
     ./manage.py migrate && \
     echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'nospamplz@hacklab.fi', 'admin')" | ./manage.py shell
 
