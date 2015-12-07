@@ -62,6 +62,9 @@ class RecurringTransaction(AsylumModel):
         (YEARLY, _("Yearly")),
     )
 
+    start = models.DateField(_("Since"), db_index=True,  null=False, blank=False, default=timezone.now)
+    end = models.DateField(_("Until"), db_index=True, null=True, blank=True)
+
     label = models.CharField(_("Label"), max_length=200, blank=True)
     rtype = models.PositiveSmallIntegerField(verbose_name=_("Recurrence type"), choices=RTYPE_CHOICES)
     tag = models.ForeignKey(TransactionTag, blank=False, verbose_name=_("Tag"), related_name='+')
@@ -91,6 +94,15 @@ class RecurringTransaction(AsylumModel):
         # NOTE: Do not localize anything in this string
         return "RecurringTransaction #%d/#%d for %s" % (self.pk, self.rtype, start.date().isoformat())
 
+    def in_timescope(self, timescope=None):
+        # Check that we should actually add the transaction
+        start, end = self.resolve_timescope(timescope)
+        if (    self.start <= start.date()
+            and (   not self.end
+                 or self.end >= end.date())):
+            return True
+        return False
+
     @transaction.atomic()
     def transaction_exists(self, timescope=None):
         start, end = self.resolve_timescope(timescope)
@@ -107,6 +119,8 @@ class RecurringTransaction(AsylumModel):
     @transaction.atomic()
     @revisions.create_revision()
     def conditional_add_transaction(self, timescope=None):
+        if not self.in_timescope(timescope):
+            return False
         if self.transaction_exists(timescope):
             return False
         t = Transaction()

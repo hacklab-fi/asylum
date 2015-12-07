@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-29 03:10+0200\n"
+"POT-Creation-Date: 2015-12-05 19:37+0200\n"
 "PO-Revision-Date: 2015-11-29 03:01+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -15,81 +15,89 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.6\n"
 
-#: creditor/models.py:12 creditor/models.py:65
+#: models.py:12 models.py:68
 msgid "Label"
 msgstr "Nimiö"
 
-#: creditor/models.py:18
+#: models.py:18
 msgid "Transaction Tag"
 msgstr "Tapahtuman tägi"
 
-#: creditor/models.py:19
+#: models.py:19
 msgid "Transaction Tags"
 msgstr "Tapahtuman tägit"
 
-#: creditor/models.py:33
+#: models.py:33
 msgid "Datetime"
 msgstr "Aika"
 
-#: creditor/models.py:34 creditor/models.py:67
+#: models.py:34 models.py:70
 msgid "Tag"
 msgstr "Tägi"
 
-#: creditor/models.py:35
+#: models.py:35
 msgid "Reference"
 msgstr "Viite"
 
-#: creditor/models.py:36 creditor/models.py:68
+#: models.py:36 models.py:71
 msgid "Member"
 msgstr "Jäsen"
 
-#: creditor/models.py:37 creditor/models.py:69
+#: models.py:37 models.py:72
 msgid "Amount"
 msgstr "Määrä"
 
-#: creditor/models.py:38
+#: models.py:38
 msgid "Unique transaction id"
 msgstr "Transaktion yksilöllinen tunniste"
 
-#: creditor/models.py:42
+#: models.py:42
 #, python-format
 msgid "%+.2f for %s (%s)"
 msgstr ""
 
-#: creditor/models.py:43
+#: models.py:43
 #, python-format
 msgid "%+.2f for %s"
 msgstr ""
 
-#: creditor/models.py:46
+#: models.py:46
 msgid "Transaction"
 msgstr "Tapahtuma"
 
-#: creditor/models.py:47
+#: models.py:47
 msgid "Transactions"
 msgstr "Tapahtumat"
 
-#: creditor/models.py:56 creditor/models.py:61
+#: models.py:56 models.py:61
 msgid "Monthly"
 msgstr "Kuukausittain"
 
-#: creditor/models.py:57 creditor/models.py:62
+#: models.py:57 models.py:62
 msgid "Yearly"
 msgstr "Vuosittain"
 
-#: creditor/models.py:66
+#: models.py:65
+msgid "Since"
+msgstr "Alkaen"
+
+#: models.py:66
+msgid "Until"
+msgstr "Asti"
+
+#: models.py:69
 msgid "Recurrence type"
 msgstr "Toistuvuuden tyyppi"
 
-#: creditor/models.py:74
+#: models.py:77
 #, python-format
 msgid "%+.2f %s for %s (%s)"
 msgstr ""
 
-#: creditor/models.py:124
+#: models.py:127
 msgid "Recurring Transaction"
 msgstr "Toistuva tapahtuma"
 
-#: creditor/models.py:125
+#: models.py:128
 msgid "Recurring Transactions"
 msgstr "Toistuvat tapahtumat"
