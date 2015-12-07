@@ -43,6 +43,7 @@ THIRD_PARTY_APPS = (
     'crispy_forms',  # Form layouts
     'bootstrap3',
     'reversion',
+    'rest_framework',
 )
 
 # Apps specific for this project go here.
@@ -244,3 +245,15 @@ APPLICATION_RULES_URL = env('APPLICATION_RULES_URL', default='http://hacklab.fi/
 # Give path to a class implementing the api outlined in member.handers baseclasses
 MEMBERAPPLICATION_CALLBACKS_HANDLER=env('MEMBERAPPLICATION_CALLBACKS_HANDLER', default=None)
 MEMBER_CALLBACKS_HANDLER=env('MEMBER_CALLBACKS_HANDLER', default=None)
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.DjangoModelPermissions'
+    ],
+    'PAGE_SIZE': 50,
+    'DEFAULT_FILTER_BACKENDS': [
+        'rest_framework_filters.backends.DjangoFilterBackend',
+    ],
+}
