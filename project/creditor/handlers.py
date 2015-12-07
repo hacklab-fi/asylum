@@ -4,6 +4,7 @@ from .models import Transaction
 
 class AbstractTransaction(models.Model):
     stamp = models.DateTimeField(_("Datetime"), blank=False)
+    name = models.CharField(_("Name"), max_length=200, blank=False)
     reference = models.CharField(_("Reference"), max_length=200, blank=False)
     amount = models.DecimalField(verbose_name=_("Amount"), max_digits=6, decimal_places=2, blank=False, null=False)
     unique_id = models.CharField(_("Unique transaction id"), max_length=64, blank=False)
@@ -13,9 +14,9 @@ class AbstractTransaction(models.Model):
         managed = False
 
     def __str__(self):
-        return _("transaction %s: %+.2f ") % (self.unique_id, self.amount)
+        return _("AbstractTransaction %s: %+.2f ") % (self.unique_id, self.amount)
 
-    def get(self):
+    def get_local(self):
         """Uses the unique_id field to get Transaction instance from the local database, or initializes a new one"""
         try:
             obj = Transaction.objects.get(unique_id=self.unique_id)

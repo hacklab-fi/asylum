@@ -41,11 +41,21 @@ class ApplicationHandler(ExampleBaseHandler):
 
 
 class TransactionHandler(BaseTransactionHandler):
-    def import_transaction(self, transaction):
-        msg = "import_transaction called for %s" % transaction
+    def import_transaction(self, at):
+        msg = "import_transaction called for %s" % at
         logger.info(msg)
         print(msg)
-        return transaction
+        # We only care about transactions with reference numbers
+        if not at.reference:
+            return None
+
+        lt = at.get_local()
+        if lt.pk:
+            # TODO update ? though it should not change...
+            return lt
+
+        # TODO: figure out if we want to make a proper local transaction
+        return at
 
     def __str__(self):
         return str(_("Example application transactions handler"))

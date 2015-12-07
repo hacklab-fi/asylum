@@ -1,5 +1,7 @@
 import tempfile
 import os
+import datetime
+import hashlib
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView
 from .forms import UploadForm
@@ -31,9 +33,13 @@ class NordeaUploadView(FormView):
                 nt = parseLine(line)
                 if nt is not None:
                     if transactions_handler:
-                        #at = AbstractTransaction()
-                        # TODO map the fields
-                        at = nt
+                        at = AbstractTransaction()
+                        at.name = str(nt.name)
+                        at.reference = str(nt.referenceNumber)
+                        at.amount = nt.amount # We know this is Decimal instance
+                        at.stamp = datetime.datetime.combine(nt.timestamp, datetime.datetime.min.time())
+                        # DO NOT EVER CHANGE THIS, it must always and forever yield same unique_id for same transaction.
+                        at.unique_id = hashlib.sha1(str(nt.archiveID).encode('utf-8') + nt.timestamp.isoformat().encode('utf-8') + str(nt.referenceNumber).encode('utf-8')).hexdigest()
                         ret = transactions_handler.import_transaction(at)
                         if ret is not None:
                             transactions.append(ret)
