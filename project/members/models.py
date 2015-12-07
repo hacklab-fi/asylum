@@ -50,6 +50,7 @@ class MemberCommon(AsylumModel):
 
     class Meta:
         abstract = True
+        ordering = ['lname', 'fname']
 
 
 class MemberType(AsylumModel):
