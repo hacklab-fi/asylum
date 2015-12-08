@@ -102,10 +102,14 @@ class MemberAdmin(VersionAdmin):
     rname.admin_order_field = 'lname'
 
     def credit_formatted(self, obj):
+        if obj.credit_annotated is not None:
+            credit = obj.credit_annotated
+        else:
+            credit = 0.0
         color = "green"
-        if obj.credit < 0:
+        if credit < 0:
             color = "red"
-        return format_html("<span style='color: {};'>{}</span>",color, "%+.02f" % obj.credit)
+        return format_html("<span style='color: {};'>{}</span>",color, "%+.02f" % credit)
     credit_formatted.short_description = _("Credit")
     credit_formatted.admin_order_field = 'credit_annotated'
 
@@ -116,6 +120,11 @@ class MemberAdmin(VersionAdmin):
     def grants_formatted(self, obj):
         return ', '.join(( x.atype.label for x in Grant.objects.filter(owner=obj) ))
     grants_formatted.short_description = _("Grants")
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.annotate(credit_annotated=models.Sum('creditor_transactions__amount'))
+        return qs
 
 
 class TagListFilter(admin.SimpleListFilter):
