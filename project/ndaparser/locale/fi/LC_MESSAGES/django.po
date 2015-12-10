@@ -1,0 +1,51 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-12-06 22:34+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: admin.py:43 templates/ndaparser/admin/change_list.html:7
+msgid "Upload Nordea transactions"
+msgstr "Lataa Nordean tapahtumat"
+
+#: forms.py:5
+msgid "Transactions file"
+msgstr "Tapahtumatiedodosto"
+
+#: templates/ndaparser/admin/upload.html:7
+msgid "Home"
+msgstr "Etusivu"
+
+#: templates/ndaparser/admin/upload.html:10
+msgid "Upload "
+msgstr "Lataa"
+
+#: templates/ndaparser/admin/upload.html:27
+msgid "Upload Nordea formatted transactions file in the form below"
+msgstr "Lataa Nordean tapahtumatiedosto allaolevalla lomakkeella"
+
+#: templates/ndaparser/admin/upload.html:34
+msgid "Upload"
+msgstr "Lataa"
+
+#: templates/ndaparser/admin/upload.html:35
+msgid "Cancel"
+msgstr "Peruuta"
+
+#: views.py:40
+msgid "Transactions uploaded"
+msgstr "Tapahtumat ladattu"
