@@ -64,10 +64,10 @@ http-socket = 127.0.0.1:9001
 master = true
 enable-threads = true
 processes = 2
-wsgi-file = /home/hacklab/asylum/project/config/wsgi.py
-virtualenv = /home/hacklab/asylum/project/venv
-chdir = /home/hacklab/asylum/project
-touch-reload = /home/hacklab/asylum/project/reload
+wsgi-file = /home/myhackerspace/asylum/project/config/wsgi.py
+virtualenv = /home/myhackerspace/asylum/project/venv
+chdir = /home/myhackerspace/asylum/project
+touch-reload = /home/myhackerspace/asylum/project/reload
 env = DJANGO_SETTINGS_MODULE=config.settings.production</code></pre>
 
 
@@ -80,7 +80,9 @@ In the `project` dir of your checkout
     git rebase upstream/master master
     git checkout myhackerspace
     git rebase master
+    source venv/bin/activate
     pip install -r requirements/production.txt
+    ./manage.py migrate
     npm run build
     ./manage.py collectstatic --noinput
 
