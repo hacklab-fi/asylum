@@ -41,7 +41,8 @@ sudo apt-get install -y nodejs</code></pre>
   - Create a `.env` file in the project directory, see the example file, you need at least the following variables
       - DJANGO_SETTINGS_MODULE (=config.settings.production)
       - DJANGO_SENTRY_DSN
-        - TODO: Instructions for setting up sentry
+        - https://hub.docker.com/_/sentry/
+        - https://docs.getsentry.com/hosted/
       - DATABASE_URL (=postgres://pguser:pgpassword@localhost/dbname)
   - Setup uWSGI
     - `sudo apt-get install uwsgi-plugin-python3 uwsgi`
