@@ -9,6 +9,8 @@ from asylum.models import AsylumModel
 from reversion import revisions
 from django.db import transaction
 from .handlers import call_saves, get_handler_instance
+from access.utils import resolve_acl
+from access.models import AccessType
 
 def generate_unique_randomid():
     """Generate pseudorandom ids until a free one is found"""
@@ -48,6 +50,10 @@ class MemberCommon(AsylumModel):
     @property
     def rname(self):
         return "%s, %s" % (self.lname, self.fname)
+
+    @property
+    def access_acl(self):
+        return resolve_acl(AccessType.objects.filter(pk__in=self.access_granted.select_related('atype').values_list('atype', flat=True)))
 
     class Meta:
         abstract = True

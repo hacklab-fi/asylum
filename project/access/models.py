@@ -26,6 +26,10 @@ class Token(AsylumModel):
     value = models.CharField(_("Token value"), max_length=200, blank=False)
     revoked = models.BooleanField(_("Revoked"), default=False)
 
+    @property
+    def acl(self):
+        return self.owner.access_acl
+
     def __str__(self):
         if self.label:
             return self.label
@@ -73,9 +77,14 @@ class NonMemberToken(AsylumModel):
     ttype = models.ForeignKey(TokenType, blank=False, verbose_name=_("Token type"), related_name='+')
     value = models.CharField(_("Token value"), max_length=200, blank=False)
     revoked = models.BooleanField(_("Revoked"), default=False)
-    grants = models.ManyToManyField(Grant, blank=True)
+    grants = models.ManyToManyField(AccessType, blank=True, verbose_name=_("Access"), related_name='+')
     contact = models.CharField(_("Contact"), max_length=200, blank=False)
     notes = MarkdownField(verbose_name=_("Notes"), blank=True)
+
+    @property
+    def acl(self):
+        from .utils import resolve_acl
+        return resolve_acl(self.grants.all())
 
     def __str__(self):
         if self.label:
