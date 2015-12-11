@@ -85,6 +85,7 @@ In the `project` dir of your checkout
     ./manage.py migrate
     npm run build
     ./manage.py collectstatic --noinput
+    for app in locale */locale; do (cd $(dirname $app) && ../manage.py compilemessages ); done
 
 And assuming you have uWSGI configured `touch reload`
 
