@@ -10,6 +10,7 @@ from django.db import transaction
 
 class TransactionTag(AsylumModel):
     label = models.CharField(_("Label"), max_length=200, blank=False)
+    tmatch = models.CharField(_("Transaction match"), max_length=20, blank=True, db_index=True) # This can be used by transaction handlers to help them in some way.
 
     def __str__(self):
         return self.label
@@ -91,7 +92,7 @@ class RecurringTransaction(AsylumModel):
 
     def make_reference(self, timescope=None):
         start, end = self.resolve_timescope(timescope)
-        # NOTE: Do not localize anything in this string
+        # NOTE: Do not localize anything in this string, also: DO NOT CHANGE IT or the unique_ids of transactions created will change
         return "RecurringTransaction #%d/#%d for %s" % (self.pk, self.rtype, start.date().isoformat())
 
     def in_timescope(self, timescope=None):

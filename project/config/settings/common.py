@@ -247,6 +247,7 @@ APPLICATION_RULES_URL = env('APPLICATION_RULES_URL', default='http://hacklab.fi/
 # Give path to a class implementing the api outlined in member.handers baseclasses
 MEMBERAPPLICATION_CALLBACKS_HANDLER=env('MEMBERAPPLICATION_CALLBACKS_HANDLER', default=None)
 MEMBER_CALLBACKS_HANDLER=env('MEMBER_CALLBACKS_HANDLER', default=None)
+TRANSACTION_CALLBACKS_HANDLER=env('TRANSACTION_CALLBACKS_HANDLER', default=None)
 NORDEA_UPLOAD_ENABLED = env.bool('NORDEA_UPLOAD_ENABLED', default=False)
 
 
