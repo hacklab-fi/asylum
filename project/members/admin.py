@@ -94,10 +94,12 @@ class MemberAdmin(VersionAdmin):
     list_filter = (MemberTypeListFilter, GrantListFilter, CreditListFilter)
     inlines = [ MemberNoteInline, GrantInline, TokenInline, RTInline ]
     search_fields = ['lname', 'fname', 'email', 'nick']
+    ordering = [ 'lname', 'fname' ]
 
     def rname(self, object):
         return object.rname
     rname.short_description = _("Name")
+    rname.admin_order_field = 'lname'
 
     def credit_formatted(self, obj):
         color = "green"
@@ -105,6 +107,7 @@ class MemberAdmin(VersionAdmin):
             color = "red"
         return format_html("<span style='color: {};'>{}</span>",color, "%+.02f" % obj.credit)
     credit_formatted.short_description = _("Credit")
+    credit_formatted.admin_order_field = 'credit_annotated'
 
     def mtypes_formatted(self, obj):
         return ', '.join(( x.label for x in obj.mtypes.all() ))
