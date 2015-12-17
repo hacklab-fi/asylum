@@ -9,12 +9,12 @@ logger = logging.getLogger('example.handlers')
 
 
 class ExampleBaseHandler(BaseMemberHandler):
-    def on_saving(self, instance):
+    def on_saving(self, instance, *args, **kwargs):
         msg = "on_saving called for %s %s" % (type(instance) , instance)
         logger.info(msg)
         print(msg)
 
-    def on_saved(self, instance):
+    def on_saved(self, instance, *args, **kwargs):
         msg = "on_saved called for %s %s" % (type(instance) , instance)
         logger.info(msg)
         print(msg)
