@@ -1,3 +1,5 @@
+staticfiles/
+media/
 bower_components/
 asylum/static/css/
 asylum/static/js/
