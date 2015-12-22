@@ -6,7 +6,7 @@ from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 import factory.django, factory.fuzzy
 from members.models import generate_unique_memberid, MemberType, MembershipApplicationTag
-from asylum.util import get_random_objects
+from asylum.utils import get_random_objects
 
 DATA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
 

@@ -1,6 +1,6 @@
 import functools
 from django.db import transaction
-from asylum.util import get_handler_instance
+from asylum.utils import get_handler_instance
 
 
 class BaseHandler(object):
