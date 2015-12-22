@@ -21,3 +21,4 @@ pep8-naming==0.3.3
 pytest==2.8.2
 
 factory_boy==2.6.0
+loremipsum==1.0.5
