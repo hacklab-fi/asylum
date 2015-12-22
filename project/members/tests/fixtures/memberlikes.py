@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 import datetime, pytz
 import os, codecs
+import random
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 import factory.django, factory.fuzzy
-from members.models import generate_unique_memberid
+from members.models import generate_unique_memberid, MemberType, MembershipApplicationTag
+from asylum.util import get_random_objects
 
 DATA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
 
@@ -45,9 +47,31 @@ class MemberFactory(MemberlikeFactoryBase):
         django_get_or_create = ('fname', 'lname', 'email', 'city')
     accepted = factory.fuzzy.FuzzyDateTime(datetime.datetime.now(pytz.utc)-datetime.timedelta(weeks=5*52))
 
+    @factory.post_generation
+    def mtypes(self, create, extracted, **kwargs):
+        mtypes = []
+        if extracted:
+            mtypes = extracted
+        else:
+            if MemberType.objects.all().count():
+                mtypes = get_random_objects(MemberType, random.randint(1, MemberType.objects.all().count()))
+        for mtype in mtypes:
+            self.mtypes.add(mtype)
+
 
 class MembershipApplicationFactory(MemberlikeFactoryBase):
     class Meta:
         model = 'members.MembershipApplication'
         django_get_or_create = ('fname', 'lname', 'email', 'city')
     received = factory.fuzzy.FuzzyDateTime(datetime.datetime.now(pytz.utc)-datetime.timedelta(days=80))
+
+    @factory.post_generation
+    def tags(self, create, extracted, **kwargs):
+        tags = []
+        if extracted:
+            tags = extracted
+        else:
+            if MembershipApplicationTag.objects.all().count():
+                tags = get_random_objects(MembershipApplicationTag, random.randint(1, MembershipApplicationTag.objects.all().count()))
+        for tag in tags:
+            self.tags.add(tag)

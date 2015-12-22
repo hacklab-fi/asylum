@@ -1,5 +1,6 @@
 import importlib
 from django.conf import settings
+import random
 
 
 def get_handler_instance(setting):
@@ -14,3 +15,13 @@ def get_handler_instance(setting):
     HandlerClass = getattr(importlib.import_module(module_name), class_name)
     instance = HandlerClass()
     return instance
+
+
+def get_random_objects(klass, num=1):
+    ret = []
+    count = klass.objects.all().count()
+    for x in range(num):
+        random_index = random.randint(0, count - 1)
+        ret.append(klass.objects.all()[random_index])
+    return ret
+
