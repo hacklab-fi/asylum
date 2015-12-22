@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
+import datetime, pytz
+import os, codecs
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 import factory.django, factory.fuzzy
 from members.models import generate_unique_memberid
-import os, codecs
 
 DATA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
 
@@ -42,9 +43,11 @@ class MemberFactory(MemberlikeFactoryBase):
     class Meta:
         model = 'members.Member'
         django_get_or_create = ('fname', 'lname', 'email', 'city')
+    accepted = factory.fuzzy.FuzzyDateTime(datetime.datetime.now(pytz.utc)-datetime.timedelta(weeks=5*52))
 
 
 class MembershipApplicationFactory(MemberlikeFactoryBase):
     class Meta:
         model = 'members.MembershipApplication'
         django_get_or_create = ('fname', 'lname', 'email', 'city')
+    received = factory.fuzzy.FuzzyDateTime(datetime.datetime.now(pytz.utc)-datetime.timedelta(days=80))
