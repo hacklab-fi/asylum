@@ -1,3 +1,4 @@
+from django.db import models
 from rest_framework import viewsets, serializers
 import rest_framework_filters as filters
 from .models import MemberType, Member, MembershipApplicationTag, MembershipApplication
@@ -40,7 +41,7 @@ class MembershipApplicationTagViewSet(viewsets.ModelViewSet):
 
 
 class MemberSerializer(serializers.HyperlinkedModelSerializer):
-    credit = serializers.CharField(read_only=True)
+    credit = serializers.CharField(source='credit_annotated', read_only=True)
     class Meta:
         model = Member
         fields = '__all__'
@@ -62,7 +63,7 @@ class MemberFilter(filters.FilterSet):
 
 class MemberViewSet(viewsets.ModelViewSet):
     serializer_class = MemberSerializer
-    queryset = Member.objects.all()
+    queryset = Member.objects.all().annotate(credit_annotated=models.Sum('creditor_transactions__amount'))
     filter_class = MemberFilter
 
 
