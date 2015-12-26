@@ -68,7 +68,11 @@ class TokenAdmin(VersionAdmin):
 
 
 class AccessTypeAdmin(VersionAdmin):
-    pass
+    list_display = (
+        'label',
+        'bit',
+        'external_id',
+    )
 
 
 class GrantAdmin(VersionAdmin):
