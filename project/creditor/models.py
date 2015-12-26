@@ -31,7 +31,7 @@ def generate_transaction_id():
 
 
 class Transaction(AsylumModel):
-    stamp = models.DateTimeField(_("Datetime"), auto_now_add=True, db_index=True)
+    stamp = models.DateTimeField(_("Datetime"), default=timezone.now, db_index=True)
     tag = models.ForeignKey(TransactionTag, blank=True, null=True, verbose_name=_("Tag"), related_name='+')
     reference = models.CharField(_("Reference"), max_length=200, blank=False, db_index=True)
     owner = models.ForeignKey('members.Member', blank=False, verbose_name=_("Member"), related_name='creditor_transactions')
