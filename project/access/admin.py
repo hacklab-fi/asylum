@@ -28,7 +28,7 @@ class RevokedListFilter(admin.SimpleListFilter):
     parameter_name = 'revoked'
 
     def lookups(self, request, model_admin):
-        return ( ( -2, _("All")), (None, _("Not revoked")), (1, _("Revoked")) )
+        return ( ( "-2", _("All")), (None, _("Not revoked")), ("1", _("Revoked")) )
 
     def choices(self, cl):
         for lookup, title in self.lookup_choices:
@@ -52,12 +52,17 @@ class RevokedListFilter(admin.SimpleListFilter):
 
 class TokenAdmin(VersionAdmin):
     list_display = (
-        'owner',
+        'owner_f',
         'ttype',
         'value_formatted',
     )
     list_filter = (TokenTypeListFilter, RevokedListFilter)
     search_fields = ['value', 'owner__fname', 'owner__lname', 'owner__email']
+
+    def owner_f(self, obj):
+        return obj.owner
+    owner_f.short_description = _("Member")
+    owner_f.admin_order_field = 'owner__lname'
 
     def value_formatted(self, obj):
         if not obj.revoked:
@@ -91,11 +96,16 @@ class AccessTypeListFilter(admin.SimpleListFilter):
 
 class GrantAdmin(VersionAdmin):
     list_display = (
-        'owner',
+        'owner_f',
         'atype',
     )
     search_fields = ['owner__fname', 'owner__lname', 'owner__email']
     list_filter = (AccessTypeListFilter, )
+
+    def owner_f(self, obj):
+        return obj.owner
+    owner_f.short_description = _("Member")
+    owner_f.admin_order_field = 'owner__lname'
 
 
 class GrantsListFilter(AccessTypeListFilter):
