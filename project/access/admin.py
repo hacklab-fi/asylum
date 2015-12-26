@@ -57,6 +57,7 @@ class TokenAdmin(VersionAdmin):
         'value_formatted',
     )
     list_filter = (TokenTypeListFilter, RevokedListFilter)
+    search_fields = ['value', 'owner__fname', 'owner__lname', 'owner__email']
 
     def value_formatted(self, obj):
         if not obj.revoked:
