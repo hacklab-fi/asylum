@@ -98,8 +98,34 @@ class GrantAdmin(VersionAdmin):
     list_filter = (AccessTypeListFilter, )
 
 
+class GrantsListFilter(AccessTypeListFilter):
+    def queryset(self, request, queryset):
+        v = self.value()
+        if not v:
+            return queryset
+        return queryset.filter(grants=v)
+
+
 class NonMemberTokenAdmin(VersionAdmin):
-    pass
+    list_display = (
+        'contact',
+        'ttype',
+        'value_formatted',
+        'grants_formatted',
+    )
+    search_fields = ['contact', 'value']
+    list_filter = (GrantsListFilter, TokenTypeListFilter, RevokedListFilter)
+
+    def grants_formatted(self, obj):
+        return ', '.join(( x.label for x in obj.grants.all() ))
+    grants_formatted.short_description = _("Grants")
+
+    def value_formatted(self, obj):
+        if not obj.revoked:
+            return obj.value
+        color = "red"
+        return format_html("<span style='color: {};'>{}</span>", color, obj.value)
+    value_formatted.short_description = _("Token value")
 
 
 admin.site.register(TokenType, TokenTypeAdmin)
