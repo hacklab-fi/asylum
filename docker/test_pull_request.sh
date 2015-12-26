@@ -1,10 +1,29 @@
-#!/bin/sh
+#!/bin/bash
+# Make sure the id is here
+if [ "$1" == "" ]
+then
+    echo "Usage:\n  test_pull_request.sh ID\n"
+    exit 1
+fi
+ID=$1
 
-# You should have: git remote add repo source
-# usage: docker/test_pull_request.sh repo issue-
+# Make sure we have upstream
+git remote | grep -q upstream
+if [ "$?" == "1" ]
+then
+    git remote add upstream https://github.com/hacklab-fi/asylum.git
+fi
 
-git fetch -a
-git checkout $1/$2
+git fetch upstream master
+git fetch upstream pull/$ID/head:test-$ID
+if [ "$?" != "0" ]
+then
+    exit 1
+fi
+set -e
+git checkout test-$ID
+git rebase upstream/master
+
 docker build -t asylum_test .
 echo "Starting test server."
 echo "To gain shell, run: docker exec -it asylum_test bash"
