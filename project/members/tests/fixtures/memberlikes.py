@@ -10,6 +10,8 @@ from asylum.utils import get_random_objects
 
 DATA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
 
+# PONDER: Move under asylym ? these are used by other apps too
+# TODO: convert to generators so we do not take the filesystem performance hit at import time
 lastnames = [x.rstrip() for x in codecs.open(os.path.join(DATA_PATH, 'lastnames'), 'r' ,'utf-8').readlines()]
 firstnames = [
     x.rstrip() for x in
@@ -18,7 +20,7 @@ firstnames = [
 ]
 cities = ['Helsinki', 'Turku', 'Jyväskylä', 'Mikkeli', 'Pori', 'Kuopio', 'Tampere', 'Oulu', 'Joensuu', 'Vaasa']
 
-
+# This is also used by other apps
 def generate_email(memberlike):
     try:
         addr = '%s.%s@hacklab.hax' % (
