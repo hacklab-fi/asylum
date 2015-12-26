@@ -109,12 +109,18 @@ class RTActiveListFilter(admin.SimpleListFilter):
 
 class RecurringTransactionAdmin(VersionAdmin):
     list_display = (
-        'owner',
+        'owner_f',
         'dates_formatted',
         'amount_formatted',
         'tag',
     )
     list_filter = (TagListFilter, RTActiveListFilter)
+    search_fields = ['amount', 'owner__fname', 'owner__lname', 'owner__email']
+
+    def owner_f(self, obj):
+        return obj.owner
+    owner_f.short_description = _("Member")
+    owner_f.admin_order_field = 'owner__lname'
 
     def amount_formatted(self, obj):
         color = "green"
