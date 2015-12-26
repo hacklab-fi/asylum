@@ -10,8 +10,9 @@ from .tags import TransactionTagFactory
 class RecurringTransactionFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = 'creditor.RecurringTransaction'
-        django_get_or_create = ('tag', 'owner')
+        django_get_or_create = ('tag', 'owner', 'end')
 
+    end = None
     rtype = factory.fuzzy.FuzzyChoice(RecurringTransaction.RTYPE_READABLE.keys())
     owner = factory.SubFactory(MemberFactory)
     tag = (factory.fuzzy.FuzzyChoice(TransactionTag.objects.all())) if TransactionTag.objects.count() else (factory.SubFactory(TransactionTagFactory, label='Membership fee', tmatch='1'))
