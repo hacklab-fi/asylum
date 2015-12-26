@@ -75,8 +75,27 @@ class AccessTypeAdmin(VersionAdmin):
     )
 
 
+class AccessTypeListFilter(admin.SimpleListFilter):
+    title = _("Access types")
+    parameter_name = 'atype'
+
+    def lookups(self, request, model_admin):
+        return ( (x.pk, x.label) for x in AccessType.objects.all() )
+
+    def queryset(self, request, queryset):
+        v = self.value()
+        if not v:
+            return queryset
+        return queryset.filter(atype=v)
+
+
 class GrantAdmin(VersionAdmin):
-    pass
+    list_display = (
+        'owner',
+        'atype',
+    )
+    search_fields = ['owner__fname', 'owner__lname', 'owner__email']
+    list_filter = (AccessTypeListFilter, )
 
 
 class NonMemberTokenAdmin(VersionAdmin):
