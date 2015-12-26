@@ -97,12 +97,12 @@ class RecurringTransaction(AsylumModel):
 
     def in_timescope(self, timescope=None):
         # Check that we should actually add the transaction
-        start, end = self.resolve_timescope(timescope)
-        if (    self.start <= start.date()
-            and (   not self.end
-                 or self.end >= end.date())):
-            return True
-        return False
+        scope_start_ts, scope_end_ts = self.resolve_timescope(timescope)
+        scope_start = scope_start_ts.date()
+        scope_end = scope_end_ts.date()
+        return (    self.start <= scope_end
+                and (   not self.end
+                     or self.end >= scope_end))
 
     @transaction.atomic()
     def transaction_exists(self, timescope=None):

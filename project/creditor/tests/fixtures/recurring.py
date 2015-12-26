@@ -2,6 +2,7 @@
 import random
 import factory.django, factory.fuzzy
 from members.models import Member
+from members.tests.fixtures.memberlikes import MemberFactory
 from creditor.models import TransactionTag, RecurringTransaction
 from .tags import TransactionTagFactory
 
@@ -12,8 +13,8 @@ class RecurringTransactionFactory(factory.django.DjangoModelFactory):
         django_get_or_create = ('tag', 'owner')
 
     rtype = factory.fuzzy.FuzzyChoice(RecurringTransaction.RTYPE_READABLE.keys())
-    owner = factory.fuzzy.FuzzyChoice(Member.objects.all())
-    tag = factory.fuzzy.FuzzyChoice(TransactionTag.objects.all())
+    owner = factory.SubFactory(MemberFactory)
+    tag = (factory.fuzzy.FuzzyChoice(TransactionTag.objects.all())) if TransactionTag.objects.count() else (factory.SubFactory(TransactionTagFactory, label='Membership fee', tmatch='1'))
     amount = factory.fuzzy.FuzzyInteger(-40, -10, 5)
     start = factory.LazyAttribute(lambda t: factory.fuzzy.FuzzyDate(t.owner.accepted).fuzz())
 

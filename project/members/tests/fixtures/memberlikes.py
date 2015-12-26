@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 import factory.django, factory.fuzzy
 from members.models import generate_unique_memberid, MemberType, MembershipApplicationTag
 from asylum.utils import get_random_objects
+from . import types
 
 DATA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
 
@@ -55,8 +56,9 @@ class MemberFactory(MemberlikeFactoryBase):
         if extracted:
             mtypes = extracted
         else:
-            if MemberType.objects.all().count():
-                mtypes = get_random_objects(MemberType, random.randint(1, MemberType.objects.all().count()))
+            if not MemberType.objects.all().count():
+                types.generate_standard_set()
+            mtypes = get_random_objects(MemberType, random.randint(1, MemberType.objects.all().count()))
         for mtype in mtypes:
             self.mtypes.add(mtype)
 
