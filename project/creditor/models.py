@@ -133,7 +133,7 @@ class RecurringTransaction(AsylumModel):
         t.unique_id = hashlib.sha1(t.reference.encode('UTF-8')).hexdigest()
         t.amount = self.amount
         t.save()
-        return True
+        return t
 
     class Meta:
         verbose_name = _('Recurring Transaction')

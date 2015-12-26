@@ -6,4 +6,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for t in RecurringTransaction.objects.all():
-            t.conditional_add_transaction()
+            ret = t.conditional_add_transaction()
+            if ret:
+                print("Created transaction %s" % ret)
