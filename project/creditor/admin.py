@@ -2,6 +2,7 @@ import datetime
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
+from django.db.models import Q
 from reversion.admin import VersionAdmin
 from .models import TransactionTag, Transaction, RecurringTransaction
 
@@ -68,6 +69,44 @@ class TransactionAdmin(VersionAdmin):
     amount_formatted.admin_order_field = 'amount'
 
 
+class RTActiveListFilter(admin.SimpleListFilter):
+    title = _("Active")
+    parameter_name = 'active'
+
+    def lookups(self, request, model_admin):
+        return (
+            ( "-2", _("All")),
+            ( "-1", _("Inactive" )),
+            ( None, _("Active") ),
+        )
+
+    def choices(self, cl):
+        for lookup, title in self.lookup_choices:
+            yield {
+                'selected': self.value() == lookup,
+                'query_string': cl.get_query_string({
+                    self.parameter_name: lookup,
+                }, []),
+                'display': title,
+            }
+
+    def queryset(self, request, queryset):
+        today = datetime.datetime.now().date()
+        v = self.value()
+        if v is not None:
+            if int(v) == -2:
+                return queryset
+            if int(v) == -1:
+                return queryset.filter(
+                    Q(Q(end__lte=today) & Q(start__lte=today))
+                    | Q(start__gt=today)
+                )
+        return queryset.filter(
+            Q(start__lte=today)
+            & (Q(end__gte=today) | Q(end=None))
+        )
+
+
 class RecurringTransactionAdmin(VersionAdmin):
     list_display = (
         'owner',
@@ -75,7 +114,7 @@ class RecurringTransactionAdmin(VersionAdmin):
         'amount_formatted',
         'tag',
     )
-    list_filter = (TagListFilter, )
+    list_filter = (TagListFilter, RTActiveListFilter)
 
     def amount_formatted(self, obj):
         color = "green"
@@ -86,13 +125,16 @@ class RecurringTransactionAdmin(VersionAdmin):
     amount_formatted.admin_order_field = 'amount'
 
     def dates_formatted(self, obj):
+        today = datetime.datetime.now().date()
+        color = "black"
         if (    obj.end
-            and obj.end < datetime.datetime.now().date()):
+            and obj.end < today):
             color = "red"
-            return format_html("<span style='color: {};'>{} / {}</span>",color, obj.start.isoformat(), obj.end.isoformat())
+        if obj.start > today:
+            color = "red"
         if obj.end:
-            return "%s / %s" % (obj.start.isoformat(), obj.end.isoformat())
-        return obj.start.isoformat()
+            return format_html("<span style='color: {};'>{} / {}</span>",color, obj.start.isoformat(), obj.end.isoformat())
+        return format_html("<span style='color: {};'>{}</span>",color, obj.start.isoformat())
     dates_formatted.short_description = _("Start / End")
     dates_formatted.admin_order_field = 'start'
 
