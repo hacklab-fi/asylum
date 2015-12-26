@@ -1,3 +1,4 @@
+import datetime
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
@@ -68,7 +69,32 @@ class TransactionAdmin(VersionAdmin):
 
 
 class RecurringTransactionAdmin(VersionAdmin):
-    pass
+    list_display = (
+        'owner',
+        'dates_formatted',
+        'amount_formatted',
+        'tag',
+    )
+    list_filter = (TagListFilter, )
+
+    def amount_formatted(self, obj):
+        color = "green"
+        if obj.amount < 0:
+            color = "red"
+        return format_html("<span style='color: {};'>{}</span>",color, "%+.02f" % obj.amount)
+    amount_formatted.short_description = _("Amount")
+    amount_formatted.admin_order_field = 'amount'
+
+    def dates_formatted(self, obj):
+        if (    obj.end
+            and obj.end < datetime.datetime.now().date()):
+            color = "red"
+            return format_html("<span style='color: {};'>{} / {}</span>",color, obj.start.isoformat(), obj.end.isoformat())
+        if obj.end:
+            return "%s / %s" % (obj.start.isoformat(), obj.end.isoformat())
+        return obj.start.isoformat()
+    dates_formatted.short_description = _("Start / End")
+    dates_formatted.admin_order_field = 'start'
 
 
 admin.site.register(TransactionTag, TransactionTagAdmin)
