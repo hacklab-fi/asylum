@@ -1,6 +1,6 @@
 import pytest
 import datetime, calendar, pytz
-from creditor.tests.fixtures.recurring import MembershipfeeFactory
+from creditor.tests.fixtures.recurring import MembershipfeeFactory, KeyholderfeeFactory
 
 def year_start_end(timescope=None):
     if timescope is None:
@@ -48,4 +48,38 @@ def test_yearly_not_in_scope_notstarted():
     now = datetime.datetime.now()
     start, end = year_start_end(now+datetime.timedelta(weeks=60))
     t = MembershipfeeFactory(start=start, end=end)
+    assert not t.in_timescope(now)
+
+
+@pytest.mark.django_db
+def test_monthly_in_scope_with_end():
+    now = datetime.datetime.now()
+    start, end = month_start_end(now)
+    end += datetime.timedelta(weeks=6)
+    t = KeyholderfeeFactory(start=start, end=end)
+    assert t.in_timescope(now)
+
+
+@pytest.mark.django_db
+def test_monthly_in_scope_without_end():
+    now = datetime.datetime.now()
+    start, end = month_start_end(now-datetime.timedelta(weeks=6))
+    end = None
+    t = KeyholderfeeFactory(start=start, end=end)
+    assert t.in_timescope(now)
+
+
+@pytest.mark.django_db
+def test_monthly_not_in_scope_ended():
+    now = datetime.datetime.now()
+    start, end = month_start_end(now-datetime.timedelta(weeks=10))
+    t = KeyholderfeeFactory(start=start, end=end)
+    assert not t.in_timescope(now)
+
+
+@pytest.mark.django_db
+def test_monthly_not_in_scope_notstarted():
+    now = datetime.datetime.now()
+    start, end = month_start_end(now+datetime.timedelta(weeks=10))
+    t = KeyholderfeeFactory(start=start, end=end)
     assert not t.in_timescope(now)

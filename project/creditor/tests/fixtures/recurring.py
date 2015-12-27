@@ -31,7 +31,6 @@ class KeyholderfeeFactory(RecurringTransactionFactory):
     tag = factory.SubFactory(TransactionTagFactory, label='Keyholder fee', tmatch='2')
     rtype = RecurringTransaction.MONTHLY
     amount = factory.fuzzy.FuzzyInteger(-40, -20, 10)
-    owner = factory.fuzzy.FuzzyChoice(Member.objects.filter(access_granted__atype__bit=0)) # TODO: Should we limit this like so ??
 
 
 def Membershipfee4all(output=False):
