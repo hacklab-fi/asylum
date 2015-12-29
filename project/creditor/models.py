@@ -18,6 +18,7 @@ class TransactionTag(AsylumModel):
     class Meta:
         verbose_name = _('Transaction Tag')
         verbose_name_plural = _('Transaction Tags')
+        ordering = ['label', ]
 
 revisions.default_revision_manager.register(TransactionTag)
 
@@ -46,6 +47,7 @@ class Transaction(AsylumModel):
     class Meta:
         verbose_name = _('Transaction')
         verbose_name_plural = _('Transactions')
+        ordering = ['-stamp', 'reference']
 
 revisions.default_revision_manager.register(Transaction)
 
@@ -138,5 +140,6 @@ class RecurringTransaction(AsylumModel):
     class Meta:
         verbose_name = _('Recurring Transaction')
         verbose_name_plural = _('Recurring Transactions')
+        ordering = ['owner__lname', 'owner__fname', '-start']
 
 revisions.default_revision_manager.register(RecurringTransaction)
