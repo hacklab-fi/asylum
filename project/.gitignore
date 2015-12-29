@@ -1,3 +1,4 @@
+.cache/
 staticfiles/
 media/
 bower_components/

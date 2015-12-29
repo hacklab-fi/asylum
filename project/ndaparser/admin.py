@@ -9,7 +9,7 @@ from django.conf import settings
 from .views import NordeaUploadView
 from creditor.admin import TransactionAdmin
 from creditor.handlers import AbstractTransaction
-from asylum.util import get_handler_instance
+from asylum.utils import get_handler_instance
 
 class NordeaUploadMixin(object):
     nda_change_list_template = "ndaparser/admin/change_list.html"

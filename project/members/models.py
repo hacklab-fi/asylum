@@ -3,6 +3,7 @@ from decimal import Decimal
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.utils import timezone
 from django_markdown.models import MarkdownField
 from asylum.models import AsylumModel
 # importing after asylum.mixins to get the monkeypatching done there
@@ -74,7 +75,7 @@ revisions.default_revision_manager.register(MemberType)
 
 
 class Member(MemberCommon):
-    accepted = models.DateField(_("Date accepted"), auto_now_add=True)
+    accepted = models.DateField(_("Date accepted"), default=timezone.now)
     mtypes = models.ManyToManyField(MemberType, related_name='+', verbose_name=_("Membership types"), blank=True)
     anonymized_id = models.CharField(_("Anonymized id (for use in external databases)"), max_length=24, unique=True, blank=True, null=True, default=generate_unique_randomid)
     member_id = models.PositiveIntegerField(_("Member id no"), blank=True, null=True, unique=True, default=generate_unique_memberid)
@@ -111,7 +112,7 @@ revisions.default_revision_manager.register(MembershipApplicationTag)
 
 
 class MembershipApplication(MemberCommon):
-    received = models.DateField(auto_now_add=True)
+    received = models.DateField(default=timezone.now)
     tags = models.ManyToManyField(MembershipApplicationTag, related_name='+', verbose_name=_("Application tags"), blank=True)
     notes = MarkdownField(verbose_name=_("Notes"), blank=True)
 
@@ -160,7 +161,7 @@ revisions.default_revision_manager.register(MembershipApplication)
 
 
 class MemberNote(AsylumModel):
-    stamp = models.DateTimeField(_("Datetime"), auto_now_add=True, db_index=True)
+    stamp = models.DateTimeField(_("Datetime"), default=timezone.now, db_index=True)
     notes = MarkdownField(verbose_name=_("Notes"), blank=False)
     member = models.ForeignKey(Member, verbose_name=_("Member"), blank=True, null=True, on_delete=models.CASCADE, related_name='notes')
 

@@ -38,6 +38,7 @@ class Token(AsylumModel):
     class Meta:
         verbose_name = _('Token')
         verbose_name_plural = _('Tokens')
+        unique_together = ("ttype", "value")
 
 revisions.default_revision_manager.register(Token)
 
@@ -94,5 +95,6 @@ class NonMemberToken(AsylumModel):
     class Meta:
         verbose_name = _('Non-member token')
         verbose_name_plural = _('Non-member tokens')
+        unique_together = ("ttype", "value")
 
 revisions.default_revision_manager.register(NonMemberToken)
