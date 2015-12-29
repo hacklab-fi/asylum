@@ -43,6 +43,11 @@ RUN virtualenv -p `which python3.4` ../asylum-venv
 COPY project/requirements /opt/asylum/requirements/
 RUN . ../asylum-venv/bin/activate && pip install -r requirements/local.txt
 
+# Configure locales
+USER root
+RUN locale-gen en_US.UTF-8
+ENV LC_CTYPE en_US.UTF-8
+
 # Configure application
 USER root
 RUN echo "DATABASE_URL=postgres://asylum:asylum@localhost/asylum" > .env
