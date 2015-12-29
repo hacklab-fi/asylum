@@ -23,6 +23,9 @@ class AbstractTransaction(models.Model):
         except Transaction.DoesNotExist:
             obj = Transaction()
             obj.unique_id = self.unique_id
+            obj.stamp = self.stamp
+            obj.amount = self.amount
+            obj.reference = self.reference
         return obj
 
 

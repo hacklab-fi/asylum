@@ -1,12 +1,15 @@
 import tempfile
 import os
-import datetime
+import datetime, pytz
 import hashlib
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView
 from .forms import UploadForm
 from .ndaparser import parseLine
 from creditor.handlers import AbstractTransaction
+
+
+HELSINKI = pytz.timezone('Europe/Helsinki')
 
 
 class NordeaUploadView(FormView):
@@ -37,7 +40,7 @@ class NordeaUploadView(FormView):
                         at.name = str(nt.name)
                         at.reference = str(nt.referenceNumber)
                         at.amount = nt.amount # We know this is Decimal instance
-                        at.stamp = datetime.datetime.combine(nt.timestamp, datetime.datetime.min.time())
+                        at.stamp = HELSINKI.fromutc(datetime.datetime.combine(nt.timestamp, datetime.datetime.min.time()))
                         # DO NOT EVER CHANGE THIS, it must always and forever yield same unique_id for same transaction.
                         at.unique_id = hashlib.sha1(str(nt.archiveID).encode('utf-8') + nt.timestamp.isoformat().encode('utf-8') + str(nt.referenceNumber).encode('utf-8')).hexdigest()
                         ret = transactions_handler.import_transaction(at)

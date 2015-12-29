@@ -85,9 +85,7 @@ class TransactionHandler(BaseTransactionHandler):
             # No member matched, skip...
             return None
 
-        # Rest of the fields map directly (unique_id was already taken care of by at.get_local())
-        lt.amount = at.amount
-        lt.reference = at.reference
+        # Rest of the fields are directly mapped already by get_local()
         lt.save()
         return lt
 
