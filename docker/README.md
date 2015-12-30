@@ -38,6 +38,13 @@ Quickly test a pull request
 
     docker build -t hacklabfi/asylum .
 
+
+# Run tests on a container
+
+When you have a container running, you can run tests with
+
+    docker exec <container name> ./docker-entrypoint.sh py.test
+
 # Running asylum
 
 All of the docker commands are to be run at git repository root.

@@ -21,7 +21,7 @@ USER postgres
 RUN service postgresql start && \
     createuser asylum && \
     createdb -E utf-8 -T template0 -O asylum asylum && \
-    psql -U postgres -d postgres -c "alter user asylum with password 'asylum';"
+    psql -U postgres -d postgres -c "alter user asylum with password 'asylum'; alter user asylum with createdb;"
 
 # Create a newuser
 USER root
