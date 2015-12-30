@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-06 18:48+0200\n"
+"POT-Creation-Date: 2015-12-30 13:20+0200\n"
 "PO-Revision-Date: 2015-11-29 03:10+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -15,7 +15,49 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.6\n"
 
-#: models.py:10 models.py:23 models.py:42 models.py:72
+#: admin.py:13
+#, fuzzy
+#| msgid "Token type"
+msgid "Token types"
+msgstr "Tunnisteen tyyppi"
+
+#: admin.py:27
+msgid "Revokation status"
+msgstr ""
+
+#: admin.py:31
+msgid "All"
+msgstr "Kaikki"
+
+#: admin.py:31
+#, fuzzy
+#| msgid "Revoked"
+msgid "Not revoked"
+msgstr "Peruutettu"
+
+#: admin.py:31 models.py:28 models.py:84
+msgid "Revoked"
+msgstr "Peruutettu"
+
+#: admin.py:64 admin.py:107 models.py:25 models.py:65
+msgid "Member"
+msgstr "Jäsen"
+
+#: admin.py:72 admin.py:138 models.py:27 models.py:83
+msgid "Token value"
+msgstr "Tunnisteen arvo"
+
+#: admin.py:84
+#, fuzzy
+#| msgid "Access Types"
+msgid "Access types"
+msgstr "Pääsyoikeuden tyypit"
+
+#: admin.py:131 models.py:74
+msgid "Grants"
+msgstr "Pääsyoikeudet"
+
+#: models.py:10 models.py:24 models.py:49 models.py:81
 msgid "Label"
 msgstr "Nimiö"
 
@@ -27,80 +69,64 @@ msgstr "Poletin tyyppi"
 msgid "Token Types"
 msgstr "Poletin tyypit"
 
-#: models.py:24 models.py:57
-msgid "Member"
-msgstr "Jäsen"
-
-#: models.py:25 models.py:73
+#: models.py:26 models.py:82
 msgid "Token type"
 msgstr "Tunnisteen tyyppi"
 
-#: models.py:26 models.py:74
-msgid "Token value"
-msgstr "Tunnisteen arvo"
-
-#: models.py:27 models.py:75
-msgid "Revoked"
-msgstr "Peruutettu"
-
-#: models.py:32 models.py:83
+#: models.py:37 models.py:97
 #, python-format
 msgid "%s '%s' for %s"
 msgstr ""
 
-#: models.py:35
+#: models.py:40
 msgid "Token"
 msgstr "Poletti"
 
-#: models.py:36
+#: models.py:41
 msgid "Tokens"
 msgstr "Poletit"
 
-#: models.py:43
+#: models.py:50
 msgid "Bit number"
 msgstr "Bittinumero"
 
-#: models.py:44
+#: models.py:51
 msgid "External identifier"
 msgstr "Ulkoinen tunnus"
 
-#: models.py:50
+#: models.py:57
 msgid "Access Type"
 msgstr "Pääsyoikeuden tyyppi"
 
-#: models.py:51
+#: models.py:58
 msgid "Access Types"
 msgstr "Pääsyoikeuden tyypit"
 
-#: models.py:58
+#: models.py:66 models.py:85
 msgid "Access"
 msgstr "Pääsyoikeus"
 
-#: models.py:59 models.py:78
+#: models.py:67 models.py:87
 msgid "Notes"
-msgstr ""
+msgstr "Muistiinpanot"
 
-#: models.py:62
+#: models.py:70
 #, python-format
 msgid "%s for %s"
 msgstr ""
 
-#: models.py:65
+#: models.py:73
 msgid "Grant"
 msgstr "Pääsyoikeus"
 
-#: models.py:66
-msgid "Grants"
-msgstr "Pääsyoikeudet"
-
-#: models.py:77
+#: models.py:86
 msgid "Contact"
 msgstr "Yhteystieto"
 
-#: models.py:86
+#: models.py:100
 msgid "Non-member token"
 msgstr "Ulkopuoliselle annettu poletti"
 
-#: models.py:87
+#: models.py:101
 msgid "Non-member tokens"
 msgstr "Ulkopuoliselle annetut poletit"
