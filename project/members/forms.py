@@ -12,6 +12,7 @@ rules_accepted_proxy = allow_lazy(rules_accepted_proxy, str)
 
 class ApplicationForm(forms.ModelForm):
     rules_accepted = forms.BooleanField(required=True, label=rules_accepted_proxy(_("I have read and accept <a href=\"%s\" target=\"_blank\">the rules</a>")) )
+    required_css_class = 'required'
 
     class Meta:
         model = MembershipApplication
