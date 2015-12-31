@@ -36,8 +36,7 @@ gulp.task("js", function() {
         BOWER_PATH + "vide/dist/jquery.vide.min.js",
         BOWER_PATH + "scrollreveal/dist/scrollReveal.min.js",
         BOWER_PATH + "jquery.scrollTo/jquery.scrollTo.min.js",
-        STATIC_SRC_PATH + "js/frontpage.js",
-        STATIC_SRC_PATH + "js/common.js"
+        STATIC_SRC_PATH + "js/asylum.js",
     ])
         .pipe(plumber({}))
         .pipe(concat("asylum.js"))
