@@ -8,8 +8,9 @@
 <div class="container-fluid">
     <form role="form" method="post">
         {% csrf_token %}
-        {% bootstrap_form form %}
-        {% buttons submit='OK' reset="Cancel" %}{% endbuttons %}
+        {% bootstrap_form form required_css_class='required' %}
+        {% trans "Submit" as submittext %}
+        {% buttons submit=submittext %}{% endbuttons %}
     </form>
 </div>
 {% endblock %}

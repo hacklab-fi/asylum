@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-06 22:34+0200\n"
+"POT-Creation-Date: 2015-12-30 13:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: admin.py:43 templates/ndaparser/admin/change_list.html:7
+#: admin.py:47 templates/ndaparser/admin/change_list.html:7
 msgid "Upload Nordea transactions"
 msgstr "Lataa Nordean tapahtumat"
 
@@ -34,18 +34,25 @@ msgstr "Etusivu"
 msgid "Upload "
 msgstr "Lataa"
 
-#: templates/ndaparser/admin/upload.html:27
+#: templates/ndaparser/admin/upload.html:28
 msgid "Upload Nordea formatted transactions file in the form below"
 msgstr "Lataa Nordean tapahtumatiedosto allaolevalla lomakkeella"
 
-#: templates/ndaparser/admin/upload.html:34
+#: templates/ndaparser/admin/upload.html:30
+msgid ""
+"You have not defined TRANSACTION_CALLBACKS_HANDLER so nothing will actually "
+"be imported on upload"
+msgstr ""
+"Et ole määritellyt muuttujaa TRANSACTION_CALLBACKS_HANDLER joten mitään ei oikeasti tallenneta kantaan"
+
+#: templates/ndaparser/admin/upload.html:42
 msgid "Upload"
 msgstr "Lataa"
 
-#: templates/ndaparser/admin/upload.html:35
+#: templates/ndaparser/admin/upload.html:43
 msgid "Cancel"
 msgstr "Peruuta"
 
-#: views.py:40
+#: views.py:33
 msgid "Transactions uploaded"
 msgstr "Tapahtumat ladattu"
