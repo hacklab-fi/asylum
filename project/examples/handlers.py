@@ -1,5 +1,8 @@
+import environ
 import logging
 import environ
+import datetime, calendar
+from django.utils import timezone
 from django.core.mail import EmailMessage
 from members.handlers import BaseApplicationHandler, BaseMemberHandler
 from creditor.handlers import BaseTransactionHandler, BaseRecurringTransactionsHandler
@@ -44,6 +47,22 @@ class ApplicationHandler(ExampleBaseHandler):
         mail.to = [ member.email, ]
         mail.body = """Your membership has been approved, your member id is #%d""" % member.member_id
         mail.send()
+        # Auto-add the membership fee as recurring transaction
+        membership_fee = env.float('MEMBEREXAMPLE_MEMBERSHIP_FEE', default=None)
+        membership_tag = env.int('MEMBEREXAMPLE_MEMBERSHIP_TAG_PK', default=None)
+        if membership_fee and membership_tag:
+            from creditor.models import RecurringTransaction, TransactionTag
+            rt = RecurringTransaction()
+            rt.tag = TransactionTag.objects.get(pk=membership_tag)
+            rt.owner = member
+            rt.amount = -membership_fee
+            rt.rtype = RecurringTransaction.YEARLY
+            # If application was received in Q4 set the recurringtransaction to start from next year
+            if application.received.month >= 10:
+                rt.start = datetime.date(year=application.received.year+1, month=1, day=1)
+            rt.save()
+            rt.conditional_add_transaction()
+
 
 
 class TransactionHandler(BaseTransactionHandler):
