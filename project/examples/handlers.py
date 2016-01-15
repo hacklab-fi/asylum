@@ -1,13 +1,15 @@
 import logging
+import environ
 from django.core.mail import EmailMessage
 from members.handlers import BaseApplicationHandler, BaseMemberHandler
 from creditor.handlers import BaseTransactionHandler, BaseRecurringTransactionsHandler
 from creditor.models import Transaction, TransactionTag
 from django.utils.translation import ugettext_lazy as _
-import environ
+from .utils import get_holvi_singleton
 
 logger = logging.getLogger('example.handlers')
 env = environ.Env()
+
 
 
 class ExampleBaseHandler(BaseMemberHandler):
@@ -95,22 +97,38 @@ class TransactionHandler(BaseTransactionHandler):
         return str(_("Example application transactions handler"))
 
 
+
 class RecurringTransactionsHolviHandler(BaseRecurringTransactionsHandler):
     def on_creating(self, rt, t, *args, **kwargs):
-        import holviapi, holviapi.utils
         msg = "on_creating called for %s (from %s)" % (t, rt)
         logger.info(msg)
         print(msg)
-        holvi_pool = env('HOLVI_POOL', default=None)
-        holvi_key = env('HOLVI_APIKEY', default=None)
-
-        # QnD reference generation example
-        import time
-        t.reference = holviapi.utils.int2iso_reference(int(time.time()))
-
-        if not holvi_pool or not holvi_key:
+        # Only negative amounts go to invoices
+        if t.amount >= 0.0:
             return True
-        # TODO: Create invoice and set t.reference to the holvi reference
+        HOLVI_CNC = get_holvi_singleton()
+        if not HOLVI_CNC:
+            return True
+
+        import holviapi
+        invoice_api = holviapi.InvoiceAPI(HOLVI_CNC)
+        invoice = holviapi.Invoice(invoice_api)
+        invoice.receiver = holviapi.contacts.InvoiceContact(**{
+            'email': t.owner.email,
+            'name': t.owner.name,
+        })
+        invoice.items.append(holviapi.InvoiceItem(invoice))
+        if t.stamp:
+            year = t.stamp.year
+        else:
+            year = datetime.datetime.now().year
+        invoice.items[0].description = "Jäsenmaksu %s" % year
+        invoice.items[0].net = -t.amount # Negative amount transaction -> positive amount invoice
+        invoice.subject = "%s / %s" % (invoice.items[0].description, invoice.receiver.name)
+        invoice = invoice.save()
+        invoice.send()
+        print("Created (and sent) Holvi invoice %s" % invoice.code)
+        t.reference = invoice.rf_reference
         return True
 
     def on_created(self, rt, t, *args, **kwargs):
