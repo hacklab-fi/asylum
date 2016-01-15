@@ -29,6 +29,11 @@ sudo apt-get install -y nodejs</code></pre>
       If the installation command fails, you'll have to bootstrap pip for your Python3.4 installation (`wget https://bootstrap.pypa.io/get-pip.py && sudo python3.4 get-pip.py`).
       Good luck.
   - `pip install -r requirements/local.txt` (or `pip install -r requirements/production.txt` if installing on production)
+  - Create the postgres database
+    - `sudo apt-get install postgresql-9.3` this is not in requirements.apt since you might want to use a dedicated postgres host.
+    - `sudo su - postgres`
+    - `createuser asylum && createdb -E utf-8 -T template0 -O asylum asylum && psql -U postgres -d postgres -c "alter user asylum with password 'asylum';"`
+      - Change at least the password,in createdb `-O asylum` is the user that owns the database.
   - `./manage.py migrate`
   - `find . -name '._*' | xargs rm ; for app in locale */locale; do (cd $(dirname $app) && ../manage.py compilemessages ); done`
   - `./manage.py createinitialrevisions`
@@ -93,7 +98,9 @@ And assuming you have uWSGI configured `touch reload`
 
 Until we maybe decide on Celery for running various (timed or otherwise) tasks add the following to your crontab:
 
+    SHELL=/bin/bash
     @daily      cd /path/to/project ; source venv/bin/activate ; ./manage.py addrecurring
+    @daily      cd /path/to/project ; set -o allexport ; source .env; set +o allexport ; pg_dump $DATABASE_URL | gzip >database_backup.sql.gz
 
 ## Running in development mode
 
