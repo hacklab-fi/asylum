@@ -92,7 +92,7 @@ class RecurringTransaction(AsylumModel):
             raise NotImplementedError("Not implemented for %s (%d)" % (RecurringTransaction.RTYPE_READABLE[self.rtype] ,self.rtype))
         return (timezone.make_aware(start), timezone.make_aware(end))
 
-    def make_reference(self, timescope=None):
+    def make_uid_source(self, timescope=None):
         start, end = self.resolve_timescope(timescope)
         # NOTE: Do not localize anything in this string, also: DO NOT CHANGE IT or the unique_ids of transactions created will change
         return "RecurringTransaction #%d/#%d for %s" % (self.pk, self.rtype, start.date().isoformat())
@@ -109,11 +109,10 @@ class RecurringTransaction(AsylumModel):
     @transaction.atomic()
     def transaction_exists(self, timescope=None):
         start, end = self.resolve_timescope(timescope)
-        ref = self.make_reference(timescope)
-        uid = hashlib.sha1(ref.encode('UTF-8')).hexdigest()
+        uid_source = self.make_uid_source(timescope)
+        uid = hashlib.sha1(uid_source.encode('UTF-8')).hexdigest()
         qs = Transaction.objects.filter(
-            owner=self.owner, tag=self.tag, reference=ref, unique_id=uid,
-            stamp__gte=start, stamp__lte=end
+            owner=self.owner, tag=self.tag, unique_id=uid, stamp__gte=start, stamp__lte=end
         )
         if qs.count():
             return True
@@ -131,8 +130,9 @@ class RecurringTransaction(AsylumModel):
             t.stamp = timescope
         t.tag = self.tag
         t.owner = self.owner
-        t.reference = self.make_reference(timescope)
-        t.unique_id = hashlib.sha1(t.reference.encode('UTF-8')).hexdigest()
+        uid_source = self.make_uid_source(timescope)
+        t.unique_id = hashlib.sha1(uid_source.encode('UTF-8')).hexdigest()
+        t.reference = uid_source
         t.amount = self.amount
         t.save()
         return t
