@@ -16,6 +16,7 @@ logger = logging.getLogger('example.handlers')
 env = environ.Env()
 
 
+env = environ.Env()
 
 class ExampleBaseHandler(BaseMemberHandler):
     def on_saving(self, instance, *args, **kwargs):
@@ -47,6 +48,7 @@ class ApplicationHandler(ExampleBaseHandler):
         mail.to = [ member.email, ]
         mail.body = """Your membership has been approved, your member id is #%d""" % member.member_id
         mail.send()
+
         # Auto-add the membership fee as recurring transaction
         membership_fee = env.float('MEMBEREXAMPLE_MEMBERSHIP_FEE', default=None)
         membership_tag = env.int('MEMBEREXAMPLE_MEMBERSHIP_TAG_PK', default=None)
@@ -62,6 +64,15 @@ class ApplicationHandler(ExampleBaseHandler):
                 rt.start = datetime.date(year=application.received.year+1, month=1, day=1)
             rt.save()
             rt.conditional_add_transaction()
+
+        mailman_subscribe = env('MEMBEREXAMPLE_MAILMAN_SUBSCRIBE', default=None)
+        if mailman_subscribe:
+            mail = EmailMessage()
+            mail.from_email = member.email
+            mail.to = [ mailman_subscribe, ]
+            mail.subject = 'subscribe'
+            mail.body = 'subscribe'
+            mail.send()
 
 
 
