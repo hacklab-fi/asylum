@@ -2,6 +2,8 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from .models import Transaction
 
+
+
 class AbstractTransaction(models.Model):
     stamp = models.DateTimeField(_("Datetime"), blank=False)
     name = models.CharField(_("Name"), max_length=200, blank=False)
@@ -29,6 +31,7 @@ class AbstractTransaction(models.Model):
         return obj
 
 
+
 class BaseTransactionHandler(object):
     """Baseclass for transaction importer callbacks"""
     def import_transaction(self, transaction):
@@ -42,3 +45,16 @@ class BaseTransactionHandler(object):
 
     def __str__(self):
         return _("Transaction handler baseclass, this does nothing")
+
+
+
+class BaseRecurringTransactionsHandler(object):
+    """Baseclass for callback handlers for MembershipApplication processing"""
+
+    def on_creating(self, recurring, transaction):
+        """Called just before transaction.save(), must return True or the save is aborted"""
+        return True
+
+    def on_created(self, recurring, transaction):
+        """Called just after transaction.save()"""
+        pass

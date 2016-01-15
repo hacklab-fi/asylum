@@ -7,6 +7,7 @@ from asylum.models import AsylumModel
 # importing after asylum.mixins to get the monkeypatching done there
 from reversion import revisions
 from django.db import transaction
+from asylum.utils import get_handler_instance
 
 class TransactionTag(AsylumModel):
     label = models.CharField(_("Label"), max_length=200, blank=False)
@@ -128,13 +129,19 @@ class RecurringTransaction(AsylumModel):
         t = Transaction()
         if timescope:
             t.stamp = timescope
+        h = get_handler_instance('RECURRINGTRANSACTIONS_CALLBACKS_HANDLER')
         t.tag = self.tag
         t.owner = self.owner
         uid_source = self.make_uid_source(timescope)
         t.unique_id = hashlib.sha1(uid_source.encode('UTF-8')).hexdigest()
         t.reference = uid_source
         t.amount = self.amount
+        if h:
+            if not h.on_creating(self, t):
+                return False
         t.save()
+        if h:
+            h.on_created(self, t)
         return t
 
     class Meta:

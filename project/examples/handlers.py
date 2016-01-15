@@ -1,11 +1,13 @@
 import logging
 from django.core.mail import EmailMessage
 from members.handlers import BaseApplicationHandler, BaseMemberHandler
-from creditor.handlers import BaseTransactionHandler
+from creditor.handlers import BaseTransactionHandler, BaseRecurringTransactionsHandler
 from creditor.models import Transaction, TransactionTag
 from django.utils.translation import ugettext_lazy as _
+import environ
 
 logger = logging.getLogger('example.handlers')
+env = environ.Env()
 
 
 class ExampleBaseHandler(BaseMemberHandler):
@@ -91,3 +93,21 @@ class TransactionHandler(BaseTransactionHandler):
 
     def __str__(self):
         return str(_("Example application transactions handler"))
+
+
+class RecurringTransactionsHolviHandler(BaseRecurringTransactionsHandler):
+    def on_creating(self, rt, t, *args, **kwargs):
+        msg = "on_creating called for %s (from %s)" % (t, rt)
+        logger.info(msg)
+        print(msg)
+        holvi_pool = env('HOLVI_POOL', default=None)
+        holvi_key = env('HOLVI_APIKEY', default=None)
+        if not holvi_pool or not holvi_key:
+            return True
+        # TODO: Create invoice
+        return True
+
+    def on_created(self, rt, t, *args, **kwargs):
+        msg = "on_created called for %s (from %s)" % (t, rt)
+        logger.info(msg)
+        print(msg)
