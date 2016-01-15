@@ -97,14 +97,20 @@ class TransactionHandler(BaseTransactionHandler):
 
 class RecurringTransactionsHolviHandler(BaseRecurringTransactionsHandler):
     def on_creating(self, rt, t, *args, **kwargs):
+        import holviapi, holviapi.utils
         msg = "on_creating called for %s (from %s)" % (t, rt)
         logger.info(msg)
         print(msg)
         holvi_pool = env('HOLVI_POOL', default=None)
         holvi_key = env('HOLVI_APIKEY', default=None)
+
+        # QnD reference generation example
+        import time
+        t.reference = holviapi.utils.int2iso_reference(int(time.time()))
+
         if not holvi_pool or not holvi_key:
             return True
-        # TODO: Create invoice
+        # TODO: Create invoice and set t.reference to the holvi reference
         return True
 
     def on_created(self, rt, t, *args, **kwargs):

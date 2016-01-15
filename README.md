@@ -142,3 +142,8 @@ See the cronjobs above for a nightly database dump. As for manual dump or restor
 For a manual dump run ```pg_dump -c $DATABASE_URL | gzip >database_backup_`date +%Y%m%d_%H%M`.sql.gz```.
 
 For restore run ```zcat database_backup.sql.gz | psql $DATABASE_URL``` (you might need to drop and recreate the database first, see the setup instructions for creating)
+
+## About the example handlers
+
+Use these as example for building your own callbacks (though some might be rather useful as-is), you need to `pip install -r examples/requirements.txt` to install
+the additional requirements.
