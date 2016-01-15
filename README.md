@@ -39,16 +39,16 @@ sudo apt-get install -y nodejs</code></pre>
   - `./manage.py createinitialrevisions`
   - `./manage.py createsuperuser`
   - `npm run build`
-  - `./manage.py collectstatic --noinput`
 
 ### Production setup
 
-  - Create a `.env` file in the project directory, see the example file, you need at least the following variables
+  - Create a `.env` file in the project directory before running any of the manage.py commands above. See the example file, you need at least the following variables
       - DJANGO_SETTINGS_MODULE (=config.settings.production)
       - DJANGO_SENTRY_DSN
         - https://hub.docker.com/_/sentry/
         - https://docs.getsentry.com/hosted/
       - DATABASE_URL (=postgres://pguser:pgpassword@localhost/dbname)
+  - `./manage.py collectstatic --noinput`
   - Setup uWSGI
     - `sudo apt-get install uwsgi-plugin-python3 uwsgi`
     - `nano -w /etc/uwsgi/apps-available/asylum.ini` (see below)
