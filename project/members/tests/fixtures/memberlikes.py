@@ -4,6 +4,7 @@ import os, codecs
 import random
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+from django.template.defaultfilters import slugify
 import factory.django, factory.fuzzy
 from members.models import generate_unique_memberid, MemberType, MembershipApplicationTag
 from asylum.utils import get_random_objects
@@ -25,13 +26,13 @@ cities = ['Helsinki', 'Turku', 'Jyväskylä', 'Mikkeli', 'Pori', 'Kuopio', 'Tamp
 def generate_email(memberlike):
     try:
         addr = '%s.%s@hacklab.hax' % (
-            memberlike.fname.encode('ascii','ignore').decode('utf-8').lower(),
-            memberlike.lname.encode('ascii','ignore').decode('utf-8').lower()
+            slugify(memberlike.fname),
+            slugify(memberlike.lname)
         )
         validate_email(addr)
         return addr
     except ValidationError as e:
-        return 'member_%d@hacklab.hax' % generate_unique_memberid()
+        return 'member_%d_%d@hacklab.hax' % (generate_unique_memberid(), random.randint(10,2**16))
 
 
 class MemberlikeFactoryBase(factory.django.DjangoModelFactory):

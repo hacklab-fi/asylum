@@ -24,6 +24,10 @@ env = environ.Env()
 if os.path.isfile(str(ROOT_DIR + '.env')):
     environ.Env.read_env(str(ROOT_DIR + '.env'))
 
+# Monkeypatch djangos own slugify with Mozilla teams Unicode-aware one
+import slugify as unicodeslugify
+import django.template.defaultfilters
+django.template.defaultfilters.slugify = lambda x: unicodeslugify.slugify(x, only_ascii=True, lower=True, spaces=False)
 
 # APP CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -245,7 +249,7 @@ AUTHENTICATION_BACKENDS = (
 
 
 # SLUGLIFIER
-AUTOSLUG_SLUGIFY_FUNCTION = 'slugify.slugify'
+AUTOSLUG_SLUGIFY_FUNCTION = 'django.template.defaultfilters.slugify'
 
 # Location of root django.contrib.admin URL, use {% url 'admin:index' %}
 ADMIN_URL = r'^admin/'
