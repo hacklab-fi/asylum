@@ -35,7 +35,7 @@ sudo apt-get install -y nodejs</code></pre>
     - `createuser asylum && createdb -E utf-8 -T template0 -O asylum asylum && psql -U postgres -d postgres -c "alter user asylum with password 'asylum';"`
       - Change at least the password,in createdb `-O asylum` is the user that owns the database.
   - `./manage.py migrate`
-  - `find . -name '._*' | xargs rm ; for app in locale */locale; do (cd $(dirname $app) && ../manage.py compilemessages ); done`
+  - `find . -name '._*' | xargs rm ; for app in $( find . -path '*/locale' ); do (cd $(dirname $app) && ../manage.py compilemessages ); done`
   - `./manage.py createinitialrevisions`
   - `./manage.py createsuperuser`
   - `npm run build`
@@ -110,5 +110,7 @@ Until we maybe decide on Celery for running various (timed or otherwise) tasks a
   - `npm run watch &` If you want to develop the JS/LESS stuff this will autocompile them on change
   - `./manage.py runserver 0.0.0.0:8000`
   - `maildump -p ~/maildump.pid --stop`
+  - Make localizations: `find . -name '._*' | xargs rm ; for app in $( find . -path '*/locale' ); do (cd $(dirname $app) && ../manage.py makemessages ); done`
+    - If you add your own apps, make sure to create the `locale` directory for them too.
 
 If you need the special environment variables in scripts not run via manage.py, use `set -o allexport ; source .env; set +o allexport` to load them.
