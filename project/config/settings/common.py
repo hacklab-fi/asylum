@@ -159,6 +159,7 @@ _TEMPLATE_CONTEXT_PROCESSORS = [
     'django.template.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
     # Your stuff: custom template context processors go here
+    'django_settings_export.settings_export',
 ]
 
 TEMPLATES = [
@@ -258,6 +259,7 @@ MEMBERAPPLICATION_CALLBACKS_HANDLER=env('MEMBERAPPLICATION_CALLBACKS_HANDLER', d
 MEMBER_CALLBACKS_HANDLER=env('MEMBER_CALLBACKS_HANDLER', default=None)
 TRANSACTION_CALLBACKS_HANDLER=env('TRANSACTION_CALLBACKS_HANDLER', default=None)
 NORDEA_UPLOAD_ENABLED = env.bool('NORDEA_UPLOAD_ENABLED', default=False)
+ORGANIZATION_NAME=env('ORGANIZATION_NAME', default="hacklab.fi asylum for the inane")
 
 
 REST_FRAMEWORK = {
@@ -273,3 +275,9 @@ REST_FRAMEWORK = {
 }
 
 MARKDOWN_EXTENSIONS = ['extra', 'CodeHilite']
+
+# Keep last as reminder
+SETTINGS_EXPORT = [
+    'ORGANIZATION_NAME',
+    'APPLICATION_RULES_URL',
+]
