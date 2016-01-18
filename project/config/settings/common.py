@@ -47,6 +47,7 @@ THIRD_PARTY_APPS = (
     'bootstrap3',
     'reversion',
     'rest_framework',
+    'rest_framework.authtoken',
     'django_markdown',
 )
 
@@ -261,10 +262,14 @@ NORDEA_UPLOAD_ENABLED = env.bool('NORDEA_UPLOAD_ENABLED', default=False)
 
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
     # Use Django's standard `django.contrib.auth` permissions,
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-        'rest_framework.permissions.DjangoModelPermissions'
+        'rest_framework.permissions.DjangoModelPermissions',
     ],
     'PAGE_SIZE': 50,
     'DEFAULT_FILTER_BACKENDS': [
