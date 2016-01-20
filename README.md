@@ -100,7 +100,7 @@ Until we maybe decide on Celery for running various (timed or otherwise) tasks a
 
     SHELL=/bin/bash
     @daily      cd /path/to/project ; source venv/bin/activate ; ./manage.py addrecurring
-    @daily      cd /path/to/project ; set -o allexport ; source .env; set +o allexport ; pg_dump $DATABASE_URL | gzip >database_backup.sql.gz
+    @daily      cd /path/to/project ; set -o allexport ; source .env; set +o allexport ; pg_dump -c $DATABASE_URL | gzip >database_backup.sql.gz
 
 ## Running in development mode
 
@@ -119,6 +119,6 @@ If you need the special environment variables in scripts not run via manage.py, 
 
 See the cronjobs above for a nightly database dump. As for manual dump or restore start with  `set -o allexport ; source .env; set +o allexport` to load the environment.
 
-For a manual dump run ```pg_dump $DATABASE_URL | gzip >database_backup_`date +%Y%m%d_%H%M`.sql.gz```.
+For a manual dump run ```pg_dump -c $DATABASE_URL | gzip >database_backup_`date +%Y%m%d_%H%M`.sql.gz```.
 
 For restore run ```zcat database_backup.sql.gz | psql $DATABASE_URL``` (you might need to drop and recreate the database first, see the setup instructions for creating)
