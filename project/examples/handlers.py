@@ -6,6 +6,8 @@ from creditor.handlers import BaseTransactionHandler, BaseRecurringTransactionsH
 from creditor.models import Transaction, TransactionTag
 from django.utils.translation import ugettext_lazy as _
 from .utils import get_holvi_singleton
+import environ
+import holviapi
 
 logger = logging.getLogger('example.handlers')
 env = environ.Env()
@@ -132,14 +134,19 @@ class RecurringTransactionsHolviHandler(BaseRecurringTransactionsHandler):
         msg = "on_creating called for %s (from %s)" % (t, rt)
         logger.info(msg)
         print(msg)
-        # Only negative amounts go to invoices
+        # Only care about amounts
         if t.amount >= 0.0:
             return True
+        # If holvi is configured, make invoice
         HOLVI_CNC = get_holvi_singleton()
-        if not HOLVI_CNC:
-            return True
+        if HOLVI_CNC:
+            return self.create_holvi_invoice(rt, t)
+        # otherwise make reference number that matches the tmatch logic above
+        t.reference = holviapi.utils.int2fin_reference(int("1%03d%s" % (rt.owner.member_id, rt.tag.tmatch)))
+        return True
 
-        import holviapi
+    def create_holvi_invoice(self, rt, t):
+        HOLVI_CNC = get_holvi_singleton()
         invoice_api = holviapi.InvoiceAPI(HOLVI_CNC)
         invoice = holviapi.Invoice(invoice_api)
         invoice.receiver = holviapi.contacts.InvoiceContact(**{
