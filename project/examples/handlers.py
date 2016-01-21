@@ -49,12 +49,17 @@ class TransactionHandler(BaseTransactionHandler):
         # We have to do this late to avoid problems with circular imports
         from members.models import Member
         self.memberclass = Member
+        self.try_methods = [
+            self.import_generic_transaction,
+            self.import_tmatch_transaction,
+        ]
         super().__init__(*args, **kwargs)
 
     def import_transaction(self, at):
         msg = "import_transaction called for %s" % at
         logger.info(msg)
         print(msg)
+
         # We only care about transactions with reference numbers
         if not at.reference:
             msg = "No reference number for %s, skip" % at
@@ -62,14 +67,38 @@ class TransactionHandler(BaseTransactionHandler):
             print(msg)
             return None
 
+        # If local transaction exists, return as-is
         lt = at.get_local()
         if lt.pk:
-            # TODO update ? though it should not change...
             msg = "Found local transaction #%d with unique_id=%s" % (lt.pk, lt.unique_id)
             logger.info(msg)
             print(msg)
             return lt
 
+        # We have few importers to try
+        for m in self.try_methods:
+            new_lt = m(at, lt)
+            if new_lt is not None:
+                return new_lt
+
+        # Nothing worked, return None
+        return None
+
+    def import_generic_transaction(self, at, lt):
+        """Look for a transaction with same reference but oppsite value. If found use that for owner and tag"""
+        qs = Transaction.objects.filter(reference=at.reference, amount=-at.amount).order_by('-stamp')
+        if not qs.count():
+            return None
+        base = qs[0]
+        msg = "Found opposite transaction %s" % base
+        logger.info(msg)
+        print(msg)
+        lt.tag = base.tag
+        lt.owner = base.owner
+        lt.save()
+        return lt
+
+    def import_tmatch_transaction(self, at, lt):
         # In  this example the last meaningful number (last number is checksum) of the reference is used to recognize the TransactionTag
         try:
             lt.tag = TransactionTag.objects.get(tmatch=at.reference[-2])
