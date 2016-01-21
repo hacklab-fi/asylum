@@ -44,7 +44,7 @@ class BaseTransactionHandler(object):
         pass
 
     def __str__(self):
-        return _("Transaction handler baseclass, this does nothing")
+        return str(_("Transaction handler baseclass, this does nothing"))
 
 
 
