@@ -145,5 +145,4 @@ For restore run ```zcat database_backup.sql.gz | psql $DATABASE_URL``` (you migh
 
 ## About the example handlers
 
-Use these as example for building your own callbacks (though some might be rather useful as-is), you need to `pip install -r examples/requirements.txt` to install
-the additional requirements.
+Use these as example for building your own callbacks (though some might be rather useful as-is).
