@@ -2,16 +2,15 @@ import environ
 import logging
 import environ
 import datetime, calendar
-from django.utils import timezone
+import holviapi
 from django.core.mail import EmailMessage
 from members.handlers import BaseApplicationHandler, BaseMemberHandler
 from creditor.handlers import BaseTransactionHandler, BaseRecurringTransactionsHandler
-from creditor.models import Transaction, TransactionTag
+from creditor.models import Transaction, TransactionTag, RecurringTransaction
 from django.utils.translation import ugettext_lazy as _
-import environ
+from holviapp.utils import api_configured, get_invoiceapi
 
 logger = logging.getLogger('example.handlers')
-env = environ.Env()
 
 
 class ExampleBaseHandler(BaseMemberHandler):
@@ -160,16 +159,46 @@ class RecurringTransactionsHolviHandler(BaseRecurringTransactionsHandler):
         msg = "on_creating called for %s (from %s)" % (t, rt)
         logger.info(msg)
         print(msg)
-        holvi_pool = env('HOLVI_POOL', default=None)
-        holvi_key = env('HOLVI_APIKEY', default=None)
-
-        # QnD reference generation example
-        import time
-        t.reference = holviapi.utils.int2iso_reference(int(time.time()))
-
-        if not holvi_pool or not holvi_key:
+        # Only care about negative amounts
+        if t.amount >= 0.0:
             return True
-        # TODO: Create invoice and set t.reference to the holvi reference
+        # If holvi is configured, make invoice
+        if api_configured():
+            return self.create_holvi_invoice(rt, t)
+        # otherwise make reference number that matches the tmatch logic above
+        t.reference = holviapi.utils.int2fin_reference(int("1%03d%s" % (rt.owner.member_id, rt.tag.tmatch)))
+        return True
+
+    def create_holvi_invoice(self, rt, t):
+        if t.stamp:
+            year = t.stamp.year
+            month = t.stamp.month
+        else:
+            now = datetime.datetime.now()
+            year = now.year
+            month = now.month
+
+        invoice = holviapi.Invoice(get_invoiceapi())
+        invoice.receiver = holviapi.InvoiceContact({
+            'email': t.owner.email,
+            'name': t.owner.name,
+        })
+        invoice.items.append(holviapi.InvoiceItem(invoice))
+
+        if rt.rtype == RecurringTransaction.YEARLY:
+            invoice.items[0].description = "%s %d" % (t.tag.label, year)
+        else:
+            invoice.items[0].description = "%s %02d/%d" % (t.tag.label, month, year)
+
+        invoice.items[0].net = -t.amount # Negative amount transaction -> positive amount invoice
+        if t.tag.holvi_code:
+            invoice.items[0].category = holviapi.IncomeCategory(invoice.api.categories_api, { 'code': t.tag.holvi_code }) # Lazy-loading category, avoids a GET
+        invoice.subject = "%s / %s" % (invoice.items[0].description, invoice.receiver.name)
+
+        invoice = invoice.save()
+        invoice.send()
+        print("Created (and sent) Holvi invoice %s" % invoice.code)
+        t.reference = invoice.rf_reference
         return True
 
     def on_created(self, rt, t, *args, **kwargs):
