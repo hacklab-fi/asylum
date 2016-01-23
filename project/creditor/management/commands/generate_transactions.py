@@ -12,4 +12,5 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         for i in range(options['amount']):
             trans = TransactionFactory()
-            print("Generated transaction %s" % trans)
+            if options['verbosity'] > 0:
+                print("Generated transaction %s" % trans)

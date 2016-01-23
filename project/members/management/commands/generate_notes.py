@@ -12,4 +12,5 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         for i in range(options['amount']):
             note = MemberNoteFactory()
-            print("Generated note to %s" % note.member)
+            if options['verbosity'] > 0:
+                print("Generated note to %s" % note.member)

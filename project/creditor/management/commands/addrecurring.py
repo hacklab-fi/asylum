@@ -8,4 +8,5 @@ class Command(BaseCommand):
         for t in RecurringTransaction.objects.all():
             ret = t.conditional_add_transaction()
             if ret:
-                print("Created transaction %s" % ret)
+                if options['verbosity'] > 1:
+                    print("Created transaction %s" % ret)
