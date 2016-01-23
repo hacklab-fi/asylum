@@ -78,6 +78,7 @@ class TransactionHandler(BaseTransactionHandler):
         self.memberclass = Member
         self.try_methods = [
             self.import_generic_transaction,
+            self.import_holvi_transaction,
             self.import_tmatch_transaction,
         ]
         super().__init__(*args, **kwargs)
@@ -110,6 +111,40 @@ class TransactionHandler(BaseTransactionHandler):
 
         # Nothing worked, return None
         return None
+
+    def import_holvi_transaction(self, at, lt):
+        """Try to find suitable owner and tag based on the invoice/order info"""
+        if not at.email:
+            # Not from holvi, those always have email
+            msg = "No email set, cannot be from holvi"
+            logger.info(msg)
+            print(msg)
+            return None
+        try:
+            lt.owner = self.memberclass.objects.get(email=at.email)
+        except self.memberclass.DoesNotExist:
+            msg = "No member with email %s" % at.email
+            logger.info(msg)
+            print(msg)
+            return None
+
+        try:
+            lt.tag = TransactionTag.objects.get(holvi_code=at.holvi_invoice.items[0].category.code)
+        except (AttributeError, TransactionTag.DoesNotExist) as e:
+            msg = "Got %s when trying to look for at.invoice.items[0].category.code" % repr(e)
+            logger.info(msg)
+            print(msg)
+            try:
+                # Triggers loading of the full product object so we can get the category, can be remove when https://github.com/rambo/python-holviapi/issues/14 is fixed
+                tmp = at.holvi_order.purchases[0].product.name
+                lt.tag = TransactionTag.objects.get(holvi_code=at.holvi_order.purchases[0].product.category.code)
+            except (AttributeError, TransactionTag.DoesNotExist) as e:
+                msg = "Got %s when trying to look for at.order.purchases[0].product.category.code" % repr(e)
+                logger.info(msg)
+                print(msg)
+                return None
+        lt.save()
+        return lt
 
     def import_generic_transaction(self, at, lt):
         """Look for a transaction with same reference but oppsite value. If found use that for owner and tag"""
