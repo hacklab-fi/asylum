@@ -63,6 +63,7 @@ LOCAL_APPS = (
     'access',
     'creditor',
     'ndaparser',
+    'holviapp',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -266,7 +267,8 @@ TRANSACTION_CALLBACKS_HANDLER=env('TRANSACTION_CALLBACKS_HANDLER', default=None)
 NORDEA_UPLOAD_ENABLED = env.bool('NORDEA_UPLOAD_ENABLED', default=False)
 ORGANIZATION_NAME=env('ORGANIZATION_NAME', default="hacklab.fi asylum for the inane")
 RECURRINGTRANSACTIONS_CALLBACKS_HANDLER=env('RECURRINGTRANSACTIONS_CALLBACKS_HANDLER', default=None)
-
+HOLVI_POOL=env('HOLVI_POOL', default=None)
+HOLVI_APIKEY=env('HOLVI_APIKEY', default=None)
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
