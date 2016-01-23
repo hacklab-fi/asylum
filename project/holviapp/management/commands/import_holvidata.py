@@ -29,11 +29,13 @@ class Command(BaseCommand):
         order_filters = {}
         if not options.get('all', False):
             since_parsed = dateutil.parser.parse(options['since'])
-            print("Importing since %s" % since_parsed.isoformat())
+            if options['verbosity'] > 1:
+                print("Importing since %s" % since_parsed.isoformat())
             invoice_filters['update_time_from'] = since_parsed.isoformat()
             order_filters['filter_paid_time_from'] = since_parsed.isoformat()
 
         h = HolviImporter(itertools.chain(list_invoices(**invoice_filters), list_orders(**order_filters)))
         transactions = h.import_transactions()
-        for t in transactions:
-            print("Imported transaction %s" % t)
+        if options['verbosity'] > 1:
+            for t in transactions:
+                print("Imported transaction %s" % t)
