@@ -4,6 +4,26 @@ Membership management for hacklabs. uses Python 3.4.
 
 Uses django-environ for configurations, create `.env`-file in your project dir to override settings.
 
+## REST API
+
+Access to all asylum models is available via REST (authentication required for reading as well).
+
+Api root is https://yourserver.example.com/api/ and includes nice web-based API explorer, if
+your user has authentication token issued you can get that with:
+
+    curl -X POST --data 'username=YOU&password=YOURPASSWORD'  https://yourserver.example.com/api-auth/get-token/
+
+To use token auth include the standard `Authorization: Token YOURTOKEN` header, like so:
+
+    curl -X GET -H 'Authorization: Token YOURTOKEN' https://yourserver.example.com/api/members/types/
+
+Admins can issue auth tokens to users via https://yourserver.example.com/admin/authtoken/token/
+
+[DjangoFilterBackend][filterbacked] is enabled so you can use [Django lookup syntax][djangoqs] in GET parameters.
+
+[filterbacked]: http://www.django-rest-framework.org/api-guide/filtering/#djangofilterbackend
+[djangoqs]: https://docs.djangoproject.com/en/1.8/ref/models/querysets/#field-lookups
+
 ## Install/setup
 
 ### General
