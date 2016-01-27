@@ -1,5 +1,5 @@
 {% load bootstrap3 staticfiles i18n %}<!DOCTYPE html>
-<html lang="en" ng-app>
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -34,6 +34,7 @@
             <div class="hero-content">
                 <div class="container text-center">
                     <h1>{% block main_title %}Hello world!{% endblock main_title %}</h1>
+                    <h3>{{ settings.ORGANIZATION_NAME }}</h3>
                 </div>
             </div>
         </section>
