@@ -23,4 +23,5 @@ def resolve_acl(atypes):
     for at in atypes:
         ret['bits'] |= 1 << at.bit
         ret['externals'].add(at.external_id)
+    ret['externals'] = list(ret['externals'])
     return ret
