@@ -144,11 +144,11 @@ class MembershipApplication(MemberCommon):
             if set_mtypes:
                 m.mtypes = set_mtypes
                 m.save()
-                if self.notes:
-                    n = MemberNote()
-                    n.notes = self.notes
-                    n.member = m
-                    n.save()
+            if self.notes:
+                n = MemberNote()
+                n.notes = self.notes
+                n.member = m
+                n.save()
             if h:
                 h.on_approved(self, m)
             self.delete()
