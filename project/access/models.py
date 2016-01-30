@@ -2,7 +2,6 @@
 from django.db import models, transaction
 from django.utils.translation import ugettext_lazy as _
 from django_markdown.models import MarkdownField
-# importing after asylum.mixins to get the monkeypatching done there
 from reversion import revisions
 
 from asylum.models import AsylumModel
