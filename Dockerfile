@@ -38,15 +38,17 @@ WORKDIR /opt/asylum/
 COPY project/requirements.apt /opt/asylum/
 RUN awk '/^\s*[^#]/' requirements.apt | xargs -r -- sudo apt-get install --no-install-recommends -y
 
-# Install python requirements
-RUN virtualenv -p `which python3.4` ../asylum-venv
-COPY project/requirements /opt/asylum/requirements/
-RUN . ../asylum-venv/bin/activate && pip install -r requirements/local.txt
-
 # Configure locales
 USER root
 RUN locale-gen en_US.UTF-8
 ENV LC_CTYPE en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+
+# Install python requirements
+RUN virtualenv -p `which python3.4` ../asylum-venv
+COPY project/requirements /opt/asylum/requirements/
+RUN . ../asylum-venv/bin/activate && pip install -r requirements/local.txt
 
 # Configure application
 USER root
