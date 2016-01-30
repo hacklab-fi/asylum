@@ -1,4 +1,5 @@
 #!/bin/bash
+SCRIPTDIR=$(python -c 'import os,sys;print os.path.dirname(os.path.realpath(sys.argv[1]))' "$0")
 # Make sure the id is here
 if [ "$1" == "" ]
 then
@@ -6,6 +7,9 @@ then
     exit 1
 fi
 ID=$1
+
+# Make sure we're in the correct place to run git commands no matter where we were called from
+cd `dirname "$SCRIPTDIR"`
 
 # Make sure we have upstream
 git remote | grep -q upstream
@@ -24,7 +28,5 @@ set -e
 git checkout test-$ID
 git rebase upstream/master
 
-docker build -t asylum_test .
-echo "Starting test server."
-echo "To gain shell, run: docker exec -it asylum_test bash"
-docker run --rm --name asylum_test -it -p 8000:8000 -p 1080:1080 asylum_test
+# Call the generic start script
+$SCRIPTDIR/start.sh
