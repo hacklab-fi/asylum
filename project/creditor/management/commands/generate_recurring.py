@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
+from creditor.tests.fixtures.recurring import KeyholderfeeFactory, MembershipfeeFactory, RecurringTransactionFactory
 from django.core.management.base import BaseCommand, CommandError
-from creditor.tests.fixtures.recurring import RecurringTransactionFactory, MembershipfeeFactory, KeyholderfeeFactory
 
 
 class Command(BaseCommand):
     help = 'generate randomised recurring transactions'
 
     def add_arguments(self, parser):
-        parser.add_argument('mode', type=str, choices = ('totalrandom', 'membership', 'keyholder'))
+        parser.add_argument('mode', type=str, choices=('totalrandom', 'membership', 'keyholder'))
         parser.add_argument('amount', type=int)
 
     def handle(self, *args, **options):

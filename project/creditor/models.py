@@ -1,18 +1,23 @@
-import datetime, calendar
-import uuid, hashlib
+# -*- coding: utf-8 -*-
+import calendar
+import datetime
+import hashlib
+import uuid
+
 from django.db import models, transaction
-from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
-from asylum.models import AsylumModel
+from django.utils.translation import ugettext_lazy as _
 # importing after asylum.mixins to get the monkeypatching done there
 from reversion import revisions
-from django.db import transaction
+
+from asylum.models import AsylumModel
 from asylum.utils import get_handler_instance
+
 
 class TransactionTag(AsylumModel):
     label = models.CharField(_("Label"), max_length=200, blank=False)
-    tmatch = models.CharField(_("Transaction match"), max_length=20, blank=True, db_index=True) # This can be used by transaction handlers to help them in some way.
-    holvi_code = models.CharField(_("Holvi category code"), max_length=64, blank=True, db_index=True) # This can be used by transaction handlers to match holvi categories to tags
+    tmatch = models.CharField(_("Transaction match"), max_length=20, blank=True, db_index=True)  # This can be used by transaction handlers to help them in some way.
+    holvi_code = models.CharField(_("Holvi category code"), max_length=64, blank=True, db_index=True)  # This can be used by transaction handlers to match holvi categories to tags
 
     def __str__(self):
         return self.label
@@ -91,7 +96,7 @@ class RecurringTransaction(AsylumModel):
             start = datetime.datetime(timescope.year, 1, 1)
             end = datetime.datetime(start.year, 12, calendar.monthrange(start.year, 12)[1])
         else:
-            raise NotImplementedError("Not implemented for %s (%d)" % (RecurringTransaction.RTYPE_READABLE[self.rtype] ,self.rtype))
+            raise NotImplementedError("Not implemented for %s (%d)" % (RecurringTransaction.RTYPE_READABLE[self.rtype], self.rtype))
         return (timezone.make_aware(start), timezone.make_aware(end))
 
     def make_uid_source(self, timescope=None):
@@ -104,8 +109,8 @@ class RecurringTransaction(AsylumModel):
         scope_start_ts, scope_end_ts = self.resolve_timescope(timescope)
         scope_start = scope_start_ts.date()
         scope_end = scope_end_ts.date()
-        return (    self.start <= scope_end
-                and (   not self.end
+        return (self.start <= scope_end
+                and (not self.end
                      or self.end >= scope_end))
 
     @transaction.atomic()

@@ -1,10 +1,13 @@
+# -*- coding: utf-8 -*-
 import datetime
+
 from django.contrib import admin
+from django.db.models import Q
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
-from django.db.models import Q
 from reversion.admin import VersionAdmin
-from .models import TransactionTag, Transaction, RecurringTransaction
+
+from .models import RecurringTransaction, Transaction, TransactionTag
 
 
 class TransactionTagAdmin(VersionAdmin):
@@ -16,7 +19,7 @@ class TagListFilter(admin.SimpleListFilter):
     parameter_name = 'tag'
 
     def lookups(self, request, model_admin):
-        return ( (x.pk, x.label) for x in TransactionTag.objects.all() )
+        return ((x.pk, x.label) for x in TransactionTag.objects.all())
 
     def queryset(self, request, queryset):
         v = self.value()
@@ -31,8 +34,8 @@ class AmountListFilter(admin.SimpleListFilter):
 
     def lookups(self, request, model_admin):
         return (
-            ( -1, _("Negative amount" )),
-            ( 1, _("Positive amount") ),
+            (-1, _("Negative amount")),
+            (1, _("Positive amount")),
         )
 
     def queryset(self, request, queryset):
@@ -64,7 +67,7 @@ class TransactionAdmin(VersionAdmin):
         color = "green"
         if obj.amount < 0:
             color = "red"
-        return format_html("<span style='color: {};'>{}</span>",color, "%+.02f" % obj.amount)
+        return format_html("<span style='color: {};'>{}</span>", color, "%+.02f" % obj.amount)
     amount_formatted.short_description = _("Amount")
     amount_formatted.admin_order_field = 'amount'
 
@@ -75,9 +78,9 @@ class RTActiveListFilter(admin.SimpleListFilter):
 
     def lookups(self, request, model_admin):
         return (
-            ( "-2", _("All")),
-            ( "-1", _("Inactive" )),
-            ( None, _("Active") ),
+            ("-2", _("All")),
+            ("-1", _("Inactive")),
+            (None, _("Active")),
         )
 
     def choices(self, cl):
@@ -126,21 +129,21 @@ class RecurringTransactionAdmin(VersionAdmin):
         color = "green"
         if obj.amount < 0:
             color = "red"
-        return format_html("<span style='color: {};'>{}</span>",color, "%+.02f" % obj.amount)
+        return format_html("<span style='color: {};'>{}</span>", color, "%+.02f" % obj.amount)
     amount_formatted.short_description = _("Amount")
     amount_formatted.admin_order_field = 'amount'
 
     def dates_formatted(self, obj):
         today = datetime.datetime.now().date()
         color = "black"
-        if (    obj.end
-            and obj.end < today):
+        if (obj.end
+                and obj.end < today):
             color = "red"
         if obj.start > today:
             color = "red"
         if obj.end:
-            return format_html("<span style='color: {};'>{} / {}</span>",color, obj.start.isoformat(), obj.end.isoformat())
-        return format_html("<span style='color: {};'>{}</span>",color, obj.start.isoformat())
+            return format_html("<span style='color: {};'>{} / {}</span>", color, obj.start.isoformat(), obj.end.isoformat())
+        return format_html("<span style='color: {};'>{}</span>", color, obj.start.isoformat())
     dates_formatted.short_description = _("Start / End")
     dates_formatted.admin_order_field = 'start'
 

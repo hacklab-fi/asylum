@@ -1,10 +1,11 @@
-from django.db import models
+# -*- coding: utf-8 -*-
+from django.db import models, transaction
 from django.utils.translation import ugettext_lazy as _
 from django_markdown.models import MarkdownField
-from asylum.models import AsylumModel
-# importing after asylum.mixins to get the monkeypatching done there
 from reversion import revisions
-from django.db import transaction
+
+from asylum.models import AsylumModel
+
 
 class TokenType(AsylumModel):
     label = models.CharField(_("Label"), max_length=200, blank=False)
@@ -47,8 +48,8 @@ revisions.default_revision_manager.register(Token)
 
 class AccessType(AsylumModel):
     label = models.CharField(_("Label"), max_length=200, blank=False)
-    bit = models.PositiveSmallIntegerField(_("Bit number"), blank=True, null=True, unique=True) # For systems that utilize bitwise checks
-    external_id = models.CharField(_("External identifier"), max_length=200, blank=True, null=True, unique=True) # For other systems
+    bit = models.PositiveSmallIntegerField(_("Bit number"), blank=True, null=True, unique=True)  # For systems that utilize bitwise checks
+    external_id = models.CharField(_("External identifier"), max_length=200, blank=True, null=True, unique=True)  # For other systems
 
     def __str__(self):
         return self.label
@@ -76,6 +77,7 @@ class Grant(AsylumModel):
         ordering = ['owner__lname', 'owner__fname', 'atype__label']
 
 revisions.default_revision_manager.register(Grant)
+
 
 class NonMemberToken(AsylumModel):
     label = models.CharField(_("Label"), max_length=200, blank=True)

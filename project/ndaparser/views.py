@@ -1,8 +1,13 @@
-import tempfile, os
+# -*- coding: utf-8 -*-
+import os
+import tempfile
+
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView
+
 from .forms import UploadForm
 from .importer import NDAImporter
+
 
 class NordeaUploadView(FormView):
     form_class = UploadForm

@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import access.rest
+import creditor.rest
+import members.rest
 from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.views.generic import TemplateView
 from django.views import defaults as default_views
+from django.views.generic import TemplateView
 from rest_framework import routers
 from rest_framework.authtoken import views as authtoken_views
-import members.rest
-import creditor.rest
-import access.rest
 
 router = routers.DefaultRouter()
 router.register(r'members/types',        members.rest.MemberTypeViewSet)
@@ -27,7 +27,6 @@ router.register(r'access/types',        access.rest.AccessTypeViewSet)
 router.register(r'access/grants',       access.rest.GrantViewSet)
 
 
-
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='pages/home.html'), name="home"),
     url(r'^about/$', TemplateView.as_view(template_name='pages/about.html'), name="about"),
@@ -41,7 +40,7 @@ urlpatterns = [
     url(r'^api/', include(router.urls)),
     url(r'^api-auth/get-token/', authtoken_views.obtain_auth_token),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url('^markdown/', include( 'django_markdown.urls')),
+    url('^markdown/', include('django_markdown.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

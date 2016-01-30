@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from .models import Transaction
 
+from .models import Transaction
 
 
 class AbstractTransaction(models.Model):
@@ -32,9 +33,9 @@ class AbstractTransaction(models.Model):
         return obj
 
 
-
 class BaseTransactionHandler(object):
     """Baseclass for transaction importer callbacks"""
+
     def import_transaction(self, transaction):
         """This method must accpet AbstractTransaction and must return Transaction or None if it would not handle 
         the AbstractTransaction for whatever reason.
@@ -46,7 +47,6 @@ class BaseTransactionHandler(object):
 
     def __str__(self):
         return str(_("Transaction handler baseclass, this does nothing"))
-
 
 
 class BaseRecurringTransactionsHandler(object):

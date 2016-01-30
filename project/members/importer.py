@@ -1,6 +1,9 @@
+# -*- coding: utf-8 -*-
 import csv
-from .models import Member
 import logging
+
+from .models import Member
+
 logger = logging.getLogger('members.importer')
 
 

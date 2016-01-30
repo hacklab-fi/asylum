@@ -1,24 +1,28 @@
+# -*- coding: utf-8 -*-
 import random
 from decimal import Decimal
-from django.core.exceptions import ValidationError
-from django.db import models
-from django.utils.translation import ugettext_lazy as _
-from django.utils import timezone
-from django_markdown.models import MarkdownField
-from asylum.models import AsylumModel
-# importing after asylum.mixins to get the monkeypatching done there
-from reversion import revisions
-from django.db import transaction
-from .handlers import call_saves, get_handler_instance
-from access.utils import resolve_acl
+
 from access.models import AccessType
+from access.utils import resolve_acl
+from django.core.exceptions import ValidationError
+from django.db import models, transaction
+from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
+from django_markdown.models import MarkdownField
+from reversion import revisions
+
+from asylum.models import AsylumModel
+
+from .handlers import call_saves, get_handler_instance
+
 
 def generate_unique_randomid():
     """Generate pseudorandom ids until a free one is found"""
-    candidate = "0x%x" % random.randint(1,2**32)
+    candidate = "0x%x" % random.randint(1, 2 ** 32)
     while Member.objects.filter(anonymized_id=candidate).count():
-        candidate = "0x%x" % random.randint(1,2**32)
+        candidate = "0x%x" % random.randint(1, 2 ** 32)
     return candidate
+
 
 def generate_unique_memberid():
     """Gives the next highest member id"""

@@ -5,7 +5,8 @@
     "scripts": {
         "watch": "npm i && bower install && gulp watch",
         "build": "npm i && bower install && gulp",
-        "build_noninteractive": "npm i && bower --config.interactive=false install && gulp"
+        "build_noninteractive": "npm i && bower --config.interactive=false install && gulp",
+        "fix": "PREFIX=\"# -*- coding: utf-8 -*-\"; find . -name '._*' | xargs rm ; for f in $(find . -name '*.py' -and -not -path '*/venv/*'); do echo \"=================\" ; echo $f; autopep8 -ri --max-line-length=10000 $f; flake8 $f; isort -rc $f; grep -qFe \"$PREFIX\" $f || echo \"$PREFIX\n$(cat $f)\" > $f ; done "
     },
     "repository": {
         "type": "git",

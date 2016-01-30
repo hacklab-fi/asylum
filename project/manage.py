@@ -1,6 +1,8 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import os
 import sys
+
 import environ
 
 if __name__ == "__main__":

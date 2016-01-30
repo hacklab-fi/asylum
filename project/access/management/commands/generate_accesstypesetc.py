@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
+from access.tests.fixtures import accesstypes, tokentypes
 from django.core.management.base import BaseCommand, CommandError
-from access.tests.fixtures import tokentypes, accesstypes
 
 
 class Command(BaseCommand):

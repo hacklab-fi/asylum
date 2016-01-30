@@ -1,15 +1,19 @@
-from django.contrib import admin
-from django.core.exceptions import PermissionDenied, ImproperlyConfigured
-from django.conf.urls import url
-from django.core.urlresolvers import reverse
-from django.utils.translation import ugettext_lazy as _
-from django.shortcuts import get_object_or_404, render
-from django.utils.text import capfirst
-from django.conf import settings
-from .views import NordeaUploadView
+# -*- coding: utf-8 -*-
 from creditor.admin import TransactionAdmin
 from creditor.handlers import AbstractTransaction
+from django.conf import settings
+from django.conf.urls import url
+from django.contrib import admin
+from django.core.exceptions import ImproperlyConfigured, PermissionDenied
+from django.core.urlresolvers import reverse
+from django.shortcuts import get_object_or_404, render
+from django.utils.text import capfirst
+from django.utils.translation import ugettext_lazy as _
+
 from asylum.utils import get_handler_instance
+
+from .views import NordeaUploadView
+
 
 class NordeaUploadMixin(object):
     nda_change_list_template = "ndaparser/admin/change_list.html"
@@ -41,11 +45,11 @@ class NordeaUploadMixin(object):
         # Get the rest of the context.
         context = dict(
             each_context,
-            opts = opts,
-            app_label = opts.app_label,
-            module_name = capfirst(opts.verbose_name),
-            title = _("Upload Nordea transactions"),
-            transactions_handler = get_handler_instance('TRANSACTION_CALLBACKS_HANDLER')
+            opts=opts,
+            app_label=opts.app_label,
+            module_name=capfirst(opts.verbose_name),
+            title=_("Upload Nordea transactions"),
+            transactions_handler=get_handler_instance('TRANSACTION_CALLBACKS_HANDLER')
         )
         context.update(extra_context or {})
         view = self.view_class.as_view()
@@ -54,7 +58,7 @@ class NordeaUploadMixin(object):
 
     def changelist_view(self, request, extra_context=None):
         context = dict(
-            orig_template = str(getattr(super(), 'change_list_template')),
+            orig_template=str(getattr(super(), 'change_list_template')),
         )
         context.update(extra_context or {})
         self.change_list_template = self.nda_change_list_template

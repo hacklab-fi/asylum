@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand, CommandError
-from members.tests.fixtures import types, tags
+from members.tests.fixtures import tags, types
 
 
 class Command(BaseCommand):

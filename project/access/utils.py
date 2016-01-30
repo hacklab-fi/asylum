@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
 import itertools
+
 from .models import NonMemberToken, Token
+
 
 def all_tokens(cfilters={}, nmtfilters={}, tfilters={}):
     """Chains all token-like models' querysets, first filters dict is applied to all, second only to NonMemberToken, third only to Token"""
@@ -9,6 +12,7 @@ def all_tokens(cfilters={}, nmtfilters={}, tfilters={}):
         NonMemberToken.objects.filter(**nmtfilters),
         Token.objects.filter(**tfilters)
     )
+
 
 def resolve_acl(atypes):
     """Resolves the bits of accesstypes into single int and externals to unique set"""

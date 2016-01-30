@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
-import factory.django, factory.fuzzy
+import factory.django
+import factory.fuzzy
+
 
 class MembershipApplicationTagFactory(factory.django.DjangoModelFactory):
+
     class Meta:
         model = 'members.MembershipApplicationTag'
         django_get_or_create = ('label',)
