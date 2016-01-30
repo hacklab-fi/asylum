@@ -1,9 +1,11 @@
-from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponseRedirect
+# -*- coding: utf-8 -*-
 from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
 from django.views import generic
-from .models import MembershipApplication
+
 from .forms import ApplicationForm
+from .models import MembershipApplication
 
 
 class ApplyView(generic.CreateView):
@@ -24,4 +26,3 @@ class HomeView(generic.base.RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
         return reverse('members-apply')
-

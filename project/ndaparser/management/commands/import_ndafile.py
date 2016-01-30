@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand, CommandError
 from ndaparser.importer import NDAImporter
+
 
 class Command(BaseCommand):
     help = 'Imports Nordea transactions file'

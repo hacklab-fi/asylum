@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand, CommandError
+
 from asylum.tests.fixtures.full import generate_all
 
 

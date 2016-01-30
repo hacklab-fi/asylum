@@ -11,10 +11,12 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 from __future__ import absolute_import, unicode_literals
 
 import os.path
+
+import django.template.defaultfilters
 import environ
-
+# Monkeypatch djangos own slugify with Mozilla teams Unicode-aware one
+import slugify as unicodeslugify
 from django.utils.translation import ugettext_lazy as _
-
 
 ROOT_DIR = environ.Path(__file__) - 3  # (/a/b/myfile.py - 3 = /)
 APPS_DIR = ROOT_DIR.path('asylum')
@@ -24,9 +26,6 @@ env = environ.Env()
 if os.path.isfile(str(ROOT_DIR + '.env')):
     environ.Env.read_env(str(ROOT_DIR + '.env'))
 
-# Monkeypatch djangos own slugify with Mozilla teams Unicode-aware one
-import slugify as unicodeslugify
-import django.template.defaultfilters
 django.template.defaultfilters.slugify = lambda x: unicodeslugify.slugify(x, only_ascii=True, lower=True, spaces=False)
 
 # APP CONFIGURATION
@@ -122,7 +121,6 @@ DATABASES = {
 DATABASES['default']['ATOMIC_REQUESTS'] = True
 
 
-
 # GENERAL CONFIGURATION
 # ------------------------------------------------------------------------------
 # Local time zone for this installation. Choices can be found here:
@@ -201,7 +199,7 @@ TEMPLATES = [
             ],
             # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-context-processors
             'context_processors': _TEMPLATE_CONTEXT_PROCESSORS,
-       },
+        },
     },
 ]
 
@@ -250,7 +248,6 @@ AUTHENTICATION_BACKENDS = (
 )
 
 
-
 # SLUGLIFIER
 AUTOSLUG_SLUGIFY_FUNCTION = 'django.template.defaultfilters.slugify'
 
@@ -261,14 +258,14 @@ ADMIN_URL = r'^admin/'
 APPLICATION_RULES_URL = env('APPLICATION_RULES_URL', default='http://hacklab.fi/')
 
 # Give path to a class implementing the api outlined in member.handers baseclasses
-MEMBERAPPLICATION_CALLBACKS_HANDLER=env('MEMBERAPPLICATION_CALLBACKS_HANDLER', default=None)
-MEMBER_CALLBACKS_HANDLER=env('MEMBER_CALLBACKS_HANDLER', default=None)
-TRANSACTION_CALLBACKS_HANDLER=env('TRANSACTION_CALLBACKS_HANDLER', default=None)
+MEMBERAPPLICATION_CALLBACKS_HANDLER = env('MEMBERAPPLICATION_CALLBACKS_HANDLER', default=None)
+MEMBER_CALLBACKS_HANDLER = env('MEMBER_CALLBACKS_HANDLER', default=None)
+TRANSACTION_CALLBACKS_HANDLER = env('TRANSACTION_CALLBACKS_HANDLER', default=None)
 NORDEA_UPLOAD_ENABLED = env.bool('NORDEA_UPLOAD_ENABLED', default=False)
-ORGANIZATION_NAME=env('ORGANIZATION_NAME', default="hacklab.fi asylum for the inane")
-RECURRINGTRANSACTIONS_CALLBACKS_HANDLER=env('RECURRINGTRANSACTIONS_CALLBACKS_HANDLER', default=None)
-HOLVI_POOL=env('HOLVI_POOL', default=None)
-HOLVI_APIKEY=env('HOLVI_APIKEY', default=None)
+ORGANIZATION_NAME = env('ORGANIZATION_NAME', default="hacklab.fi asylum for the inane")
+RECURRINGTRANSACTIONS_CALLBACKS_HANDLER = env('RECURRINGTRANSACTIONS_CALLBACKS_HANDLER', default=None)
+HOLVI_POOL = env('HOLVI_POOL', default=None)
+HOLVI_APIKEY = env('HOLVI_APIKEY', default=None)
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [

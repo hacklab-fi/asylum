@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import datetime
-from django.core.management.base import BaseCommand, CommandError
-from creditor.tests.fixtures.recurring import MembershipfeeFactory
-from members.models import Member
-from creditor.models import TransactionTag, RecurringTransaction
 
+from creditor.models import RecurringTransaction, TransactionTag
+from creditor.tests.fixtures.recurring import MembershipfeeFactory
+from django.core.management.base import BaseCommand, CommandError
+from members.models import Member
 
 
 class Command(BaseCommand):

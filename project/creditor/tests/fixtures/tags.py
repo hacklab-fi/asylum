@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-import factory.django, factory.fuzzy
+import factory.django
+import factory.fuzzy
 
 
 class TransactionTagFactory(factory.django.DjangoModelFactory):
+
     class Meta:
         model = 'creditor.TransactionTag'
         django_get_or_create = ('label', 'tmatch')

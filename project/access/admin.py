@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 from reversion.admin import VersionAdmin
-from .models import TokenType, Token, AccessType, Grant, NonMemberToken
+
+from .models import AccessType, Grant, NonMemberToken, Token, TokenType
 
 
 class TokenTypeAdmin(VersionAdmin):
@@ -14,7 +16,7 @@ class TokenTypeListFilter(admin.SimpleListFilter):
     parameter_name = 'ttype'
 
     def lookups(self, request, model_admin):
-        return ( (x.pk, x.label) for x in TokenType.objects.all() )
+        return ((x.pk, x.label) for x in TokenType.objects.all())
 
     def queryset(self, request, queryset):
         v = self.value()
@@ -28,7 +30,7 @@ class RevokedListFilter(admin.SimpleListFilter):
     parameter_name = 'revoked'
 
     def lookups(self, request, model_admin):
-        return ( ( "-2", _("All")), (None, _("Not revoked")), ("1", _("Revoked")) )
+        return (("-2", _("All")), (None, _("Not revoked")), ("1", _("Revoked")))
 
     def choices(self, cl):
         for lookup, title in self.lookup_choices:
@@ -85,7 +87,7 @@ class AccessTypeListFilter(admin.SimpleListFilter):
     parameter_name = 'atype'
 
     def lookups(self, request, model_admin):
-        return ( (x.pk, x.label) for x in AccessType.objects.all() )
+        return ((x.pk, x.label) for x in AccessType.objects.all())
 
     def queryset(self, request, queryset):
         v = self.value()
@@ -109,6 +111,7 @@ class GrantAdmin(VersionAdmin):
 
 
 class GrantsListFilter(AccessTypeListFilter):
+
     def queryset(self, request, queryset):
         v = self.value()
         if not v:
@@ -127,7 +130,7 @@ class NonMemberTokenAdmin(VersionAdmin):
     list_filter = (GrantsListFilter, TokenTypeListFilter, RevokedListFilter)
 
     def grants_formatted(self, obj):
-        return ', '.join(( x.label for x in obj.grants.all() ))
+        return ', '.join((x.label for x in obj.grants.all()))
     grants_formatted.short_description = _("Grants")
 
     def value_formatted(self, obj):

@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 import random
 import re
+
+import factory.django
+import factory.fuzzy
 import loremipsum
-import factory.django, factory.fuzzy
 
 
 class FuzzyLoremipsum(factory.fuzzy.BaseFuzzyAttribute):

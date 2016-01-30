@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
 import random
-import factory.django, factory.fuzzy
+
+import factory.django
+import factory.fuzzy
 from access.models import AccessType, TokenType
-from asylum.utils import get_random_objects
-from asylum.tests.utils import FuzzyLoremipsum
-from members.tests.fixtures.memberlikes import lastnames, firstnames, generate_email
 from members.models import MemberCommon
+from members.tests.fixtures.memberlikes import firstnames, generate_email, lastnames
+
+from asylum.tests.utils import FuzzyLoremipsum
+from asylum.utils import get_random_objects
+
 from .tokens import generate_value
 
 
@@ -18,9 +22,10 @@ def generate_contact(x):
 
 
 class NonMemberTokenFactory(factory.django.DjangoModelFactory):
+
     class Meta:
         model = 'access.NonMemberToken'
-        django_get_or_create = ('ttype','value')
+        django_get_or_create = ('ttype', 'value')
     ttype = factory.fuzzy.FuzzyChoice(TokenType.objects.all())
     notes = FuzzyLoremipsum()
     contact = factory.LazyAttribute(generate_contact)

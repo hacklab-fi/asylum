@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
-import factory.django, factory.fuzzy
+import factory.django
+import factory.fuzzy
+
 
 class AccessTypeFactory(factory.django.DjangoModelFactory):
+
     class Meta:
         model = 'access.AccessType'
         django_get_or_create = ('bit',)

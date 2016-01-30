@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
 import importlib
-from django.conf import settings
 import random
+
+from django.conf import settings
 
 
 def get_handler_instance(setting):
@@ -24,4 +26,3 @@ def get_random_objects(klass, num=1):
         random_index = random.randint(0, count - 1)
         ret.append(klass.objects.all()[random_index])
     return ret
-

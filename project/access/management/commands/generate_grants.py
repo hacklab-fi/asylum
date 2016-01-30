@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from django.core.management.base import BaseCommand, CommandError
 from access.tests.fixtures.grants import GrantFactory
+from django.core.management.base import BaseCommand, CommandError
 
 
 class Command(BaseCommand):

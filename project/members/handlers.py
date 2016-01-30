@@ -1,10 +1,14 @@
+# -*- coding: utf-8 -*-
 import functools
+
 from django.db import transaction
+
 from asylum.utils import get_handler_instance
 
 
 class BaseHandler(object):
     """Baseclass for the callback based handlers"""
+
     def on_saving(self, instance, *args, **kwargs):
         """Called just before passing control to save()"""
         pass

@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
 import sqlite3
-from django.core.management.base import BaseCommand, CommandError
+
 from access.utils import all_tokens
+from django.core.management.base import BaseCommand, CommandError
 
 
 class Command(BaseCommand):

@@ -1,17 +1,24 @@
-from rest_framework import viewsets, serializers
+# -*- coding: utf-8 -*-
 import rest_framework_filters as filters
-from .models import TransactionTag, Transaction, RecurringTransaction
+from rest_framework import serializers, viewsets
+
+from .models import RecurringTransaction, Transaction, TransactionTag
+
 
 class TransactionTagSerializer(serializers.HyperlinkedModelSerializer):
+
     class Meta:
         model = TransactionTag
 
+
 class TransactionTagFilter(filters.FilterSet):
+
     class Meta:
         model = TransactionTag
         fields = {
             'label': filters.ALL_LOOKUPS,
         }
+
 
 class TransactionTagViewSet(viewsets.ModelViewSet):
     serializer_class = TransactionTagSerializer
@@ -19,12 +26,14 @@ class TransactionTagViewSet(viewsets.ModelViewSet):
     filter_class = TransactionTagFilter
 
 
-
 class TransactionSerializer(serializers.HyperlinkedModelSerializer):
+
     class Meta:
         model = Transaction
 
+
 class TransactionFilter(filters.FilterSet):
+
     class Meta:
         model = Transaction
         fields = {
@@ -36,18 +45,21 @@ class TransactionFilter(filters.FilterSet):
             'unique_id': filters.ALL_LOOKUPS,
         }
 
+
 class TransactionViewSet(viewsets.ModelViewSet):
     serializer_class = TransactionSerializer
     queryset = Transaction.objects.all()
     filter_class = TransactionFilter
 
 
-
 class RecurringTransactionSerializer(serializers.HyperlinkedModelSerializer):
+
     class Meta:
         model = RecurringTransaction
 
+
 class RecurringTransactionFilter(filters.FilterSet):
+
     class Meta:
         model = RecurringTransaction
         fields = {
@@ -59,6 +71,7 @@ class RecurringTransactionFilter(filters.FilterSet):
             'owner': filters.ALL_LOOKUPS,
             'amount': filters.ALL_LOOKUPS,
         }
+
 
 class RecurringTransactionViewSet(viewsets.ModelViewSet):
     serializer_class = RecurringTransactionSerializer
