@@ -1,4 +1,5 @@
 #!/bin/bash
+SCRIPTDIR=$(python -c 'import os,sys;print os.path.dirname(os.path.realpath(sys.argv[1]))' "$0")
 # Make sure the id is here
 if [ "$1" == "" ]
 then
@@ -6,6 +7,10 @@ then
     exit 1
 fi
 ID=$1
+CURRENT_BRANCH=`git rev-parse --abbrev-ref HEAD`
+
+# Make sure we're in the correct place to run git commands no matter where we were called from
+cd `dirname "$SCRIPTDIR"`
 
 # Make sure we have upstream
 git remote | grep -q upstream
@@ -15,16 +20,30 @@ then
 fi
 
 git fetch upstream master
+
+# Local branch exists, remove it
+git rev-parse --verify test-$ID
+if [ "$?" == "0" ]
+then
+    git branch -D test-$ID
+fi
+
 git fetch upstream pull/$ID/head:test-$ID
 if [ "$?" != "0" ]
 then
     exit 1
 fi
+
+# Store current branch
+BRANCH=`git rev-parse --abbrev-ref HEAD`
+
 set -e
 git checkout test-$ID
 git rebase upstream/master
 
-docker build -t asylum_test .
-echo "Starting test server."
-echo "To gain shell, run: docker exec -it asylum_test bash"
-docker run --rm --name asylum_test -it -p 8000:8000 -p 1080:1080 asylum_test
+# Call the generic start script
+$SCRIPTDIR/start.sh
+
+git checkout $BRANCH
+git branch -D test-$ID
+echo "Temporary branch test-$ID was removed, to check it out again run: git fetch upstream pull/$ID/head:test-$ID"
