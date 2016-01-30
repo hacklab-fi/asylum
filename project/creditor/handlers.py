@@ -7,6 +7,7 @@ from .models import Transaction
 class AbstractTransaction(models.Model):
     stamp = models.DateTimeField(_("Datetime"), blank=False)
     name = models.CharField(_("Name"), max_length=200, blank=False)
+    email = models.EmailField(_("Name"), max_length=200, blank=True)
     reference = models.CharField(_("Reference"), max_length=200, blank=False)
     amount = models.DecimalField(verbose_name=_("Amount"), max_digits=6, decimal_places=2, blank=False, null=False)
     unique_id = models.CharField(_("Unique transaction id"), max_length=64, blank=False)

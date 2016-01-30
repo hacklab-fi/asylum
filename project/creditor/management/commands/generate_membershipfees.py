@@ -24,4 +24,5 @@ class Command(BaseCommand):
                     rt.start = rt.end - datetime.timedelta(days=1)
                 rt.save()
             newrt = MembershipfeeFactory.create(amount=options["amount"], start=today, end=None, owner=m)
-            print("Generated RecurringTransaction %s" % newrt)
+            if options['verbosity'] > 0:
+                print("Generated RecurringTransaction %s" % newrt)

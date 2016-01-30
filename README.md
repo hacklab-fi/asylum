@@ -121,6 +121,7 @@ Until we maybe decide on Celery for running various (timed or otherwise) tasks a
     SHELL=/bin/bash
     @daily      cd /path/to/project ; source venv/bin/activate ; ./manage.py addrecurring
     @daily      cd /path/to/project ; set -o allexport ; source .env; set +o allexport ; pg_dump -c $DATABASE_URL | gzip >database_backup.sql.gz
+    @daily      cd /path/to/project ; source venv/bin/activate ; ./manage.py import_holvidata # if using Holvi integrations
 
 ## Running in development mode
 
@@ -145,5 +146,4 @@ For restore run ```zcat database_backup.sql.gz | psql $DATABASE_URL``` (you migh
 
 ## About the example handlers
 
-Use these as example for building your own callbacks (though some might be rather useful as-is), you need to `pip install -r examples/requirements.txt` to install
-the additional requirements.
+Use these as example for building your own callbacks (though some might be rather useful as-is).

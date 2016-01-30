@@ -12,4 +12,5 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         for i in range(options['amount']):
             token = NonMemberTokenFactory()
-            print("Generated token %s" % token)
+            if options['verbosity'] > 0:
+                print("Generated token %s" % token)

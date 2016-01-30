@@ -11,5 +11,6 @@ class Command(BaseCommand):
         with open(options['filepath']) as fp:
             h = NDAImporter(fp)
             transactions = h.import_transactions()
-            for t in transactions:
-                print("Imported transaction %s" % t)
+            if options['verbosity'] > 1:
+                for t in transactions:
+                    print("Imported transaction %s" % t)

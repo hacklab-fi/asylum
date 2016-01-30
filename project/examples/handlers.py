@@ -2,21 +2,16 @@ import environ
 import logging
 import environ
 import datetime, calendar
-from django.utils import timezone
+import holviapi
 from django.core.mail import EmailMessage
 from members.handlers import BaseApplicationHandler, BaseMemberHandler
 from creditor.handlers import BaseTransactionHandler, BaseRecurringTransactionsHandler
-from creditor.models import Transaction, TransactionTag
+from creditor.models import Transaction, TransactionTag, RecurringTransaction
 from django.utils.translation import ugettext_lazy as _
-from .utils import get_holvi_singleton
-import environ
-import holviapi
+from holviapp.utils import api_configured, get_invoiceapi
 
 logger = logging.getLogger('example.handlers')
-env = environ.Env()
 
-
-env = environ.Env()
 
 class ExampleBaseHandler(BaseMemberHandler):
     def on_saving(self, instance, *args, **kwargs):
@@ -83,6 +78,7 @@ class TransactionHandler(BaseTransactionHandler):
         self.memberclass = Member
         self.try_methods = [
             self.import_generic_transaction,
+            self.import_holvi_transaction,
             self.import_tmatch_transaction,
         ]
         super().__init__(*args, **kwargs)
@@ -115,6 +111,40 @@ class TransactionHandler(BaseTransactionHandler):
 
         # Nothing worked, return None
         return None
+
+    def import_holvi_transaction(self, at, lt):
+        """Try to find suitable owner and tag based on the invoice/order info"""
+        if not at.email:
+            # Not from holvi, those always have email
+            msg = "No email set, cannot be from holvi"
+            logger.info(msg)
+            print(msg)
+            return None
+        try:
+            lt.owner = self.memberclass.objects.get(email=at.email)
+        except self.memberclass.DoesNotExist:
+            msg = "No member with email %s" % at.email
+            logger.info(msg)
+            print(msg)
+            return None
+
+        try:
+            lt.tag = TransactionTag.objects.get(holvi_code=at.holvi_invoice.items[0].category.code)
+        except (AttributeError, TransactionTag.DoesNotExist) as e:
+            msg = "Got %s when trying to look for at.invoice.items[0].category.code" % repr(e)
+            logger.info(msg)
+            print(msg)
+            try:
+                # Triggers loading of the full product object so we can get the category, can be remove when https://github.com/rambo/python-holviapi/issues/14 is fixed
+                tmp = at.holvi_order.purchases[0].product.name
+                lt.tag = TransactionTag.objects.get(holvi_code=at.holvi_order.purchases[0].product.category.code)
+            except (AttributeError, TransactionTag.DoesNotExist) as e:
+                msg = "Got %s when trying to look for at.order.purchases[0].product.category.code" % repr(e)
+                logger.info(msg)
+                print(msg)
+                return None
+        lt.save()
+        return lt
 
     def import_generic_transaction(self, at, lt):
         """Look for a transaction with same reference but oppsite value. If found use that for owner and tag"""
@@ -158,39 +188,48 @@ class TransactionHandler(BaseTransactionHandler):
         return str(_("Example application transactions handler"))
 
 
-
 class RecurringTransactionsHolviHandler(BaseRecurringTransactionsHandler):
     def on_creating(self, rt, t, *args, **kwargs):
+        import holviapi, holviapi.utils
         msg = "on_creating called for %s (from %s)" % (t, rt)
         logger.info(msg)
         print(msg)
-        # Only care about amounts
+        # Only care about negative amounts
         if t.amount >= 0.0:
             return True
         # If holvi is configured, make invoice
-        HOLVI_CNC = get_holvi_singleton()
-        if HOLVI_CNC:
+        if api_configured():
             return self.create_holvi_invoice(rt, t)
         # otherwise make reference number that matches the tmatch logic above
         t.reference = holviapi.utils.int2fin_reference(int("1%03d%s" % (rt.owner.member_id, rt.tag.tmatch)))
         return True
 
     def create_holvi_invoice(self, rt, t):
-        HOLVI_CNC = get_holvi_singleton()
-        invoice_api = holviapi.InvoiceAPI(HOLVI_CNC)
-        invoice = holviapi.Invoice(invoice_api)
-        invoice.receiver = holviapi.contacts.InvoiceContact(**{
+        if t.stamp:
+            year = t.stamp.year
+            month = t.stamp.month
+        else:
+            now = datetime.datetime.now()
+            year = now.year
+            month = now.month
+
+        invoice = holviapi.Invoice(get_invoiceapi())
+        invoice.receiver = holviapi.InvoiceContact({
             'email': t.owner.email,
             'name': t.owner.name,
         })
         invoice.items.append(holviapi.InvoiceItem(invoice))
-        if t.stamp:
-            year = t.stamp.year
+
+        if rt.rtype == RecurringTransaction.YEARLY:
+            invoice.items[0].description = "%s %d" % (t.tag.label, year)
         else:
-            year = datetime.datetime.now().year
-        invoice.items[0].description = "Jäsenmaksu %s" % year
+            invoice.items[0].description = "%s %02d/%d" % (t.tag.label, month, year)
+
         invoice.items[0].net = -t.amount # Negative amount transaction -> positive amount invoice
+        if t.tag.holvi_code:
+            invoice.items[0].category = holviapi.IncomeCategory(invoice.api.categories_api, { 'code': t.tag.holvi_code }) # Lazy-loading category, avoids a GET
         invoice.subject = "%s / %s" % (invoice.items[0].description, invoice.receiver.name)
+
         invoice = invoice.save()
         invoice.send()
         print("Created (and sent) Holvi invoice %s" % invoice.code)

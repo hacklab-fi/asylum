@@ -12,6 +12,7 @@ from asylum.utils import get_handler_instance
 class TransactionTag(AsylumModel):
     label = models.CharField(_("Label"), max_length=200, blank=False)
     tmatch = models.CharField(_("Transaction match"), max_length=20, blank=True, db_index=True) # This can be used by transaction handlers to help them in some way.
+    holvi_code = models.CharField(_("Holvi category code"), max_length=64, blank=True, db_index=True) # This can be used by transaction handlers to match holvi categories to tags
 
     def __str__(self):
         return self.label

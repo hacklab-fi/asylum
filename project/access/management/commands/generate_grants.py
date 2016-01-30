@@ -12,4 +12,5 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         for i in range(options['amount']):
             grant = GrantFactory()
-            print("Generated grant %s" % grant)
+            if options['verbosity'] > 0:
+                print("Generated grant %s" % grant)

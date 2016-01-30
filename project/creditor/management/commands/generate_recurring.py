@@ -18,4 +18,5 @@ class Command(BaseCommand):
                 rt = MembershipfeeFactory()
             if options['mode'] == 'keyholder':
                 rt = KeyholderfeeFactory()
-            print("Generated RecurringTransaction %s" % rt)
+            if options['verbosity'] > 0:
+                print("Generated RecurringTransaction %s" % rt)
