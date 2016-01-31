@@ -15,11 +15,18 @@ framework.
 
 """
 import os
+import environ
+ROOT_DIR = environ.Path(__file__) - 2  # (/a/b/myfile.py - 3 = /)
+env = environ.Env()
+# If the project root contains a .env file, read it
+if os.path.isfile(str(ROOT_DIR + '.env')):
+    environ.Env.read_env(str(ROOT_DIR + '.env'))
+
 
 from django.core.wsgi import get_wsgi_application
 from whitenoise.django import DjangoWhiteNoise
 
-if os.environ.get("DJANGO_SETTINGS_MODULE") == "config.settings.production":
+if env.bool('USE_SENTRY', False):
     from raven.contrib.django.raven_compat.middleware.wsgi import Sentry
 
 # We defer to a DJANGO_SETTINGS_MODULE already in the environment. This breaks
@@ -36,7 +43,7 @@ application = get_wsgi_application()
 # Use Whitenoise to serve static files
 # See: https://whitenoise.readthedocs.org/
 application = DjangoWhiteNoise(application)
-if os.environ.get("DJANGO_SETTINGS_MODULE") == "config.settings.production":
+if env.bool('USE_SENTRY', False):
     application = Sentry(application)
 
 # Apply WSGI middleware here.
