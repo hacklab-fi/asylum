@@ -33,7 +33,11 @@ with custom callbacks for automating things like mailing list subscriptions for 
 
 For Ubuntu 14.04 LTS
 
+  - Make sure your're using UTF-8 locale
+    - `sudo locale-gen en_US.UTF-8 ; export LC_ALL=en_US.UTF-8`
+    - You will want to make your system default locale is UTF-8 one too, see your distribution documentation.
   - Add the original repo as upstream `git remote add upstream https://github.com/hacklab-fi/asylum.git`
+  - Enter the "project" directory: `cd asylum/project`
   - Make a branch for your local changes `git checkout -b myhackerspace`
   - Install nodejs v4 first (needs PPA and key and stuff, nodesource has a handy script for this)
 
@@ -54,8 +58,9 @@ sudo apt-get install -y nodejs</code></pre>
     - `sudo su - postgres`
     - `createuser asylum && createdb -E utf-8 -T template0 -O asylum asylum && psql -U postgres -d postgres -c "alter user asylum with password 'asylum';"`
       - Change at least the password,in createdb `-O asylum` is the user that owns the database.
+  - If installing for production create your `.env` file now.
   - `./manage.py migrate`
-  - `find . -name '._*' | xargs rm ; for app in $( find . -path '*/locale' ); do (cd $(dirname $app) && ../manage.py compilemessages ); done`
+  - `find . -name '._*' | xargs rm ; for app in $( find . -path '*/locale' | grep -v venv/ ); do (cd $(dirname $app) && ../manage.py compilemessages ); done`
   - `./manage.py createinitialrevisions`
   - `./manage.py createsuperuser`
   - `npm run build`
@@ -67,17 +72,24 @@ sudo apt-get install -y nodejs</code></pre>
       - DJANGO_SENTRY_DSN
         - https://hub.docker.com/_/sentry/
         - https://docs.getsentry.com/hosted/
+        - OR set `USE_SENTRY=False`
       - DATABASE_URL (=postgres://pguser:pgpassword@localhost/dbname)
+      - DJANGO_SECRET_KEY
+      - DJANGO_ADMIN_URL (=admin/)
+      - DJANGO_ALLOWED_HOSTS (comma separated list)
   - `./manage.py collectstatic --noinput`
   - Setup uWSGI
     - `sudo apt-get install uwsgi-plugin-python3 uwsgi`
-    - `nano -w /etc/uwsgi/apps-available/asylum.ini` (see below)
-    - `ln -s /etc/uwsgi/apps-available/asylum.ini /etc/uwsgi/apps-enabled/asylum.ini`
-    - `service uwsgi reload`
+    - `sudo nano -w /etc/uwsgi/apps-available/asylum.ini` (see below)
+    - `sudo ln -s /etc/uwsgi/apps-available/asylum.ini /etc/uwsgi/apps-enabled/asylum.ini`
+    - `sudo service uwsgi restart`
   - Setup Nginx
-    - TODO: instructions
+    - `sudo apt-get install nginx`
+    - `sudo nano -w /etc/nginx/sites-available/asylum.ini` (see below)
+    - `sudo ln -s /etc/nginx/sites-available/asylum.ini /etc/nginx/sites-enabled/asylum.ini`
+    - `sudo service nginx restart`
   - Configure backups
-    - TODO: instructions
+    - See the cronjobs below, offsite backups are recommended.
 
 #### uWSGI config example
 
@@ -95,6 +107,27 @@ chdir = /home/myhackerspace/asylum/project
 touch-reload = /home/myhackerspace/asylum/project/reload
 env = DJANGO_SETTINGS_MODULE=config.settings.production</code></pre>
 
+#### Nginx config example
+
+<pre><code>upstream asylum {
+    server 127.0.0.1:9001 fail_timeout=0;
+}
+server {
+    listen 80;
+    server_name asylum.mylab.hacklab.fi;
+
+    root /usr/share/nginx/html;
+    index index.html index.htm;
+    client_max_body_size 50M;
+    keepalive_timeout 5;
+
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+        proxy_pass http://asylum;
+    }
+}</code></pre>
 
 ### Updating upstream changes
 
@@ -104,13 +137,13 @@ In the `project` dir of your checkout
     git fetch upstream
     git rebase upstream/master master
     git checkout myhackerspace
-    git rebase master
+    git merge master
     source venv/bin/activate
     pip install -r requirements/production.txt
     ./manage.py migrate
     npm run build
     ./manage.py collectstatic --noinput
-    for app in locale */locale; do (cd $(dirname $app) && ../manage.py compilemessages ); done
+    find . -name '._*' | xargs rm ; for app in $( find . -path '*/locale' | grep -v venv/ ); do (cd $(dirname $app) && ../manage.py compilemessages ); done
 
 And assuming you have uWSGI configured `touch reload`
 
@@ -131,8 +164,9 @@ Until we maybe decide on Celery for running various (timed or otherwise) tasks a
   - `npm run watch &` If you want to develop the JS/LESS stuff this will autocompile them on change
   - `./manage.py runserver 0.0.0.0:8000`
   - `maildump -p ~/maildump.pid --stop`
-  - Make localizations: `find . -name '._*' | xargs rm ; for app in $( find . -path '*/locale' ); do (cd $(dirname $app) && ../manage.py makemessages ); done`
+  - Make localizations: `find . -name '._*' | xargs rm ; for app in $( find . -path '*/locale' | grep -v venv/ ); do (cd $(dirname $app) && ../manage.py makemessages ); done`
     - If you add your own apps, make sure to create the `locale` directory for them too.
+  - use `npm run fix` to run autopep8 and friends before committing.
 
 If you need the special environment variables in scripts not run via manage.py, use `set -o allexport ; source .env; set +o allexport` to load them.
 
