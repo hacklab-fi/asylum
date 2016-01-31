@@ -4,6 +4,7 @@ import os
 import sys
 
 import environ
+
 ROOT_DIR = environ.Path(__file__) - 1
 
 if __name__ == "__main__":
