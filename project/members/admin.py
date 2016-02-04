@@ -148,6 +148,17 @@ class TagListFilter(admin.SimpleListFilter):
         return queryset.filter(tags=v)
 
 
+def mtypes_choices():
+    return itertools.chain((('', '----'), ), ((x.pk, x.label) for x in MemberType.objects.all()))
+
+
+class MembershipApplicationsForm(admin.helpers.ActionForm):
+    mtypes = forms.MultipleChoiceField(
+        label=_("Membership types"),  # TODO: Read from the member model meta ?
+        choices=lazy(mtypes_choices, tuple)
+    )
+
+
 class MembershipApplicationAdmin(VersionAdmin):
     list_display = (
         'rname',
@@ -156,11 +167,22 @@ class MembershipApplicationAdmin(VersionAdmin):
         'tags_formatted',
     )
     list_filter = (TagListFilter,)
+    actions = ['approve_selected']
+    action_form = MembershipApplicationsForm
     search_fields = ['lname', 'fname', 'email', 'nick']
 
     def tags_formatted(self, obj):
         return ', '.join((x.label for x in obj.tags.all()))
     tags_formatted.short_description = _("Tags")
+
+    def approve_selected(modeladmin, request, queryset):
+        add_types = []
+        for x in request.POST.getlist('mtypes'):
+            if x:
+                add_types.append(int(x))
+        for a in queryset.all():
+            a.approve(add_types)
+    approve_selected.short_description = _("Approve selected applications")
 
 
 class MembershipApplicationTagAdmin(VersionAdmin):
