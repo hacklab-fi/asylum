@@ -43,10 +43,6 @@ class ApplicationHandler(ExampleBaseHandler):
         msg = "on_approved called for %s" % application
         logger.info(msg)
         print(msg)
-        mail = EmailMessage()
-        mail.to = [member.email, ]
-        mail.body = """Your membership has been approved, your member id is #%d""" % member.member_id
-        mail.send()
 
         # Auto-add the membership fee as recurring transaction
         membership_fee = env.float('MEMBEREXAMPLE_MEMBERSHIP_FEE', default=None)
@@ -72,6 +68,11 @@ class ApplicationHandler(ExampleBaseHandler):
             mail.subject = 'subscribe'
             mail.body = 'subscribe'
             mail.send()
+
+        mail = EmailMessage()
+        mail.to = [member.email, ]
+        mail.body = """Your membership has been approved, your member id is #%d""" % member.member_id
+        mail.send()
 
 
 class TransactionHandler(BaseTransactionHandler):
