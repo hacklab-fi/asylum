@@ -4,14 +4,11 @@ import itertools
 
 import dateutil.parser
 from django.core.management.base import BaseCommand, CommandError
+from django.utils import timezone
 from holviapp.importer import HolviImporter
 from holviapp.utils import list_invoices, list_orders
 
-
-def yesterday_proxy():
-    now_yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
-    start_yesterday = datetime.datetime.combine(now_yesterday.date(), datetime.datetime.min.time())
-    return start_yesterday.isoformat()
+from asylum.utils import datetime_proxy
 
 
 class Command(BaseCommand):
@@ -19,7 +16,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('--all', action='store_true', help='Import all Holvi transactions (WARNING: this may take forever)')
-        parser.add_argument('since', type=str, nargs='?', default=yesterday_proxy(), help='Import transactions updated since datetime, defaults to yesterday midnight')
+        parser.add_argument('since', type=str, nargs='?', default=datetime_proxy(), help='Import transactions updated since datetime, defaults to yesterday midnight')
 
     def handle(self, *args, **options):
         if (not options['since']
@@ -28,7 +25,7 @@ class Command(BaseCommand):
         invoice_filters = {}
         order_filters = {}
         if not options.get('all', False):
-            since_parsed = dateutil.parser.parse(options['since'])
+            since_parsed = timezone.make_aware(dateutil.parser.parse(options['since']))
             if options['verbosity'] > 1:
                 print("Importing since %s" % since_parsed.isoformat())
             invoice_filters['update_time_from'] = since_parsed.isoformat()
