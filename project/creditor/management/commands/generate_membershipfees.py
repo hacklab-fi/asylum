@@ -8,7 +8,7 @@ from members.models import Member
 
 
 class Command(BaseCommand):
-    help = 'generate randomised (member) tokens'
+    help = 'Generate membership fee RecurringTransactions for all members'
 
     def add_arguments(self, parser):
         parser.add_argument('amount', type=int)
