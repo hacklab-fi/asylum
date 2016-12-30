@@ -1,6 +1,6 @@
 # Bleeding edge Django
 django==1.8.5
-Jinja2==2.8
+Jinja2==2.8.1
 django-jinja==2.2.2
 markupsafe==0.23
 
