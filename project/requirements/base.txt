@@ -10,7 +10,7 @@ django-secure==1.0.1
 whitenoise==3.2.2
 
 # Forms
-django-braces==1.8.1
+django-braces==1.10.0
 django-crispy-forms==1.5.2
 django-floppyforms==1.7.0
 
