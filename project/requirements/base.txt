@@ -33,7 +33,7 @@ pytz==2016.10
 # Your custom requirements go here
 django-bootstrap3==6.2.2
 django-reversion==1.9.3
-djangorestframework==3.3.1
+djangorestframework==3.5.3
 Markdown==2.6.5
 django-filter==0.11.0
 djangorestframework-filters==0.6.0
