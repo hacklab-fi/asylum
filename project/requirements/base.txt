@@ -38,6 +38,6 @@ Markdown==2.6.7
 django-filter==1.0.1
 djangorestframework-filters==0.6.0
 django-markdown==0.8.4
-django-settings-export==1.0.6
+django-settings-export==1.2.1
 holviapi==0.2.20170129
 python-dateutil==2.6.0
