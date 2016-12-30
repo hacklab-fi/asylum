@@ -2,7 +2,7 @@
 -r base.txt
 
 coverage==4.0
-flake8==2.4.1
+flake8==3.2.1
 pep8==1.5.7
 pep8-naming==0.3.3
 
