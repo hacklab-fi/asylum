@@ -6,6 +6,6 @@ cd `dirname "$SCRIPTDIR"`
 
 docker build -t asylum_test .
 echo "Starting test server."
-echo "To connect to shell in this instance run: docker exec -it $(docker ps | grep asylum_test | awk '{print $1}') /bin/bash"
+echo "To connect to shell in this instance run: docker exec -it asylum_test /bin/bash"
 echo "Then in that shell run: source ../asylum-venv/bin/activate"
 docker run --rm --name asylum_test -it -p 8000:8000 -p 1080:1080 asylum_test
