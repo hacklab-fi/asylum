@@ -64,6 +64,7 @@ LOCAL_APPS = (
     'creditor',
     'ndaparser',
     'holviapp',
+    'velkoja',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

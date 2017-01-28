@@ -1,0 +1,39 @@
+(english below the break)
+
+Hei,
+
+Seuraava lasku holvissa on kirjanpitomme mukaan maksamatta
+
+Kuvaus: {{ invoice.subject }}
+Eräpäivä: {{ invoice.due_date }}
+Viite: {{ invoice.rf_reference }}
+Summa: {{ invoice.due_sum }}{{ invoice.currency }}
+
+{% if barcode %}
+Virtuaaliviivakoodi: {{ barcode }}
+{% endif %}
+
+Lasku on myös lähetetty Holvista uudelleen, tarkista että postit lähettäjältä
+invoices@holvi.com eivät päädy roskapostiin.
+
+Mikäli uskot että tässä on jokin virhe ole hyvä ja ota yhteyttä hallitukseen.
+
+--------------
+
+Hey,
+
+According to our bookkeeping in Holvi, the following invoice is unpaid
+
+Description: {{ invoice.subject }}
+Due date: {{ invoice.due_date }}
+Reference: {{ invoice.rf_reference }}
+Amount due: {{ invoice.due_sum }}{{ invoice.currency }}
+
+{% if barcode %}
+Virtual barcode: {{ barcode }}
+{% endif %}
+
+The invoice has also been resent from Holvi, please check that emails from
+sender invoices@holvi.com are not getting marked as spam.
+
+If you think there is some error here, please contact the board.
