@@ -52,6 +52,7 @@ THIRD_PARTY_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
     'django_markdown',
+    'django_jinja',
 )
 
 # Apps specific for this project go here.
