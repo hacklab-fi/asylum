@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load bootstrap3 staticfiles i18n %}
+
+{% block page_title %}{% trans "Email preview" %}{% endblock page_title %}
+{% block main_title %}{% trans "Email preview" %}{% endblock main_title %}
+
+{% block content %}
+<div class="container-fluid">
+    <p>{% trans "Subject" %}: {{ email.subject }}</p>
+    <p><pre>{{ email.body }}</pre></p>
+</div>
+{% endblock content %}

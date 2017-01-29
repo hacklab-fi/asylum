@@ -36,6 +36,7 @@ urlpatterns = [
 
     # Your stuff: custom urls includes go here
     url(r'^members/', include('members.urls')),
+    url(r'^velkoja/', include('velkoja.urls')),
 
     url(r'^api/', include(router.urls)),
     url(r'^api-auth/get-token/', authtoken_views.obtain_auth_token),
