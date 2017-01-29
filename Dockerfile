@@ -48,7 +48,7 @@ ENV LANGUAGE en_US:en
 # Install python requirements
 RUN virtualenv -p `which python3.4` ../asylum-venv
 COPY project/requirements /opt/asylum/requirements/
-RUN . ../asylum-venv/bin/activate && pip install packaging appdirs && pip install -r requirements/local.txt
+RUN . ../asylum-venv/bin/activate && pip install packaging appdirs && pip install -r requirements/local.txt && chown -R asylum:asylum ../asylum-venv
 
 # Configure application
 USER root

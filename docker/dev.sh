@@ -4,7 +4,7 @@ SCRIPTDIR=$(python -c 'import os,sys;print os.path.dirname(os.path.realpath(sys.
 # Make sure we're in the correct place relative to Dockerfile no matter where we were called from
 cd `dirname "$SCRIPTDIR"`
 
-if [ "$( docker images asylum_dev:latest )" == "" ]
+if [ "$( docker images -q asylum_dev:latest )" == "" ]
 then
     docker build -t asylum_dev .
 fi
