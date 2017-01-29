@@ -10,7 +10,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         handler = HolviOverdueInvoicesHandler()
-        notified = handler.process_overdue()
+        notified = handler.process_overdue(send=True)
         if options['verbosity'] > 1:
             for n,i in notified:
                 print("Notified  %s about %s" % (n.email, i.subject))
