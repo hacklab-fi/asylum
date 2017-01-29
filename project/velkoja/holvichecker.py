@@ -1,7 +1,8 @@
+from decimal import Decimal
 from django.utils import timezone
 from django.conf import settings
-from holviapp.utils import list_invoices, get_invoice
-from holviapi.utils import barcode
+from holviapp.utils import list_invoices
+from holviapi.utils import barcode as bank_barcode
 from .models import NotificationSent
 from django.core.mail import EmailMessage
 from django.template import Context
@@ -10,8 +11,6 @@ from django.template.loader import get_template
 class HolviOverdueInvoicesHandler(object):
     def process_overdue(self, send=False):
         barcode_iban = settings.HOLVI_BARCODE_IBAN
-        if not barcode_iban:
-            raise RuntimeError('HOLVI_BARCODE_IBAN is not configured')
         body_template = get_template('velkoja/notification_email_body.jinja')
         subject_template = get_template('velkoja/notification_email_subject.jinja')
         overdue = list_invoices(status='overdue')
@@ -28,7 +27,10 @@ class HolviOverdueInvoicesHandler(object):
 
             if send:
                 invoice.send()
-            barcode = barcode(barcode_iban, invoice.rf_reference, invoice.due_sum)
+
+            barcode = None
+            if barcode_iban:
+                barcode = bank_barcode(barcode_iban, invoice.rf_reference, Decimal(invoice.due_sum))
 
             mail = EmailMessage()
             mail.subject = subject_template.render(Context({ "invoice": invoice, "barcode": barcode })).strip()
