@@ -13,3 +13,4 @@ class NotificationSent(AsylumModel):
     stamp = models.DateTimeField(_("Datetime"), default=timezone.now, db_index=True)
     transaction_unique_id = models.CharField(_("Unique transaction id"), max_length=64, blank=False, unique=True)
     email = models.EmailField(_("Email address"), blank=False)
+    notification_no = models.PositiveIntegerField(default=1)

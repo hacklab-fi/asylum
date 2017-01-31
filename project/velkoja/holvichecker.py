@@ -41,6 +41,7 @@ class HolviOverdueInvoicesHandler(object):
 
             try:
                 notified = NotificationSent.objects.get(transaction_unique_id=invoice.code)
+                notified.notification_no += 1
             except NotificationSent.DoesNotExist:
                 notified = NotificationSent()
                 notified.transaction_unique_id = invoice.code
