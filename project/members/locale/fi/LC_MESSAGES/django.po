@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-30 13:20+0200\n"
+"POT-Creation-Date: 2017-04-04 19:51+0300\n"
 "PO-Revision-Date: 2015-11-29 02:53+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -15,136 +15,140 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.6\n"
 
-#: admin.py:37 admin.py:118 admin.py:149 models.py:79
+#: admin.py:44 admin.py:142 admin.py:174 models.py:83
 msgid "Membership types"
 msgstr "Jäsentyyppi"
 
-#: admin.py:51 admin.py:122
+#: admin.py:58 admin.py:146
 msgid "Grants"
 msgstr "Pääsyoikeudet"
 
-#: admin.py:65 admin.py:113
+#: admin.py:72
+msgid "Cities"
+msgstr "Kaupungit"
+
+#: admin.py:88 admin.py:137
 msgid "Credit"
 msgstr "Saldo"
 
-#: admin.py:70
+#: admin.py:93
 msgid "Negative credit"
 msgstr "Saldo miinuksella"
 
-#: admin.py:71
+#: admin.py:94
 msgid "Positive credit"
 msgstr "Saldo plussalla"
 
-#: admin.py:101
+#: admin.py:125
 msgid "Name"
 msgstr "Nimi"
 
-#: admin.py:131 admin.py:168
+#: admin.py:155 admin.py:193
 msgid "Tags"
 msgstr "Tägit"
 
-#: admin.py:177
+#: admin.py:202
 msgid "Approve selected applications"
 msgstr "Hyväksy valitut hakemukset"
 
-#: forms.py:14
+#: forms.py:18
 #, python-format
 msgid "I have read and accept <a href=\"%s\" target=\"_blank\">the rules</a>"
 msgstr "Olen lukenut ja hyväksyn <a href=\"%s\" target=\"_blank\">säännöt</a>"
 
-#: models.py:37
+#: models.py:41
 msgid "First name"
 msgstr "Etunimi"
 
-#: models.py:38
+#: models.py:42
 msgid "Last name"
 msgstr "Sukunimi"
 
-#: models.py:39
+#: models.py:43
 msgid "City of residence"
 msgstr "Paikkakunta"
 
-#: models.py:40
+#: models.py:44
 msgid "Email address"
 msgstr "Sähköpostiosoite"
 
-#: models.py:41
+#: models.py:45
 msgid "Phone number"
 msgstr "Puhelinnumero"
 
-#: models.py:42
+#: models.py:46
 msgid "Nickname"
 msgstr "Lempinimi"
 
-#: models.py:65 models.py:102
+#: models.py:69 models.py:106
 msgid "Label"
 msgstr "Nimiö"
 
-#: models.py:71
+#: models.py:75
 msgid "Member Type"
 msgstr "Jäsentyyppi"
 
-#: models.py:72
+#: models.py:76
 msgid "Member Types"
 msgstr "Jäsentyypit"
 
-#: models.py:78
+#: models.py:82
 msgid "Date accepted"
 msgstr "Hyväksymispäivä"
 
-#: models.py:80
+#: models.py:84
 msgid "Anonymized id (for use in external databases)"
 msgstr "Anonymisoitu tunniste (käytettäväksi ulkoisissa tietokannoissa)"
 
-#: models.py:81
+#: models.py:85
 msgid "Member id no"
 msgstr "Jäsennumero"
 
-#: models.py:95 models.py:166
+#: models.py:99 models.py:170
 msgid "Member"
 msgstr "Jäsen"
 
-#: models.py:96
+#: models.py:100
 msgid "Members"
 msgstr "Jäsenet"
 
-#: models.py:108
+#: models.py:112
 msgid "Membership Application Tag"
 msgstr "Jäsenhakemuksen tägi"
 
-#: models.py:109
+#: models.py:113
 msgid "Membership Application Tags"
 msgstr "Jäsenhakemuksen tägit"
 
-#: models.py:116
+#: models.py:120
 msgid "Application tags"
 msgstr "Jäsenhakemuksen tagit"
 
-#: models.py:117 models.py:165 models.py:170
+#: models.py:121 models.py:169 models.py:174
 msgid "Notes"
 msgstr "Muistiinpanot"
 
-#: models.py:128
+#: models.py:132
 msgid "Member with this email already exists"
 msgstr "Tämä sähköpostiosoite on jo jäsenrekisterissä"
 
-#: models.py:157
+#: models.py:161
 msgid "Membership Application"
 msgstr "Jäsenhakemus"
 
-#: models.py:158
+#: models.py:162
 msgid "Membership Applications"
 msgstr "Jäsenhakemukset"
 
-#: models.py:164
+#: models.py:168
 msgid "Datetime"
 msgstr "Päivä ja aika"
 
-#: models.py:169
+#: models.py:173
 msgid "Note"
 msgstr "Muistiinpano"
 
-#: models.py:174
+#: models.py:178
 #, python-format
 msgid "Notes about %s on %s"
 msgstr "Muistiinpanoja jäsenestä %s ajalla %s"
