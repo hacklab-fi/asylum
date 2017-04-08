@@ -10,14 +10,14 @@ from holviapi.utils import barcode as bank_barcode
 from holviapp.utils import list_invoices
 
 
-class EmailPreviewView(generic.TemplateView):
-    template_name = "velkoja/preview.html"
+class HolviEmailPreviewView(generic.TemplateView):
+    template_name = "velkoja/holvi_preview.html"
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         barcode_iban = settings.HOLVI_BARCODE_IBAN
-        body_template = get_template('velkoja/notification_email_body.jinja')
-        subject_template = get_template('velkoja/notification_email_subject.jinja')
+        body_template = get_template('velkoja/holvi_notification_email_body.jinja')
+        subject_template = get_template('velkoja/holvi_notification_email_subject.jinja')
         overdue = list_invoices(status='overdue')
         for invoice in overdue:
             # Quick check to make sure the invoice has not been credited
