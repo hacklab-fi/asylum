@@ -14,6 +14,7 @@ class HolviEmailPreviewView(generic.TemplateView):
     template_name = "velkoja/holvi_preview.html"
 
     def get_context_data(self, **kwargs):
+        # TODO: refactor together with HolviOverdueInvoicesHandler so there's one method to format the email.
         ctx = super().get_context_data(**kwargs)
         barcode_iban = settings.HOLVI_BARCODE_IBAN
         body_template = get_template('velkoja/holvi_notification_email_body.jinja')
@@ -41,4 +42,18 @@ class HolviEmailPreviewView(generic.TemplateView):
             mail.to = [invoice.receiver.email]
             ctx['email'] = mail
             break
+        return ctx
+
+
+class NordeaEmailPreviewView(generic.TemplateView):
+    template_name = "velkoja/nordea_preview.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        barcode_iban = settings.HOLVI_BARCODE_IBAN
+        body_template = get_template('velkoja/nordea_notification_email_body.jinja')
+        subject_template = get_template('velkoja/nordea_notification_email_subject.jinja')
+        raise NotImplemented()
+        # TODO: See the todo on HolviEmailPreviewView about having one method for email formatting.
+
         return ctx

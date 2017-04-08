@@ -1,0 +1,35 @@
+(english below the break)
+
+Hei,
+
+Seuraava maksu on kirjanpitomme mukaan maksamatta
+
+Kuvaus: {{ transaction.tag }}
+Eräpäivä: {{ transaction.stamp.isoformat }}
+Viite: {{ transaction.reference }}
+Summa: {{ -transaction.sum }} EUR
+Tilinro: {{ iban }}
+
+{% if barcode %}
+Virtuaaliviivakoodi: {{ barcode }}
+{% endif %}
+
+Mikäli uskot että tässä on jokin virhe ole hyvä ja ota yhteyttä hallitukseen.
+
+--------------
+
+Hey,
+
+According to our bookkeeping, the following payment is not made
+
+Description: {{ transaction.tag }}
+Due date: {{ transaction.stamp.isoformat }}
+Reference: {{ transaction.reference }}
+Amount due: {{ -transaction.sum }} EUR
+IBAN Account number: {{ iban }}
+
+{% if barcode %}
+Virtual barcode: {{ barcode }}
+{% endif %}
+
+If you think there is some error here, please contact the board.
