@@ -68,6 +68,22 @@ class GrantListFilter(admin.SimpleListFilter):
         return queryset.filter(access_granted__atype=v)
 
 
+class CityListFilter(admin.SimpleListFilter):
+    title = _("Cities")
+    parameter_name = 'city'
+
+    def lookups(self, request, model_admin):
+        cities = Member.objects.values_list('city',flat=True).distinct()
+        return zip(cities,cities)
+
+    def queryset(self, request, queryset):
+        v = self.value()
+        if not v:
+            return queryset
+        return queryset.filter(city=v)
+
+
+
 class CreditListFilter(admin.SimpleListFilter):
     title = _("Credit")
     parameter_name = 'credit'
@@ -97,8 +113,9 @@ class MemberAdmin(VersionAdmin):
         'credit_formatted',
         'mtypes_formatted',
         'grants_formatted',
+        'city',
     )
-    list_filter = (MemberTypeListFilter, GrantListFilter, CreditListFilter)
+    list_filter = (MemberTypeListFilter, GrantListFilter, CreditListFilter, CityListFilter)
     inlines = [MemberNoteInline, GrantInline, TokenInline, RTInline]
     search_fields = ['lname', 'fname', 'email', 'nick']
     ordering = ['lname', 'fname']
