@@ -20,10 +20,17 @@ def get_sentinel_user():
 
 def datestamped_and_normalized(instance, filename):
     """Normalized filename and places in datestamped path"""
+    file_parts = filename.split('.')
+    if len(file_parts) > 1:
+        name = '.'.join(file_parts[:-1])
+        ext = '.' + file_parts[-1]
+    else:
+        ext = ''
+        name = filename
     filename_normalized = unicodeslugify.slugify(
-        filename, only_ascii=True, lower=True,
+        name, only_ascii=True, lower=True,
         spaces=False, space_replacement='_'
-    )
+    ) + ext
     return datetime.datetime.now().strftime("ndaparser/%Y/%m/%d/{}").format(filename_normalized)
 
 
