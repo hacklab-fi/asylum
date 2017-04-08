@@ -18,6 +18,7 @@ class TokenType(AsylumModel):
         verbose_name_plural = _('Token Types')
         ordering = ['label', ]
 
+
 revisions.default_revision_manager.register(TokenType)
 
 
@@ -43,6 +44,7 @@ class Token(AsylumModel):
         unique_together = ("ttype", "value")
         ordering = ['owner__lname', 'owner__fname', 'ttype__label']
 
+
 revisions.default_revision_manager.register(Token)
 
 
@@ -58,6 +60,7 @@ class AccessType(AsylumModel):
         verbose_name = _('Access Type')
         verbose_name_plural = _('Access Types')
         ordering = ['label', ]
+
 
 revisions.default_revision_manager.register(AccessType)
 
@@ -75,6 +78,7 @@ class Grant(AsylumModel):
         verbose_name_plural = _('Grants')
         unique_together = ('owner', 'atype')
         ordering = ['owner__lname', 'owner__fname', 'atype__label']
+
 
 revisions.default_revision_manager.register(Grant)
 
@@ -103,5 +107,6 @@ class NonMemberToken(AsylumModel):
         verbose_name_plural = _('Non-member tokens')
         unique_together = ("ttype", "value")
         ordering = ['contact', 'ttype__label']
+
 
 revisions.default_revision_manager.register(NonMemberToken)

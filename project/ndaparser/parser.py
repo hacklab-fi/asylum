@@ -125,6 +125,7 @@ def ascii2scandic(string):
     string = string.replace('|', 'ö')
     return string
 
+
 if __name__ == "__main__":
     transactions = []
     with open("./testdata.nda") as f:
