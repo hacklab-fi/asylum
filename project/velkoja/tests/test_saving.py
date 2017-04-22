@@ -2,11 +2,11 @@
 import datetime
 
 import pytest
-
-from members.tests.fixtures.memberlikes import MemberFactory
-from creditor.tests.fixtures.transactions import TransactionFactory
 from creditor.tests.fixtures.tags import generate_standard_set
+from creditor.tests.fixtures.transactions import TransactionFactory
+from members.tests.fixtures.memberlikes import MemberFactory
 from velkoja.models import NotificationSent
+
 
 @pytest.mark.django_db
 def test_model_can_be_saved():

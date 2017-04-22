@@ -1,15 +1,19 @@
+# -*- coding: utf-8 -*-
 import logging
 from decimal import Decimal
-from django.utils import timezone
+
 from django.conf import settings
-from holviapp.utils import list_invoices
-from holviapi.utils import barcode as bank_barcode
-from .models import NotificationSent
 from django.core.mail import EmailMessage
 from django.template import Context
 from django.template.loader import get_template
+from django.utils import timezone
+from holviapi.utils import barcode as bank_barcode
+from holviapp.utils import list_invoices
+
+from .models import NotificationSent
 
 logger = logger.getLogger()
+
 
 class HolviOverdueInvoicesHandler(object):
     def process_overdue(self, send=False):
@@ -36,8 +40,8 @@ class HolviOverdueInvoicesHandler(object):
                 barcode = bank_barcode(barcode_iban, invoice.rf_reference, Decimal(invoice.due_sum))
 
             mail = EmailMessage()
-            mail.subject = subject_template.render(Context({ "invoice": invoice, "barcode": barcode })).strip()
-            mail.body = body_template.render(Context({ "invoice": invoice, "barcode": barcode }))
+            mail.subject = subject_template.render(Context({"invoice": invoice, "barcode": barcode})).strip()
+            mail.body = body_template.render(Context({"invoice": invoice, "barcode": barcode}))
             mail.to = [invoice.receiver.email]
             if send:
                 try:

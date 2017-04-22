@@ -2,6 +2,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from velkoja.holvichecker import HolviOverdueInvoicesHandler
 
+
 class Command(BaseCommand):
     help = 'Import transaction data from Holvi API'
 
@@ -12,5 +13,5 @@ class Command(BaseCommand):
         handler = HolviOverdueInvoicesHandler()
         notified = handler.process_overdue(send=True)
         if options['verbosity'] > 1:
-            for n,i in notified:
+            for n, i in notified:
                 print("Notified  %s about %s" % (n.email, i.subject))

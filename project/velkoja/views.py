@@ -1,11 +1,14 @@
+# -*- coding: utf-8 -*-
 from decimal import Decimal
-from django.views import generic
+
 from django.conf import settings
-from holviapp.utils import list_invoices
-from django.template.loader import get_template
 from django.core.mail import EmailMessage
 from django.template import Context
+from django.template.loader import get_template
+from django.views import generic
 from holviapi.utils import barcode as bank_barcode
+from holviapp.utils import list_invoices
+
 
 class EmailPreviewView(generic.TemplateView):
     template_name = "velkoja/preview.html"
@@ -26,8 +29,8 @@ class EmailPreviewView(generic.TemplateView):
                 barcode = bank_barcode(barcode_iban, invoice.rf_reference, Decimal(invoice.due_sum))
 
             mail = EmailMessage()
-            mail.subject = subject_template.render(Context({ "invoice": invoice, "barcode": barcode })).strip()
-            mail.body = body_template.render(Context({ "invoice": invoice, "barcode": barcode }))
+            mail.subject = subject_template.render(Context({"invoice": invoice, "barcode": barcode})).strip()
+            mail.body = body_template.render(Context({"invoice": invoice, "barcode": barcode}))
             mail.to = [invoice.receiver.email]
             ctx['email'] = mail
             break

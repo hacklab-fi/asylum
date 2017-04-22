@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.db import models, transaction
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
