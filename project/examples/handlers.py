@@ -43,10 +43,6 @@ class ApplicationHandler(ExampleBaseHandler):
         msg = "on_approved called for %s" % application
         logger.info(msg)
         print(msg)
-        mail = EmailMessage()
-        mail.to = [member.email, ]
-        mail.body = """Your membership has been approved, your member id is #%d""" % member.member_id
-        mail.send()
 
         # Auto-add the membership fee as recurring transaction
         membership_fee = env.float('MEMBEREXAMPLE_MEMBERSHIP_FEE', default=None)
@@ -72,6 +68,11 @@ class ApplicationHandler(ExampleBaseHandler):
             mail.subject = 'subscribe'
             mail.body = 'subscribe'
             mail.send()
+
+        mail = EmailMessage()
+        mail.to = [member.email, ]
+        mail.body = """Your membership has been approved, your member id is #%d""" % member.member_id
+        mail.send()
 
 
 class TransactionHandler(BaseTransactionHandler):
@@ -165,6 +166,10 @@ class TransactionHandler(BaseTransactionHandler):
         return lt
 
     def import_tmatch_transaction(self, at, lt):
+        if len(at.reference) < 2: # To avoid indexerrors
+            return None
+        if at.reference[0:2] == "RF": # ISO references, our lookup won't work with them, even worse: there will be exceptions
+            return None
         # In  this example the last meaningful number (last number is checksum) of the reference is used to recognize the TransactionTag
         try:
             lt.tag = TransactionTag.objects.get(tmatch=at.reference[-2])
