@@ -4,6 +4,12 @@ Membership management for hacklabs. uses Python 3.4.
 
 Uses django-environ for configurations, create `.env`-file in your project dir to override settings.
 
+## TL;DR
+
+Install docker and run the `docker/dev.sh` to set up a development enviroment. The script
+will mount the project directory inside the docker container so that all modifications in
+the `project/` take effect immediately.
+
 ## REST API
 
 Access to all asylum models is available via REST (authentication required for reading as well).
