@@ -52,6 +52,7 @@ THIRD_PARTY_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
     'django_markdown',
+    'django_jinja',
 )
 
 # Apps specific for this project go here.
@@ -63,6 +64,7 @@ LOCAL_APPS = (
     'creditor',
     'ndaparser',
     'holviapp',
+    'velkoja',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -266,6 +268,8 @@ ORGANIZATION_NAME = env('ORGANIZATION_NAME', default="hacklab.fi asylum for the 
 RECURRINGTRANSACTIONS_CALLBACKS_HANDLER = env('RECURRINGTRANSACTIONS_CALLBACKS_HANDLER', default=None)
 HOLVI_POOL = env('HOLVI_POOL', default=None)
 HOLVI_APIKEY = env('HOLVI_APIKEY', default=None)
+HOLVI_BARCODE_IBAN = env('HOLVI_BARCODE_IBAN', default=None)
+HOLVI_NOTIFICATION_INTERVAL_DAYS = env('HOLVI_NOTIFICATION_INTERVAL_DAYS', default=7)
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [

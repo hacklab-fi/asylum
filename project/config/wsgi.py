@@ -27,7 +27,6 @@ if os.path.isfile(str(ROOT_DIR + '.env')):
     environ.Env.read_env(str(ROOT_DIR + '.env'))
 
 
-
 if env.bool('USE_SENTRY', False):
     from raven.contrib.django.raven_compat.middleware.wsgi import Sentry
 
