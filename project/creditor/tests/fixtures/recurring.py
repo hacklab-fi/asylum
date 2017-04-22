@@ -9,6 +9,10 @@ from members.tests.fixtures.memberlikes import MemberFactory
 
 from .tags import TransactionTagFactory
 
+def get_tag():
+    if TransactionTag.objects.count():
+        return factory.fuzzy.FuzzyChoice(TransactionTag.objects.all())
+    return factory.SubFactory(TransactionTagFactory, label='Membership fee', tmatch='1')
 
 class RecurringTransactionFactory(factory.django.DjangoModelFactory):
 
@@ -19,7 +23,7 @@ class RecurringTransactionFactory(factory.django.DjangoModelFactory):
     end = None
     rtype = factory.fuzzy.FuzzyChoice(RecurringTransaction.RTYPE_READABLE.keys())
     owner = factory.SubFactory(MemberFactory)  # ternary expression does not really help us since the import is done before the test-db is created, TODO: Make a special helper class that can will evaluate the count later
-    tag = (factory.fuzzy.FuzzyChoice(TransactionTag.objects.all())) if TransactionTag.objects.count() else (factory.SubFactory(TransactionTagFactory, label='Membership fee', tmatch='1'))
+    tag = get_tag
     amount = factory.fuzzy.FuzzyInteger(-40, -10, 5)
     start = factory.LazyAttribute(lambda t: factory.fuzzy.FuzzyDate(t.owner.accepted).fuzz())
 
