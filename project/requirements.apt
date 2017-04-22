@@ -1,6 +1,6 @@
 ##basic build dependencies of various Django apps for Ubuntu 14.04
 python-virtualenv
-#build-essential metapackage install: make, gcc, g++, 
+#build-essential metapackage install: make, gcc, g++,
 build-essential
 #required to translate
 gettext
@@ -13,11 +13,11 @@ zlib1g-dev
 
 
 ##Pillow dependencies
-libtiff4-dev
 libjpeg8-dev
 libfreetype6-dev
-liblcms1-dev
 libwebp-dev
+libtiff5-dev
+liblcms2-dev
 
 ##django-extensions
 graphviz-dev

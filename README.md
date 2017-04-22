@@ -67,10 +67,10 @@ sudo apt-get install -y nodejs</code></pre>
 
   - `xargs -a <(awk '/^\s*[^#]/' "requirements.apt") -r -- sudo apt-get install` Installs all packages listed in requirements.apt
   - `sudo pip install maildump` currently not python3 compatible due to broken package, only needed if you're going to run in development mode
-  - `` virtualenv -p `which python3.4` venv && source venv/bin/activate ``
+  - `` virtualenv -p `which python3` venv && source venv/bin/activate ``
     - Note: this might not work. If it doesn't, try `virtualenv-3.4`.
       If you don't have `virtualenv-3.4`, you might need to install it (`sudo pip3.4 install virtualenv`).
-      If the installation command fails, you'll have to bootstrap pip for your Python3.4 installation (`wget https://bootstrap.pypa.io/get-pip.py && sudo python3.4 get-pip.py`).
+      If the installation command fails, you'll have to bootstrap pip for your python3 installation (`wget https://bootstrap.pypa.io/get-pip.py && sudo python3 get-pip.py`).
       Good luck.
   - `pip install -r requirements/local.txt` (or `pip install -r requirements/production.txt` if installing on production)
   - Create the postgres database
