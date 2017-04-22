@@ -15,7 +15,7 @@ if [ "$(docker ps -a -q -f name=asylum_dev)" == "" ]
 then
   echo "First run"
 	set -x
-	docker run --name asylum_dev -i -p 8000:8000 -p 1080:1080 -v `pwd -P`/project:/opt/asylum asylum_dev
+	docker run --name asylum_dev -it -p 8000:8000 -p 1080:1080 -v `pwd -P`/project:/opt/asylum asylum_dev
   set +x
 else
   set -x
