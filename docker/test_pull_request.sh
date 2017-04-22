@@ -1,5 +1,5 @@
 #!/bin/bash
-SCRIPTDIR=$(python -c 'import os,sys;print os.path.dirname(os.path.realpath(sys.argv[1]))' "$0")
+SCRIPTDIR=$(python2.7 -c 'import os,sys;print os.path.dirname(os.path.realpath(sys.argv[1]))' "$0")
 # Make sure the id is here
 if [ "$1" == "" ]
 then

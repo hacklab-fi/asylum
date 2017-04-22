@@ -1,20 +1,17 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 ENV PYTHONUNBUFFERED 1
 EXPOSE 8000
 
 # Install basics
-RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y build-essential postgresql git python-dev
-RUN apt-get install -y python-virtualenv python3-pip graphviz-dev libpq-dev # faster builds
+RUN apt-get update && apt-get upgrade -y && apt-get install -y curl sudo
+RUN curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash
+RUN apt-get install -y build-essential postgresql \
+    git python-dev python3-dev python-virtualenv \
+    python3-pip python-pip graphviz-dev libpq-dev nodejs
 
 # Install maildump
 EXPOSE 1080
 RUN pip install maildump
-
-# Install nodejs
-RUN apt-get update && apt-get install -y curl
-RUN curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash
-RUN apt-get update && apt-get install -y nodejs
 
 # Create database
 USER postgres
@@ -46,9 +43,14 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 
 # Install python requirements
-RUN virtualenv -p `which python3.4` ../asylum-venv
+RUN virtualenv -p `which python3` ../asylum-venv
 COPY project/requirements /opt/asylum/requirements/
-RUN . ../asylum-venv/bin/activate && pip install packaging appdirs && pip install -r requirements/local.txt && chown -R asylum:asylum ../asylum-venv
+RUN . ../asylum-venv/bin/activate && \
+    pip install pip --upgrade && \
+    pip install packaging appdirs urllib3[secure] && \
+    pip install -r requirements/local.txt && \
+    chown -R asylum:asylum ../asylum-venv && \
+    true
 
 # Configure application
 USER root
