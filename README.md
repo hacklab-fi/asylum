@@ -2,13 +2,13 @@
 
 Membership management for hacklabs. uses Python 3.4.
 
-Uses django-environ for configurations, create `.env`-file in your project dir to override settings.
+Uses django-environ for configurations, you can create `.env`-file in your project dir to override settings.
 
 ## TL;DR
 
 Install docker and run the `docker/dev.sh` to set up a development enviroment. The script
 will mount the project directory inside the docker container so that all modifications in
-the `project/` take effect immediately.
+the `project/` take effect immediately. Do not create `.env` file yet.
 
 ## REST API
 
@@ -30,7 +30,21 @@ Admins can issue auth tokens to users via https://yourserver.example.com/admin/a
 [filterbacked]: http://www.django-rest-framework.org/api-guide/filtering/#djangofilterbackend
 [djangoqs]: https://docs.djangoproject.com/en/1.8/ref/models/querysets/#field-lookups
 
-## Install/setup
+## Developer setup
+
+Fork the repo on github and use you local fork as checkout source.
+
+  - Make sure you have [Docker](https://www.docker.com/get-docker)
+  - Clone your fork to local machine
+  - `git remote add upstream https://github.com/hacklab-fi/asylum.git`
+  - `docker/dev.sh`
+
+That script will build docker image and map your checkout directory there so you can
+edit the files directly in your checkout.
+
+See also "Updating upstream changes".
+
+## Install/setup in native
 
 ### General
 
@@ -135,15 +149,19 @@ server {
     }
 }</code></pre>
 
-### Updating upstream changes
+## Updating upstream changes
 
-In the `project` dir of your checkout
+In the `project` dir of your checkout (`myhackerspace` being the branch you want to
+update upstream changes to)
 
     git checkout master
     git fetch upstream
     git rebase upstream/master master
     git checkout myhackerspace
     git merge master
+
+And in the production server (or inside your Docker dev container):
+
     source venv/bin/activate
     pip install -r requirements/production.txt
     ./manage.py migrate
@@ -151,7 +169,7 @@ In the `project` dir of your checkout
     ./manage.py collectstatic --noinput
     find . -name '._*' | xargs rm ; for app in $( find . -path '*/locale' | grep -v venv/ ); do (cd $(dirname $app) && ../manage.py compilemessages ); done
 
-And assuming you have uWSGI configured `touch reload`
+And if you have uWSGI configured `touch reload`, Docker dev env reloads automatically.
 
 ## Cron jobs
 
