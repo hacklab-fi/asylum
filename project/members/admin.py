@@ -73,15 +73,14 @@ class CityListFilter(admin.SimpleListFilter):
     parameter_name = 'city'
 
     def lookups(self, request, model_admin):
-        cities = Member.objects.values_list('city',flat=True).distinct()
-        return zip(cities,cities)
+        cities = Member.objects.values_list('city', flat=True).distinct()
+        return zip(cities, cities)
 
     def queryset(self, request, queryset):
         v = self.value()
         if not v:
             return queryset
         return queryset.filter(city=v)
-
 
 
 class CreditListFilter(admin.SimpleListFilter):

@@ -75,6 +75,7 @@ class MemberType(AsylumModel):
         verbose_name = _('Member Type')
         verbose_name_plural = _('Member Types')
 
+
 revisions.default_revision_manager.register(MemberType)
 
 
@@ -99,6 +100,7 @@ class Member(MemberCommon):
         verbose_name = _('Member')
         verbose_name_plural = _('Members')
 
+
 revisions.default_revision_manager.register(Member)
 
 
@@ -111,6 +113,7 @@ class MembershipApplicationTag(AsylumModel):
     class Meta:
         verbose_name = _('Membership Application Tag')
         verbose_name_plural = _('Membership Application Tags')
+
 
 revisions.default_revision_manager.register(MembershipApplicationTag)
 
@@ -161,6 +164,7 @@ class MembershipApplication(MemberCommon):
         verbose_name = _('Membership Application')
         verbose_name_plural = _('Membership Applications')
 
+
 revisions.default_revision_manager.register(MembershipApplication)
 
 
@@ -176,5 +180,6 @@ class MemberNote(AsylumModel):
 
     def __str__(self):
         return _("Notes about %s on %s") % (self.member, self.stamp)
+
 
 revisions.default_revision_manager.register(MemberNote)

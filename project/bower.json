@@ -10,9 +10,6 @@
   "dependencies": {
     "bootstrap": "3.3.5",
     "font-awesome": "~4.4.0",
-    "jquery": "~2.1.4",
-    "jquery.scrollTo": "~2.1.2",
-    "scrollreveal": "scroll-reveal#~2.3.2",
-    "vide": "~0.4.1"
+    "jquery": "~2.1.4"
   }
 }

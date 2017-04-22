@@ -15,7 +15,11 @@ framework.
 
 """
 import os
+
 import environ
+from django.core.wsgi import get_wsgi_application
+from whitenoise.django import DjangoWhiteNoise
+
 ROOT_DIR = environ.Path(__file__) - 2  # (/a/b/myfile.py - 3 = /)
 env = environ.Env()
 # If the project root contains a .env file, read it
@@ -23,8 +27,6 @@ if os.path.isfile(str(ROOT_DIR + '.env')):
     environ.Env.read_env(str(ROOT_DIR + '.env'))
 
 
-from django.core.wsgi import get_wsgi_application
-from whitenoise.django import DjangoWhiteNoise
 
 if env.bool('USE_SENTRY', False):
     from raven.contrib.django.raven_compat.middleware.wsgi import Sentry

@@ -11,6 +11,7 @@ from .models import MembershipApplication
 def rules_accepted_proxy(msg):
     return msg % settings.APPLICATION_RULES_URL
 
+
 rules_accepted_proxy = allow_lazy(rules_accepted_proxy, str)
 
 

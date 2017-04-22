@@ -33,9 +33,6 @@ gulp.task("js", function() {
     return gulp.src([
         BOWER_PATH + "jquery/dist/jquery.min.js",
         BOWER_PATH + "bootstrap/dist/js/bootstrap.min.js",
-        BOWER_PATH + "vide/dist/jquery.vide.min.js",
-        BOWER_PATH + "scrollreveal/dist/scrollReveal.min.js",
-        BOWER_PATH + "jquery.scrollTo/jquery.scrollTo.min.js",
         STATIC_SRC_PATH + "js/asylum.js",
     ])
         .pipe(plumber({}))
