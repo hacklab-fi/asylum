@@ -128,7 +128,7 @@ def ascii2scandic(string):
 
 if __name__ == "__main__":
     transactions = []
-    with open("./testdata.nda") as f:
+    with open("./tests/testdata.nda") as f:
         for line in f:
             transaction = parseLine(line)
             if transaction is not None:
