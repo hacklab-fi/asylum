@@ -1,3 +1,4 @@
+import logging
 from decimal import Decimal
 from django.utils import timezone
 from django.conf import settings
@@ -7,6 +8,8 @@ from .models import NotificationSent
 from django.core.mail import EmailMessage
 from django.template import Context
 from django.template.loader import get_template
+
+logger = logger.getLogger()
 
 class HolviOverdueInvoicesHandler(object):
     def process_overdue(self, send=False):
@@ -37,7 +40,10 @@ class HolviOverdueInvoicesHandler(object):
             mail.body = body_template.render(Context({ "invoice": invoice, "barcode": barcode }))
             mail.to = [invoice.receiver.email]
             if send:
-                mail.send()
+                try:
+                    mail.send()
+                except Exception as e:
+                    logger.exception("Sending email failed")
 
             try:
                 notified = NotificationSent.objects.get(transaction_unique_id=invoice.code)
