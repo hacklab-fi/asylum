@@ -34,7 +34,7 @@ pytz==2017.2
 django-bootstrap3==8.2.2
 django-reversion==1.9.3
 djangorestframework==3.6.2
-Markdown==2.6.7
+Markdown==2.6.8
 django-filter==0.15.3
 djangorestframework-filters==0.9.1
 django-markdown==0.8.4
