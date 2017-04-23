@@ -7,7 +7,7 @@ markupsafe==0.23
 # Configuration
 django-environ==0.4.1
 django-secure==1.0.1
-whitenoise==3.2.2
+whitenoise==3.3.0
 
 # Forms
 django-braces==1.10.0
