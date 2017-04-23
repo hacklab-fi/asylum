@@ -14,3 +14,5 @@ def test_get_member_list_json(admin_client):
     )
     result = json.loads(response.content.decode('utf-8'))
     assert result['count'] > 0
+
+# TODO: Figure out a good way to test the HTML API browser

@@ -17,3 +17,5 @@ def test_application_approve():
 def test_get_application_form(client):
     response = client.get(reverse('members-apply'))
     assert b'Apply for membership' in response.content
+
+# TODO: Figure out a good way to submitting the form
