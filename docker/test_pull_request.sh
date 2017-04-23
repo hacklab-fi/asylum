@@ -1,5 +1,4 @@
 #!/bin/bash
-SCRIPTDIR=$(python2.7 -c 'import os,sys;print os.path.dirname(os.path.realpath(sys.argv[1]))' "$0")
 # Make sure the id is here
 if [ "$1" == "" ]
 then
@@ -8,6 +7,9 @@ then
 fi
 ID=$1
 CURRENT_BRANCH=`git rev-parse --abbrev-ref HEAD`
+
+# "realpath" utility is not installed by default on all Linuxen and we need the true path
+SCRIPTDIR=$(python2.7 -c 'import os,sys;print os.path.dirname(os.path.realpath(sys.argv[1]))' "$0")
 
 # Make sure we're in the correct place to run git commands no matter where we were called from
 cd `dirname "$SCRIPTDIR"`
@@ -41,8 +43,8 @@ set -e
 git checkout test-$ID
 git rebase upstream/master
 
-# Call the generic start script
-$SCRIPTDIR/start.sh
+# Run tests
+$SCRIPTDIR/run_unit_tests.sh
 
 git checkout $BRANCH
 git branch -D test-$ID
