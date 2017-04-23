@@ -17,5 +17,6 @@ __pycache__
 *.log
 node_modules/
 project/asylum/media/
-*_backup.tar.gz
+*_backup.*.gz
+*.sql.gz
 .git

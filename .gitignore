@@ -3,5 +3,5 @@
 # OSX stuff
 ._*
 .DS_Store
-
-
+*_backup.*.gz
+*.sql.gz
