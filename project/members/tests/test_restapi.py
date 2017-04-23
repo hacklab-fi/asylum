@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-import pytest
 import json
+
+import pytest
 from members.tests.fixtures.memberlikes import MemberFactory
 
 
