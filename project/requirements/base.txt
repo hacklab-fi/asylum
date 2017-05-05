@@ -31,7 +31,7 @@ django-autoslug==1.9.3
 pytz==2016.10
 
 # Your custom requirements go here
-django-bootstrap3==7.1.0
+django-bootstrap3==8.2.3
 django-reversion==1.9.3
 djangorestframework==3.5.3
 Markdown==2.6.7
