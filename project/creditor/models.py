@@ -64,14 +64,17 @@ revisions.default_revision_manager.register(Transaction)
 class RecurringTransaction(AsylumModel):
     MONTHLY = 1
     YEARLY = 2
+    QUARTERLY = 3
     RTYPE_READABLE = {
         MONTHLY: _("Monthly"),
         YEARLY: _("Yearly"),
+        QUARTERLY: _("Quarterly"),
     }
     # Defined separately because we cannot do [ (x, RTYPE_READABLE[x]) for x in RTYPE_READABLE ]
     RTYPE_CHOICES = (
         (MONTHLY, _("Monthly")),
         (YEARLY, _("Yearly")),
+        (QUARTERLY, _("Quarterly")),
     )
 
     start = models.DateField(_("Since"), db_index=True,  null=False, blank=False, default=timezone.now)
@@ -97,6 +100,16 @@ class RecurringTransaction(AsylumModel):
         elif self.rtype == RecurringTransaction.YEARLY:
             start = datetime.datetime(timescope.year, 1, 1)
             end = datetime.datetime(start.year, 12, calendar.monthrange(start.year, 12)[1])
+        elif self.rtype == RecurringTransaction.QUARTERLY:
+            if timescope.month in range(1,4):
+                start = datetime.datetime(timescope.year, 1, 1)
+            elif timescope.month in range(4,7):
+                start = datetime.datetime(timescope.year, 4, 1)
+            elif timescope.month in range(7,10):
+                start = datetime.datetime(timescope.year, 7, 1)
+            else:
+                start = datetime.datetime(timescope.year, 10, 1)
+            end = datetime.datetime(start.year, start.month, calendar.monthrange(start.year, start.month)[1])
         else:
             raise NotImplementedError("Not implemented for %s (%d)" % (RecurringTransaction.RTYPE_READABLE[self.rtype], self.rtype))
         return (timezone.make_aware(start), timezone.make_aware(end))

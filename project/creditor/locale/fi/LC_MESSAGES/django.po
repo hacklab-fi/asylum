@@ -127,6 +127,10 @@ msgstr "Kuukausittain"
 msgid "Yearly"
 msgstr "Vuosittain"
 
+#: models.py:61 models.py:66
+msgid "Quarterly"
+msgstr "Vuosineljänneksittäin"
+
 #: models.py:68
 msgid "Since"
 msgstr "Alkaen"
