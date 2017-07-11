@@ -30,7 +30,7 @@ class TransactionSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Transaction
-
+        fields = '__all__'
 
 class TransactionFilter(filters.FilterSet):
 
@@ -56,6 +56,7 @@ class RecurringTransactionSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = RecurringTransaction
+        fields = '__all__'
 
 
 class RecurringTransactionFilter(filters.FilterSet):
