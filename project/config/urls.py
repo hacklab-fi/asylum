@@ -39,6 +39,7 @@ urlpatterns = [
     url(r'^velkoja/', include('velkoja.urls')),
 
     url(r'^api/', include(router.urls)),
+    url(r'^api/members/sinlist', members.rest.MemberSinView.as_view()),
     url(r'^api-auth/get-token/', authtoken_views.obtain_auth_token),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url('^markdown/', include('django_markdown.urls')),
