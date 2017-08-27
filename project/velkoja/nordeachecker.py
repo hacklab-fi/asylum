@@ -48,7 +48,8 @@ class NordeaOverdueInvoicesHandler(object):
 
     def _list_member_overdue(self, member, cutoff_date):
         """Figure out which debits of a given member are still unpaid"""
-        base_qs = member.creditor_transactions.exclude(**HOLVI_EXCLUDE_KWARGS).filter(stamp__lte=cutoff_date)
+        cutoff_datetime = timezone.make_aware(datetime.datetime.combine(cutoff_date, datetime.datetime.min.time()))
+        base_qs = member.creditor_transactions.exclude(**HOLVI_EXCLUDE_KWARGS).filter(stamp__lte=cutoff_datetime)
         refnos = [x['reference'] for x in
                   base_qs.order_by('reference').distinct('reference').values('reference')]
         ret = []
