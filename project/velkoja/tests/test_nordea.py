@@ -149,3 +149,31 @@ def test_nonuniform_overdue(nonuniform_transactions_zerosum):
     assert overdue
     # The overdue one should be the one with the newest stamp
     assert overdue[0].unique_id == newest.unique_id
+
+
+@pytest.mark.django_db
+def test_nonuniform_overdue_emails(nonuniform_transactions_zerosum, mailoutbox):
+    # FIXME: can we avoid this copy-paste with fixture or something ?
+    member, cutoff = nonuniform_transactions_zerosum
+    old_count = member.creditor_transactions.count()
+    assert old_count > 0
+    newest = member.creditor_transactions.filter(amount__lt=0).order_by('-stamp')[0]
+    oldest = member.creditor_transactions.filter(amount__lt=0).order_by('stamp')[0]
+    debit = TransactionFactory(
+        owner=member,
+        reference=oldest.reference,
+        amount=oldest.amount,
+        tag=oldest.tag,
+        stamp=oldest.stamp - datetime.timedelta(days=60)
+    )
+    assert member.creditor_transactions.count() > old_count
+    if not settings.NORDEA_BARCODE_IBAN:
+        # Example IBAN from http://www.xe.com/ibancalculator/sample/?ibancountry=finland
+        settings.NORDEA_BARCODE_IBAN = 'FI21 1234 5600 0007 85'
+    handler = NordeaOverdueInvoicesHandler()
+    assert (len(mailoutbox) == 0)
+    handler.process_overdue(send=True)
+    assert (len(mailoutbox) == 1)
+    m = mailoutbox[0]
+    assert member.email in m.to
+    assert newest.reference in m.body
