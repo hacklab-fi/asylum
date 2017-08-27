@@ -14,7 +14,7 @@ from velkoja.nordeachecker import NordeaOverdueInvoicesHandler
 
 
 @pytest.mark.django_db
-@pytest.fixture(scope="module")
+@pytest.fixture
 def basic_setup():
     generate_standard_set()
     member = MemberFactory()
@@ -22,7 +22,7 @@ def basic_setup():
 
 
 @pytest.mark.django_db
-@pytest.fixture(scope="module")
+@pytest.fixture
 def uniform_transactions_zerosum(basic_setup):
     member = basic_setup
     cutoff = datetime.datetime.now().date() - datetime.timedelta(days=settings.VELKOJA_NORDEACHECKER_GRACE_DAYS+2)
@@ -45,17 +45,34 @@ def uniform_transactions_zerosum(basic_setup):
                 tag = tag,
                 stamp = datetime.datetime.combine(credit_date, datetime.datetime.min.time())
             )
-    return member
-
-
-@pytest.mark.django_db
-def test_transactions_exist(uniform_transactions_zerosum):
-    member = uniform_transactions_zerosum
-    assert member.creditor_transactions.count() > 0
+    return (member, cutoff)
 
 
 @pytest.mark.django_db
 def test_no_overdue(uniform_transactions_zerosum):
+    member, cutoff = uniform_transactions_zerosum
+    assert member.creditor_transactions.count() > 0
     handler = NordeaOverdueInvoicesHandler()
     overdue = handler.list_overdue()
     assert not overdue
+
+
+@pytest.mark.django_db
+def test_uniform_overdue(uniform_transactions_zerosum):
+    member, cutoff = uniform_transactions_zerosum
+    old_count = member.creditor_transactions.count()
+    assert old_count > 0
+    templ = member.creditor_transactions.filter(amount__lt=0).order_by('-stamp')[0]
+    debit = TransactionFactory(
+        owner=member,
+        reference=templ.reference,
+        amount=templ.amount,
+        tag=templ.tag,
+        stamp=templ.stamp + datetime.timedelta(days=2)
+    )
+    print(debit, debit.unique_id)
+    assert member.creditor_transactions.count() > old_count
+    handler = NordeaOverdueInvoicesHandler()
+    overdue = handler.list_overdue()
+    assert overdue
+    assert overdue[0].unique_id == debit.unique_id
