@@ -55,10 +55,12 @@ class NordeaOverdueInvoicesHandler(object):
         for refno in refnos:
             refno_qs = base_qs.filter(reference=refno)
             refno_credits = refno_qs.filter(amount__gte=0).aggregate(models.Sum('amount'))['amount__sum']
+            if refno_credits is None:
+                refno_credits = Decimal('0')
             refno_debits = refno_qs.filter(amount__lt=0).order_by('stamp')
             for transaction in refno_debits:
                 refno_credits += transaction.amount  # remember: the amount is negative
-                if refno_credits > 0:
+                if refno_credits >= 0:
                     # While we have not expended all credit, keep spending
                     continue
                 # After no more credits are left, put rest of transactions to the unpaid pile.
