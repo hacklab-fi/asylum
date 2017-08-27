@@ -5,9 +5,9 @@ Hei,
 Seuraava maksu on kirjanpitomme mukaan maksamatta
 
 Kuvaus: {{ transaction.tag }}
-Eräpäivä: {{ transaction.stamp.isoformat }}
+Eräpäivä: {{ transaction.stamp.date.isoformat }}
 Viite: {{ transaction.reference }}
-Summa: {{ -transaction.sum }} EUR
+Summa: {{ due }} EUR
 Tilinro: {{ iban }}
 
 {% if barcode %}
@@ -23,9 +23,9 @@ Hey,
 According to our bookkeeping, the following payment is not made
 
 Description: {{ transaction.tag }}
-Due date: {{ transaction.stamp.isoformat }}
+Due date: {{ transaction.stamp.date.isoformat }}
 Reference: {{ transaction.reference }}
-Amount due: {{ -transaction.sum }} EUR
+Amount due: {{ due }} EUR
 IBAN Account number: {{ iban }}
 
 {% if barcode %}

@@ -9,6 +9,9 @@ from django.views import generic
 from holviapi.utils import barcode as bank_barcode
 from holviapp.utils import list_invoices
 
+from creditor.models import Transaction
+
+from .nordeachecker import HOLVI_EXCLUDE_KWARGS
 
 class HolviEmailPreviewView(generic.TemplateView):
     template_name = "velkoja/holvi_preview.html"
@@ -50,10 +53,22 @@ class NordeaEmailPreviewView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        barcode_iban = settings.HOLVI_BARCODE_IBAN
+        barcode_iban = settings.NORDEA_BARCODE_IBAN
         body_template = get_template('velkoja/nordea_notification_email_body.jinja')
         subject_template = get_template('velkoja/nordea_notification_email_subject.jinja')
-        raise NotImplemented()
-        # TODO: See the todo on HolviEmailPreviewView about having one method for email formatting.
 
+        transaction = Transaction.objects.exclude(**HOLVI_EXCLUDE_KWARGS).filter(amount__lt=0).order_by('-stamp')[0]
+
+        barcode = None
+        if barcode_iban:
+            barcode = bank_barcode(barcode_iban, transaction.reference, -transaction.amount)
+
+        mail = EmailMessage()
+        mail.to = [transaction.owner.email]
+        render_context = Context({
+            "transaction": transaction, "due": -transaction.amount, "barcode": barcode, "iban": barcode_iban,
+        })
+        mail.subject = subject_template.render(render_context).strip()
+        mail.body = body_template.render(render_context)
+        ctx['email'] = mail
         return ctx

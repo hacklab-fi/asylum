@@ -90,8 +90,12 @@ class NordeaOverdueInvoicesHandler(object):
             mail.to = [transaction.owner.email]
             if settings.VELKOJA_CC_EMAIL:
                 mail.cc = [settings.VELKOJA_CC_EMAIL]
-            mail.subject = subject_template.render(Context({"transaction": transaction, "barcode": barcode})).strip()
-            mail.body = body_template.render(Context({"transaction": transaction, "barcode": barcode}))
+
+            render_context = Context({
+                "transaction": transaction, "due": -transaction.amount, "barcode": barcode, "iban": barcode_iban,
+            })
+            mail.subject = subject_template.render(render_context).strip()
+            mail.body = body_template.render(render_context)
             if send:
                 mail.send()
 
