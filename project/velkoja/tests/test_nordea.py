@@ -108,7 +108,6 @@ def test_uniform_overdue(uniform_transactions_zerosum):
         tag=templ.tag,
         stamp=templ.stamp + datetime.timedelta(days=2)
     )
-    print(debit, debit.unique_id)
     assert member.creditor_transactions.count() > old_count
     handler = NordeaOverdueInvoicesHandler()
     overdue = handler.list_overdue()
@@ -128,3 +127,25 @@ def test_nonuniform_no_overdue(nonuniform_transactions_zerosum):
     handler = NordeaOverdueInvoicesHandler()
     overdue = handler.list_overdue()
     assert not overdue
+
+
+@pytest.mark.django_db
+def test_nonuniform_overdue(nonuniform_transactions_zerosum):
+    member, cutoff = nonuniform_transactions_zerosum
+    old_count = member.creditor_transactions.count()
+    assert old_count > 0
+    newest = member.creditor_transactions.filter(amount__lt=0).order_by('-stamp')[0]
+    oldest = member.creditor_transactions.filter(amount__lt=0).order_by('stamp')[0]
+    debit = TransactionFactory(
+        owner=member,
+        reference=oldest.reference,
+        amount=oldest.amount,
+        tag=oldest.tag,
+        stamp=oldest.stamp - datetime.timedelta(days=60)
+    )
+    assert member.creditor_transactions.count() > old_count
+    handler = NordeaOverdueInvoicesHandler()
+    overdue = handler.list_overdue()
+    assert overdue
+    # The overdue one should be the one with the newest stamp
+    assert overdue[0].unique_id == newest.unique_id
