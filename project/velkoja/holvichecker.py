@@ -12,7 +12,7 @@ from holviapp.utils import list_invoices
 
 from .models import NotificationSent
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 
 class HolviOverdueInvoicesHandler(object):
