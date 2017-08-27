@@ -101,6 +101,7 @@ FIXTURE_DIRS = []
 
 # EMAIL CONFIGURATION
 # ------------------------------------------------------------------------------
+DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL', default='asylum <noreply@example.com>')
 EMAIL_BACKEND = env('DJANGO_EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
 
 # MANAGER CONFIGURATION
