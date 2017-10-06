@@ -6,6 +6,7 @@ Seuraava lasku holvissa on kirjanpitomme mukaan maksamatta
 
 Kuvaus: {{ invoice.subject }}
 Eräpäivä: {{ invoice.due_date.isoformat }}
+Tilinumero: {{ iban }}
 Viite: {{ invoice.rf_reference }}
 Summa: {{ invoice.due_sum }}{{ invoice.currency }}
 
@@ -26,6 +27,7 @@ According to our bookkeeping in Holvi, the following invoice is unpaid
 
 Description: {{ invoice.subject }}
 Due date: {{ invoice.due_date.isoformat }}
+IBAN (account no): {{ iban }}
 Reference: {{ invoice.rf_reference }}
 Amount due: {{ invoice.due_sum }}{{ invoice.currency }}
 

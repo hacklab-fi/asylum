@@ -35,8 +35,10 @@ class HolviOverdueInvoicesHandler(object):
             if send:
                 invoice.send()
 
+            template_iban = invoice.iban
             barcode = None
             if barcode_iban:
+                template_iban = barcode_iban
                 barcode = bank_barcode(barcode_iban, invoice.rf_reference, Decimal(invoice.due_sum))
 
             mail = EmailMessage()
@@ -44,8 +46,13 @@ class HolviOverdueInvoicesHandler(object):
             mail.to = [invoice.receiver.email]
             if settings.VELKOJA_CC_EMAIL:
                 mail.cc = [settings.VELKOJA_CC_EMAIL]
-            mail.subject = subject_template.render(Context({"invoice": invoice, "barcode": barcode})).strip()
-            mail.body = body_template.render(Context({"invoice": invoice, "barcode": barcode}))
+            ctx = Context({
+                "invoice": invoice,
+                "barcode": barcode,
+                "iban": template_iban,
+            })
+            mail.subject = subject_template.render(ctx).strip()
+            mail.body = body_template.render(ctx)
 
             if send:
                 try:
