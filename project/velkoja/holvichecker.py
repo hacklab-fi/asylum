@@ -18,8 +18,8 @@ logger = logging.getLogger(__name__)
 class HolviOverdueInvoicesHandler(object):
     def process_overdue(self, send=False):
         barcode_iban = settings.HOLVI_BARCODE_IBAN
-        body_template = get_template('velkoja/notification_email_body.jinja')
-        subject_template = get_template('velkoja/notification_email_subject.jinja')
+        body_template = get_template('velkoja/holvi_notification_email_body.jinja')
+        subject_template = get_template('velkoja/holvi_notification_email_subject.jinja')
         overdue = list_invoices(status='overdue')
         ret = []
         for invoice in overdue:
