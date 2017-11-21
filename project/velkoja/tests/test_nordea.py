@@ -90,6 +90,27 @@ def nonuniform_transactions_zerosum(basic_setup):
 def test_uniform_no_overdue(uniform_transactions_zerosum):
     member, cutoff = uniform_transactions_zerosum
     assert member.creditor_transactions.count() > 0
+    assert member.credit >= 0
+    handler = NordeaOverdueInvoicesHandler()
+    overdue = handler.list_overdue()
+    assert not overdue
+
+
+@pytest.mark.django_db
+def test_uniform_no_overdue_after_cutoff(uniform_transactions_zerosum):
+    member, cutoff = uniform_transactions_zerosum
+    old_count = member.creditor_transactions.count()
+    assert old_count > 0
+    templ = member.creditor_transactions.filter(amount__lt=0).order_by('-stamp')[0]
+    debit = TransactionFactory(
+        owner=member,
+        reference=templ.reference,
+        amount=templ.amount,
+        tag=templ.tag,
+        stamp=cutoff + datetime.timedelta(days=20)
+    )
+    assert member.creditor_transactions.count() > old_count
+    assert member.credit < 0
     handler = NordeaOverdueInvoicesHandler()
     overdue = handler.list_overdue()
     assert not overdue
@@ -109,6 +130,7 @@ def test_uniform_overdue(uniform_transactions_zerosum):
         stamp=templ.stamp + datetime.timedelta(days=2)
     )
     assert member.creditor_transactions.count() > old_count
+    assert member.credit < 0
     handler = NordeaOverdueInvoicesHandler()
     overdue = handler.list_overdue()
     assert overdue
@@ -119,6 +141,7 @@ def test_uniform_overdue(uniform_transactions_zerosum):
 def test_nonuniform_no_overdue(nonuniform_transactions_zerosum):
     member, cutoff = nonuniform_transactions_zerosum
     assert member.creditor_transactions.count() > 0
+    assert member.credit >= 0
     # Make sure the distribution is non-uniform
     debits = member.creditor_transactions.filter(amount__lt=0)
     credits = member.creditor_transactions.filter(amount__gt=0)
@@ -144,6 +167,7 @@ def test_nonuniform_overdue(nonuniform_transactions_zerosum):
         stamp=oldest.stamp - datetime.timedelta(days=60)
     )
     assert member.creditor_transactions.count() > old_count
+    assert member.credit < 0
     handler = NordeaOverdueInvoicesHandler()
     overdue = handler.list_overdue()
     assert overdue
