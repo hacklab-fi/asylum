@@ -81,6 +81,11 @@ class NordeaOverdueInvoicesHandler(object):
                 notified = NotificationSent.objects.get(transaction_unique_id=transaction.unique_id)
                 if (timezone.now() - notified.stamp).days < settings.HOLVI_NOTIFICATION_INTERVAL_DAYS:
                     continue
+                # Also check that we have new transactions since the notification
+                if UploadedTransaction.objects.count():
+                    last_transaction = UploadedTransaction.objects.order_by('-last_transaction')[0].last_transaction
+                    if last_transaction < notified.stamp:
+                        continue
 
             barcode = None
             if barcode_iban:
