@@ -25,7 +25,6 @@ HOLVI_EXCLUDE_KWARGS = {"reference__startswith": "RF"}
 class NordeaOverdueInvoicesHandler(object):
     def list_overdue(self):
         """Gets list of overdue Nordea transactions"""
-        # TODO: Heuristics to determine which transactions are not paid...
         gd = settings.VELKOJA_NORDEACHECKER_GRACE_DAYS
         if not UploadedTransaction.objects.count():
             logger.warning("No uploaded transactions found defaulting to configured grace period of {} days".format(gd))
@@ -49,7 +48,7 @@ class NordeaOverdueInvoicesHandler(object):
     def _list_member_overdue(self, member, cutoff_date):
         """Figure out which debits of a given member are still unpaid"""
         cutoff_datetime = timezone.make_aware(datetime.datetime.combine(cutoff_date, datetime.datetime.min.time()))
-        base_qs = member.creditor_transactions.exclude(**HOLVI_EXCLUDE_KWARGS).filter(stamp__lte=cutoff_datetime)
+        base_qs = member.creditor_transactions.exclude(**HOLVI_EXCLUDE_KWARGS)
         refnos = [x['reference'] for x in
                   base_qs.order_by('reference').distinct('reference').values('reference')]
         ret = []
@@ -58,7 +57,7 @@ class NordeaOverdueInvoicesHandler(object):
             refno_credits = refno_qs.filter(amount__gte=0).aggregate(models.Sum('amount'))['amount__sum']
             if refno_credits is None:
                 refno_credits = Decimal('0')
-            refno_debits = refno_qs.filter(amount__lt=0).order_by('stamp')
+            refno_debits = refno_qs.filter(amount__lt=0, stamp__lte=cutoff_datetime).order_by('stamp')
             for transaction in refno_debits:
                 refno_credits += transaction.amount  # remember: the amount is negative
                 if refno_credits >= 0:
