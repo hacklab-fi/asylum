@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from decimal import Decimal
 
+from creditor.models import Transaction
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.template import Context
@@ -9,9 +10,8 @@ from django.views import generic
 from holviapi.utils import barcode as bank_barcode
 from holviapp.utils import list_invoices
 
-from creditor.models import Transaction
-
 from .nordeachecker import HOLVI_EXCLUDE_KWARGS
+
 
 class HolviEmailPreviewView(generic.TemplateView):
     template_name = "velkoja/holvi_preview.html"

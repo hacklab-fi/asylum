@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
 import datetime
+
 import pytest
-
-
-from django.conf import settings
-
-from creditor.tests.fixtures.tags import generate_standard_set
 from creditor.models import TransactionTag
+from creditor.tests.fixtures.tags import generate_standard_set
 from creditor.tests.fixtures.transactions import TransactionFactory
+from django.conf import settings
 from members.tests.fixtures.memberlikes import MemberFactory
-
 from velkoja.nordeachecker import NordeaOverdueInvoicesHandler
 
 
@@ -25,26 +22,26 @@ def basic_setup():
 @pytest.fixture
 def uniform_transactions_zerosum(basic_setup):
     member = basic_setup
-    cutoff = datetime.datetime.now().date() - datetime.timedelta(days=settings.VELKOJA_NORDEACHECKER_GRACE_DAYS+2)
+    cutoff = datetime.datetime.now().date() - datetime.timedelta(days=settings.VELKOJA_NORDEACHECKER_GRACE_DAYS + 2)
     tag = TransactionTag.objects.get(tmatch='2')
     months = 6
-    for refno, amount in [ ('109', 40), ('107', 20) ]:
+    for refno, amount in [('109', 40), ('107', 20)]:
         for x in range(months):
-            credit_date = cutoff - datetime.timedelta(days=x*30)
+            credit_date = cutoff - datetime.timedelta(days=x * 30)
             debit_date = credit_date - datetime.timedelta(days=3)
             debit = TransactionFactory(
-                owner = member,
-                reference = refno,
-                amount = -amount,
-                tag = tag,
-                stamp = datetime.datetime.combine(debit_date, datetime.datetime.min.time())
+                owner=member,
+                reference=refno,
+                amount=-amount,
+                tag=tag,
+                stamp=datetime.datetime.combine(debit_date, datetime.datetime.min.time())
             )
             credit = TransactionFactory(
-                owner = member,
-                reference = refno,
-                amount = amount,
-                tag = tag,
-                stamp = datetime.datetime.combine(credit_date, datetime.datetime.min.time())
+                owner=member,
+                reference=refno,
+                amount=amount,
+                tag=tag,
+                stamp=datetime.datetime.combine(credit_date, datetime.datetime.min.time())
             )
     return (member, cutoff)
 
@@ -53,34 +50,34 @@ def uniform_transactions_zerosum(basic_setup):
 @pytest.fixture
 def nonuniform_transactions_zerosum(basic_setup):
     member = basic_setup
-    cutoff = datetime.datetime.now().date() - datetime.timedelta(days=settings.VELKOJA_NORDEACHECKER_GRACE_DAYS+2)
+    cutoff = datetime.datetime.now().date() - datetime.timedelta(days=settings.VELKOJA_NORDEACHECKER_GRACE_DAYS + 2)
     tag = TransactionTag.objects.get(tmatch='2')
     months = 6
-    for refno, amount in [ ('109', 40), ('107', 20) ]:
+    for refno, amount in [('109', 40), ('107', 20)]:
         for x in range(months):
-            debit_date = cutoff - datetime.timedelta(days=x*30)
+            debit_date = cutoff - datetime.timedelta(days=x * 30)
             debit = TransactionFactory(
-                owner = member,
-                reference = refno,
-                amount = -amount,
-                tag = tag,
-                stamp = datetime.datetime.combine(debit_date, datetime.datetime.min.time())
+                owner=member,
+                reference=refno,
+                amount=-amount,
+                tag=tag,
+                stamp=datetime.datetime.combine(debit_date, datetime.datetime.min.time())
             )
-        credit_date = cutoff - datetime.timedelta(days=months/3*30)
-        first_amount = amount*(months/3)
+        credit_date = cutoff - datetime.timedelta(days=months / 3 * 30)
+        first_amount = amount * (months / 3)
         credit = TransactionFactory(
-            owner = member,
-            reference = refno,
-            amount = first_amount,
-            tag = tag,
-            stamp = datetime.datetime.combine(credit_date, datetime.datetime.min.time())
+            owner=member,
+            reference=refno,
+            amount=first_amount,
+            tag=tag,
+            stamp=datetime.datetime.combine(credit_date, datetime.datetime.min.time())
         )
         credit2 = TransactionFactory(
-            owner = member,
-            reference = refno,
-            amount = months*amount-first_amount,
-            tag = tag,
-            stamp = datetime.datetime.combine(cutoff, datetime.datetime.min.time())
+            owner=member,
+            reference=refno,
+            amount=months * amount - first_amount,
+            tag=tag,
+            stamp=datetime.datetime.combine(cutoff, datetime.datetime.min.time())
         )
 
     return (member, cutoff)
