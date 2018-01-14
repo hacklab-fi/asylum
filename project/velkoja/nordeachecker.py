@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-import logging
 import datetime
-
+import logging
 from decimal import Decimal
 
 from django.conf import settings
@@ -13,7 +12,6 @@ from django.utils import timezone
 from holviapi.utils import barcode as bank_barcode
 from members.models import Member
 from ndaparser.models import UploadedTransaction
-
 
 from .models import NotificationSent
 
@@ -83,7 +81,7 @@ class NordeaOverdueInvoicesHandler(object):
                 # Also check that we have new transactions since the notification
                 if UploadedTransaction.objects.count():
                     last_transaction = UploadedTransaction.objects.order_by('-last_transaction')[0].last_transaction
-                    if last_transaction < notified.stamp:
+                    if last_transaction < notified.stamp.date():
                         continue
 
             barcode = None
