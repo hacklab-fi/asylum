@@ -20,7 +20,7 @@ docker inspect --type=image asylum_dev >/dev/null 2>&1
 if [ "$?" != "0" ]
 then
     set -e
-    docker build -t  .
+    docker build -t asylum_dev .
 fi
 set -e
 echo "Starting devel server."

@@ -1,17 +1,24 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 ENV PYTHONUNBUFFERED 1
 EXPOSE 8000
+ENV LC_ALL "en_US.UTF-8"
+ENV LC_CTYPE en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+RUN ln -fs /usr/share/zoneinfo/Europe/Helsinki /etc/localtime
 
 # Install basics
-RUN apt-get update && apt-get upgrade -y && apt-get install -y curl sudo
-RUN curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash
-RUN apt-get install -y build-essential postgresql \
-    git python-dev python3-dev python-virtualenv \
-    python3-pip python-pip graphviz-dev libpq-dev nodejs
+RUN apt update
+RUN apt upgrade -y
+RUN apt install -yq curl sudo postgresql git python3-dev virtualenv python3-virtualenv python3-pip npm locales
 
+RUN locale-gen en_US.UTF-8
+
+# build-essential graphviz-dev libpq-dev nodejs python-pip python-dev python-virtualenv
 # Install maildump
 EXPOSE 1080
-RUN pip install maildump
+# Installation fails at the moment
+RUN pip3 install maildump
 
 # Create database
 USER postgres
@@ -37,18 +44,13 @@ RUN awk '/^\s*[^#]/' requirements.apt | xargs -r -- sudo apt-get install --no-in
 
 # Configure locales
 USER root
-RUN locale-gen en_US.UTF-8
-ENV LC_CTYPE en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
 
 # Install python requirements
 RUN virtualenv -p `which python3` ../asylum-venv
 COPY project/requirements /opt/asylum/requirements/
 RUN . ../asylum-venv/bin/activate && \
-    pip install pip --upgrade && \
-    pip install packaging appdirs urllib3[secure] && \
-    pip install -r requirements/local.txt && \
+    pip3 install packaging appdirs urllib3[secure] && \
+    pip3 install -r requirements/local.txt && \
     chown -R asylum:asylum ../asylum-venv && \
     true
 
