@@ -61,6 +61,9 @@ class NordeaOverdueInvoicesHandler(object):
                 if refno_credits >= 0:
                     # While we have not expended all credit, keep spending
                     continue
+                # Exclude configured transaction tags from the overdue pile
+                if transaction.tag.label in settings.VELKOJA_EXCLUDE_TAGS:
+                    continue
                 # After no more credits are left, put rest of transactions to the unpaid pile.
                 ret.append(transaction)
 

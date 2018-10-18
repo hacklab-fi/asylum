@@ -3,7 +3,7 @@ import datetime
 
 import pytest
 from creditor.models import TransactionTag
-from creditor.tests.fixtures.tags import generate_standard_set
+from creditor.tests.fixtures.tags import TransactionTagFactory, generate_standard_set
 from creditor.tests.fixtures.transactions import TransactionFactory
 from django.conf import settings
 from members.tests.fixtures.memberlikes import MemberFactory
@@ -81,6 +81,48 @@ def nonuniform_transactions_zerosum(basic_setup):
         )
 
     return (member, cutoff)
+
+
+@pytest.mark.django_db
+def test_nonuniform_adjustment_zerosum(nonuniform_transactions_zerosum):
+    member, cutoff = nonuniform_transactions_zerosum
+    adjtag = TransactionTagFactory(label='Adjustment', tmatch='')
+    all_debits_as_list = list(member.creditor_transactions.filter(amount__lt=0).order_by('stamp'))
+    first_half = all_debits_as_list[:int(len(all_debits_as_list) / 2)]
+    credit_sum = 0
+    for trans in first_half:
+        credit_sum += trans.amount
+        trans.delete()
+
+    newest = member.creditor_transactions.filter(amount__lt=0).order_by('-stamp')[0]
+    oldest = member.creditor_transactions.filter(amount__lt=0).order_by('stamp')[0]
+
+    odd_sum = TransactionFactory(
+        owner=member,
+        reference=oldest.reference + ' adjust',
+        amount=credit_sum,
+        tag=adjtag,
+        stamp=oldest.stamp
+    )
+
+    debit = TransactionFactory(
+        owner=member,
+        reference=newest.reference,
+        amount=newest.amount,
+        tag=newest.tag,
+        stamp=cutoff + datetime.timedelta(days=20)
+    )
+
+    # First check we have overdue without tag filter
+    handler = NordeaOverdueInvoicesHandler()
+    overdue = handler.list_overdue()
+    assert overdue
+
+    # Then check that we don't have overdue with tag filter
+    settings.VELKOJA_EXCLUDE_TAGS = ['Adjustment']
+    handler = NordeaOverdueInvoicesHandler()
+    overdue = handler.list_overdue()
+    assert not overdue
 
 
 @pytest.mark.django_db
