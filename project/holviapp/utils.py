@@ -3,6 +3,7 @@ import holviapi
 import holvirc
 from django.conf import settings
 
+CONNECTION_SINGLETON = None
 
 def apikey_configured():
     """Check if we have apikey"""
@@ -21,12 +22,16 @@ def api_configured():
 
 def get_connection():
     """Shorhand connection singleton getter"""
+    global CONNECTION_SINGLETON
+    if CONNECTION_SINGLETON is not None:
+        return CONNECTION_SINGLETON
     if not api_configured():
         raise RuntimeError('Holvi API is not configured')
     if userauth_configured():
-        return holvirc.Connection.singleton(settings.HOLVI_POOL, settings.HOLVI_USER, settings.HOLVI_PASSWORD)
+        CONNECTION_SINGLETON = holvirc.Connection.singleton(settings.HOLVI_POOL, settings.HOLVI_USER, settings.HOLVI_PASSWORD)
     if apikey_configured():
-        return holviapi.Connection.singleton(settings.HOLVI_POOL, settings.HOLVI_APIKEY)
+        CONNECTION_SINGLETON = holviapi.Connection.singleton(settings.HOLVI_POOL, settings.HOLVI_APIKEY)
+    return CONNECTION_SINGLETON
 
 
 def get_invoiceapi():
