@@ -24,13 +24,20 @@ class EmailPreviewView(generic.TemplateView):
             if float(invoice._jsondata.get('credited_sum')) > 0:
                 continue
 
+            template_iban = invoice.iban
             barcode = None
             if barcode_iban:
+                template_iban = barcode_iban
                 barcode = bank_barcode(barcode_iban, invoice.rf_reference, Decimal(invoice.due_sum))
 
             mail = EmailMessage()
-            mail.subject = subject_template.render(Context({"invoice": invoice, "barcode": barcode})).strip()
-            mail.body = body_template.render(Context({"invoice": invoice, "barcode": barcode}))
+            jinja_ctx = Context({
+                "invoice": invoice,
+                "barcode": barcode,
+                "iban": template_iban,
+            })
+            mail.subject = subject_template.render(jinja_ctx).strip()
+            mail.body = body_template.render(jinja_ctx)
             mail.to = [invoice.receiver.email]
             ctx['email'] = mail
             break
