@@ -25,7 +25,8 @@ def quarter_start_end(timescope=None):
         start = datetime.datetime(timescope.year, 7, 1).date()
     else:
         start = datetime.datetime(timescope.year, 10, 1).date()
-    end = datetime.datetime(start.year, start.month + 3, calendar.monthrange(start.year, start.month)[1]).date()
+    end_month = start.month + 3
+    end = datetime.datetime(start.year, end_month, calendar.monthrange(start.year, end_month)[1]).date()
     return (start, end)
 
 def month_start_end(timescope=None):

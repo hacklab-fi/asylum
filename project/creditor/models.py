@@ -109,7 +109,8 @@ class RecurringTransaction(AsylumModel):
                 start = datetime.datetime(timescope.year, 7, 1)
             else:
                 start = datetime.datetime(timescope.year, 10, 1)
-            end = datetime.datetime(start.year, start.month + 3, calendar.monthrange(start.year, start.month)[1])
+            end_month = start.month + 3
+            end = datetime.datetime(start.year, end_month, calendar.monthrange(start.year, end_month)[1])
         else:
             raise NotImplementedError("Not implemented for %s (%d)" % (RecurringTransaction.RTYPE_READABLE[self.rtype], self.rtype))
         return (timezone.make_aware(start), timezone.make_aware(end))
