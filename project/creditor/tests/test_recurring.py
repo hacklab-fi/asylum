@@ -4,7 +4,7 @@ import datetime
 
 import pytest
 import pytz
-from creditor.tests.fixtures.recurring import KeyholderfeeFactory, MembershipfeeFactory
+from creditor.tests.fixtures.recurring import KeyholderfeeFactory, MembershipfeeFactory, QuarterlyFactory
 
 
 def year_start_end(timescope=None):
