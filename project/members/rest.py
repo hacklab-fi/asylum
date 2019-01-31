@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import rest_framework_filters as filters
 from django.db import models
-from rest_framework import serializers, viewsets
+from rest_framework import serializers, viewsets, views, response
 
 from .models import Member, MembershipApplication, MembershipApplicationTag, MemberType
 
@@ -58,7 +58,6 @@ class MemberSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class MemberFilter(filters.FilterSet):
-    # TODO: figure out how to implement the credit < 0 filter here
 
     class Meta:
         model = Member
@@ -78,6 +77,18 @@ class MemberViewSet(viewsets.ModelViewSet):
     serializer_class = MemberSerializer
     queryset = Member.objects.all().annotate(credit_annotated=models.Sum('creditor_transactions__amount'))
     filter_class = MemberFilter
+
+
+class MemberSinView(views.APIView):
+    def get_queryset(self):
+        members = Member.objects.all().annotate(credit_annotated=models.Sum('creditor_transactions__amount'))
+        members = members.filter(credit_annotated__lt=0).order_by('credit_annotated')
+        return members
+
+    def get(self, request, format=None):
+        members = self.get_queryset()
+        serializer = MemberSerializer(members, many=True, context={'request': request})
+        return response.Response(serializer.data)
 
 
 class MembershipApplicationSerializer(serializers.HyperlinkedModelSerializer):
