@@ -15,7 +15,10 @@ venv/
 *.pyc
 __pycache__
 *.log
-node_modules/
+node_modules
+bower_components
+project/node_modules/
+project/bower_components/
 project/asylum/media/
 *_backup.*.gz
 *.sql.gz
