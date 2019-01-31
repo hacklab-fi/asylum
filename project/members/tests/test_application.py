@@ -18,7 +18,7 @@ def test_application_approve():
 @pytest.mark.django_db
 def test_get_application_form(client):
     response = client.get(reverse('members-apply'))
-    assert b'Apply for membership' in response.content
+    assert b'name="fname"' in response.content
 
 # TODO: Figure out a good way to submitting the form
 
