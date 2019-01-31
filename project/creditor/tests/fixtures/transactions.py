@@ -35,7 +35,7 @@ class TransactionFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = 'creditor.Transaction'
-        django_get_or_create = ('owner', 'tag', 'amount')
+        django_get_or_create = ('owner', 'tag', 'amount', 'reference', 'stamp')
 
     stamp = factory.LazyAttribute(lambda t: factory.fuzzy.FuzzyDateTime(datetime.datetime.combine(t.owner.accepted, datetime.datetime.min.time()).replace(tzinfo=pytz.utc)).fuzz())
     amount = factory.fuzzy.FuzzyInteger(-40, 40, 5)
