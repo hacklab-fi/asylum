@@ -36,7 +36,7 @@ class MembershipfeeFactory(RecurringTransactionFactory):
 
 class QuarterlyFactory(RecurringTransactionFactory):
     tag = factory.SubFactory(TransactionTagFactory, label= 'Quarterly fee', tmatch='3')
-    rtype = RecurringTransaction.Quarterly
+    rtype = RecurringTransaction.QUARTERLY
     amount = amount = factory.fuzzy.FuzzyInteger(-40, -20, 10)
 
 
