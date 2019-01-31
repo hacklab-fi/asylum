@@ -31,6 +31,7 @@ class MembershipApplicationTagSerializer(serializers.HyperlinkedModelSerializer)
 
     class Meta:
         model = MembershipApplicationTag
+        fields = '__all__'
 
 
 class MembershipApplicationTagFilter(filters.FilterSet):
@@ -83,6 +84,7 @@ class MembershipApplicationSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = MembershipApplication
+        fields = '__all__'
 
 
 class MembershipApplicationFilter(filters.FilterSet):

@@ -30,6 +30,7 @@ class TokenSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Token
+        fields = '__all__'
 
 
 class TokenFilter(filters.FilterSet):
@@ -55,6 +56,7 @@ class AccessTypeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = AccessType
+        fields = '__all__'
 
 
 class AccessTypeFilter(filters.FilterSet):
@@ -78,6 +80,7 @@ class GrantSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Grant
+        fields = '__all__'
 
 
 class GrantFilter(filters.FilterSet):
