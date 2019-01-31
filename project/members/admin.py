@@ -11,13 +11,12 @@ from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 from reversion.admin import VersionAdmin
 
+from .forms import RTInlineForm
 from .models import Member, MemberNote, MembershipApplication, MembershipApplicationTag, MemberType
 
 
 class MemberTypeAdmin(VersionAdmin):
     pass
-
-# TODO: how to make this a multiselect
 
 
 class GrantInline(admin.TabularInline):
@@ -32,6 +31,7 @@ class TokenInline(admin.TabularInline):
 
 class RTInline(admin.TabularInline):
     model = RecurringTransaction
+    form = RTInlineForm
     extra = 0
 
 
@@ -104,6 +104,7 @@ class CreditListFilter(admin.SimpleListFilter):
         return queryset.filter(credit_annotated__gt=0)
 
 
+# TODO: how to make membertypes checkbox
 class MemberAdmin(VersionAdmin):
     list_display = (
         'rname',

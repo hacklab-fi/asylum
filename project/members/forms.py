@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from creditor.models import RecurringTransaction
 from django import forms
 from django.conf import settings
 from django.utils.functional import allow_lazy, lazy
@@ -28,4 +29,18 @@ class ApplicationForm(forms.ModelForm):
             'email',
             'phone',
             'nick',
+        ]
+
+
+class RTInlineForm(forms.ModelForm):
+    amount = forms.DecimalField(max_value=0)
+
+    class Meta:
+        model = RecurringTransaction
+        fields = [
+            'start',
+            'end',
+            'label',
+            'rtype',
+            'tag',
         ]
