@@ -9,10 +9,12 @@ from members.tests.fixtures.memberlikes import MemberFactory
 
 from .tags import TransactionTagFactory
 
+
 def get_tag():
     if TransactionTag.objects.count():
         return factory.fuzzy.FuzzyChoice(TransactionTag.objects.all())
     return factory.SubFactory(TransactionTagFactory, label='Membership fee', tmatch='1')
+
 
 class RecurringTransactionFactory(factory.django.DjangoModelFactory):
 

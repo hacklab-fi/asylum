@@ -7,8 +7,8 @@ from django.views.generic import FormView
 
 from .forms import UploadForm
 from .importer import NDAImporter
-from .parser import parseLine
 from .models import UploadedTransaction
+from .parser import parseLine
 
 
 class NordeaUploadView(FormView):
@@ -38,7 +38,7 @@ class NordeaUploadView(FormView):
         last_stamp = None
         with open(tmp.name) as fp:
             for line in fp:
-                nt =  parseLine(line)
+                nt = parseLine(line)
                 if not nt:
                     continue
                 if not last_stamp:
@@ -47,9 +47,9 @@ class NordeaUploadView(FormView):
                     last_stamp = nt.timestamp
 
         UploadedTransaction(
-            last_transaction = last_stamp,
-            file = self.request.FILES['ndafile'],
-            user = self.request.user
+            last_transaction=last_stamp,
+            file=self.request.FILES['ndafile'],
+            user=self.request.user
         ).save()
 
         # Done with the temp file, get rid of it

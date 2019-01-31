@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
-import dateutil.parser
 
+import dateutil.parser
 from creditor.models import RecurringTransaction, TransactionTag
 from creditor.tests.fixtures.recurring import MembershipfeeFactory
 from django.core.management.base import BaseCommand, CommandError
@@ -26,7 +26,7 @@ class Command(BaseCommand):
             end=None,
             start__lt=cutoff_dt,
             amount=options['oldamount']
-            ):
+        ):
             rt.end = end_dt
             rt.save()
             newrt = MembershipfeeFactory.create(amount=options['newamount'], start=cutoff_dt, end=None, owner=rt.owner)

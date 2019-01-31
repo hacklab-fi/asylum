@@ -166,9 +166,9 @@ class TransactionHandler(BaseTransactionHandler):
         return lt
 
     def import_tmatch_transaction(self, at, lt):
-        if len(at.reference) < 2: # To avoid indexerrors
+        if len(at.reference) < 2:  # To avoid indexerrors
             return None
-        if at.reference[0:2] == "RF": # ISO references, our lookup won't work with them, even worse: there will be exceptions
+        if at.reference[0:2] == "RF":  # ISO references, our lookup won't work with them, even worse: there will be exceptions
             return None
         # In  this example the last meaningful number (last number is checksum) of the reference is used to recognize the TransactionTag
         try:

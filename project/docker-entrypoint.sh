@@ -28,5 +28,5 @@ if [ "$#" -eq 0 ]; then
   maildump -p ~/maildump.pid --stop
 else
   echo "Calling $@"
-  "$@"
+  /usr/bin/env "$@"
 fi

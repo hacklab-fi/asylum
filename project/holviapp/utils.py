@@ -1,22 +1,37 @@
 # -*- coding: utf-8 -*-
 import holviapi
+import holvirc
 from django.conf import settings
 
 
-def api_configured():
+def apikey_configured():
+    """Check if we have apikey"""
     return bool(settings.HOLVI_POOL) and bool(settings.HOLVI_APIKEY)
+
+
+def userauth_configured():
+    """Check if we have username/password"""
+    return bool(settings.HOLVI_POOL) and bool(settings.HOLVI_USER) and bool(settings.HOLVI_PASSWORD)
+
+
+def api_configured():
+    """Check that we have some API config"""
+    return apikey_configured() or userauth_configured()
 
 
 def get_connection():
     """Shorhand connection singleton getter"""
     if not api_configured():
         raise RuntimeError('Holvi API is not configured')
-    return holviapi.Connection.singleton(settings.HOLVI_POOL, settings.HOLVI_APIKEY)
+    if userauth_configured():
+        return holvirc.Connection.singleton(settings.HOLVI_POOL, settings.HOLVI_USER, settings.HOLVI_PASSWORD)
+    if apikey_configured():
+        return holviapi.Connection.singleton(settings.HOLVI_POOL, settings.HOLVI_APIKEY)
 
 
 def get_invoiceapi():
     """Shorthand API instance creator"""
-    return holviapi.InvoiceAPI(get_connection())
+    return holvirc.InvoiceAPI(get_connection())
 
 
 def list_invoices(**kwargs):
@@ -31,11 +46,18 @@ def get_invoice(code):
 
 def get_checkoutapi():
     """Shorthand API instance creator"""
-    return holviapi.CheckoutAPI(get_connection())
+    cnc = get_connection()
+    if isinstance(cnc, (holvirc.Connection, holvirc.connection.Connection)):
+        raise RuntimeError("This only works with the old style api keys")
+    return holviapi.CheckoutAPI(cnc)
 
 
 def list_orders(**kwargs):
     """Shorthand accessor for the API method"""
+    cnc = get_connection()
+    if isinstance(cnc, (holvirc.Connection, holvirc.connection.Connection)):
+        # TODO: Log the issue
+        return iter([])
     return get_checkoutapi().list_orders(**kwargs)
 
 
@@ -46,7 +68,10 @@ def get_order(code):
 
 def get_categoriesapi():
     """Shorthand API instance creator"""
-    return holviapi.CategoriesAPI(get_connection())
+    cnc = get_connection()
+    if isinstance(cnc, (holviapi.Connection, holviapi.connection.Connection)):
+        return holviapi.CategoriesAPI(get_connection())
+    return holvirc.CategoriesAPI(cnc)
 
 
 def get_category(code):
